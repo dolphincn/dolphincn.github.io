@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/life/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/life/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/life/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/life/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/life/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/life/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/life/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/life/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="随着岁月的流逝及投资经验的积累我的投资哲学基本成型，这不是简单模仿的结果、而是理论学习与投资实践共振的结果，虽然未来我还会不断修正自己的投资哲学但基本结构或核心要素不会改变而只能是不断强化。">
+<meta name="keywords" content="finance,future,stock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="投资札记-安全边际与资产配置">
+<meta property="og:url" content="http://dolphincn.github.io/life/finance/投资札记-安全边际与资产配置/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="随着岁月的流逝及投资经验的积累我的投资哲学基本成型，这不是简单模仿的结果、而是理论学习与投资实践共振的结果，虽然未来我还会不断修正自己的投资哲学但基本结构或核心要素不会改变而只能是不断强化。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-23T01:23:07.114Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="投资札记-安全边际与资产配置">
+<meta name="twitter:description" content="随着岁月的流逝及投资经验的积累我的投资哲学基本成型，这不是简单模仿的结果、而是理论学习与投资实践共振的结果，虽然未来我还会不断修正自己的投资哲学但基本结构或核心要素不会改变而只能是不断强化。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/life/finance/投资札记-安全边际与资产配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>投资札记-安全边际与资产配置 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/life/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私益,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/life/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/life/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/life/life/finance/投资札记-安全边际与资产配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/life/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">投资札记-安全边际与资产配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2012-06-20 10:35:17" itemprop="dateCreated datePublished" datetime="2012-06-20T10:35:17+08:00">2012-06-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-23 09:23:07" itemprop="dateModified" datetime="2018-06-23T09:23:07+08:00">2018-06-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/life/categories/finance/" itemprop="url" rel="index"><span itemprop="name">finance</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/life/categories/finance/future/" itemprop="url" rel="index"><span itemprop="name">future</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/life/categories/finance/future/stock/" itemprop="url" rel="index"><span itemprop="name">stock</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随着岁月的流逝及投资经验的积累我的投资哲学基本成型，这不是简单模仿的结果、而是理论学习与投资实践共振的结果，虽然未来我还会不断修正自己的投资哲学但基本结构或核心要素不会改变而只能是不断强化。<br><a id="more"></a><br>我的投资体系有两个核心要素：安全边际与资产配置。</p>
+<p>1、安全边际：解决价格与价值、风险与回报的匹配问题，解决目标选择与投资时机的问题；</p>
+<p>2、资产配置：解决如果实现投资过程的问题、解决如果将安全边际转换为投资收益的问题。</p>
+<p>我的投资策略以此为基础而展开，早期深受格兰姆与巴菲特的影响对安全边际研究较多、近期则受卡拉曼与史云生的影响在资产配置方面有一些研究，再加上这么多年持续的投资实践，我不能说自己就此悟到了投资正道、但至少找到了适应自我的投资之道。这里记录一些自己的投资思考：</p>
+<p>A、 资产配置的实践总结</p>
+<p>2007年我逐步而彻底的脱离了沸腾的A股市场，这就是一次大规模的资产再配置：将投资组合中的股票资产转换为现金资产，这让我基本避免了2008年金融崩溃的伤害、保住了之前多年的投资成果，这让我深刻感受到有效的资产配置（或投资组合的动态管理）是防范风险特别是极端风险的可靠手段。那么何为“有效”的资产配置呢？</p>
+<p>为了理清楚这个问题我重新回顾了巴菲特的投资历程，现在可以澄清或明确一个说法：与其说巴菲特是股票投资大师不如说是资产配置大师：巴菲特的伯克希尔•哈萨维王国就是一个超大规模的投资组合，巴菲特的主要工作就是对这个投资组合中的各类资产进行动态配置，而股票在这个大组合中的投资比例是动态变化的、有时甚至还不是主要的资产部位。而更早期合伙时代的巴菲特在资产配置上更是思路清晰的将目标资产明确分为三类：</p>
+<p>1、  低估类资产（Generals）</p>
+<p>2、  套利类资产（Workouts）</p>
+<p>3、  控制类资产（Controls）</p>
+<p>巴菲特将资金在这三类资产上进行分配，在这三类资产中“低估类资产”与市场变动具有一定的相关性而“套利类资产与控制类资产”与市场变动基本绝缘，巴菲特战胜市场的真正法宝是在投资组合中配置了大量与市场变化绝缘的资产（合伙时代的巴菲特基本上是不配置现金资产的，因为那个时候好机会比资金多，而且在安全性较高的套利类投资中巴菲特还曾持续进行过融资操作）。资金在这三类资产上的分配比例对投资业绩将会产生重要的影响，虽然巴菲特对资金的分配事先有一定的计划，但总的来说，实际的资金分配是非常随机的、主要取决于投资机会出现的时间、巴菲特的资金在这三类资产中的配置比例很大程度上取决于各种投资机会存在的几率。</p>
+<p>卡拉曼配置的目标资产也是非常明确的，与早期合伙时代的巴菲特有类似的地方，但资产类别比那个时代要更广泛一些：</p>
+<p>1：低估类资产</p>
+<p>2：有催化剂的低估类资产（与巴菲特的套利类资产有相似性）</p>
+<p>3：不动产</p>
+<p>4：避险类的对冲资产</p>
+<p>5：防备通胀类的资产（这类资产卡拉曼曾经提及，但具体内涵不详）</p>
+<p>6：现金类资产</p>
+<p>卡拉曼最喜欢或最擅长配置的资产是“有催化剂的低估类资产”其中即有股票也有优先级债券，而且在资产配置上卡拉曼具有相当大的灵活性，比如现金类资产的配置有时只有几个百分点而有时会占到投资组合的50%以上。巴菲特与卡拉曼的区别是很有意思的：卡拉曼基本不配置控制类资产，这也许不是卡拉曼的兴趣与能力之所在，而目前巴菲特的伯克希尔•哈萨维王国主要是以控制类资产为核心的控股集团，就此而言我个人认为卡拉曼成为巴菲特的接班人几乎是不可能的，毕竟双方的核心能力圈基本没有交集的部分。</p>
+<p>大卫·史云生是耶鲁大学基金首席投资官1985年加入基金后20年中基金每年回报率达16%以上，史云生认为应配置的核心资产包括股票、公债、不动产：</p>
+<p>1：股票：创造投资报酬的资产</p>
+<p>2：公债：分散投资风险的资产</p>
+<p>3：不动产：介于股票与公债之间的混合物，使投资人能够以较低的代价保护资产对抗通货膨胀</p>
+<p>史云生更重要的一个观点是“组合再平衡”，他建议投资者根据自己的风险偏好设定各类资产的分配比例，根据各类资产的变化不定期调整各类资产到原来设定的比例从而实现“组合再平衡”。恢复组合平衡的行为与正常的认知大异其趣：在正常的市场状况下有系统地恢复平衡表示减码赢家而加码输家；在正常的市场状况下恢复平衡仅仅需要一些毅力可是碰到市场异常波动时要恢复组合的平衡就需要极大的勇气。</p>
+<p>虽然采取恢复平衡操作可能会带来额外的红利，但是它真正的用意在于坚守长期投资政策的目标，这样的做法可以使投资组合维持在预期可接受的风险水准内，而这种创造获利兼顾风险控管的做法确实是一种无懈可击的配套措施。</p>
+<p>我接受史云生“组合再平衡”的观点，但不赞同这种数量化的“组合再平衡”而应是进行“风险-回报匹配”评估后的“组合再平衡”，我认为应该根据对投资机会的分析评估进行“动态的组合再平衡”：比如对低估类投资不是维持某个比例的投资、而是应该在低估类资产再被低估的时候增加此类投资的比例。</p>
+<p>其实投资大师格兰姆很早就提出了资产配置的策略，他建议在股票与债券之间保持25%-75%的宽泛区域，并根据环境变化做出应对操作，我在投资实践中能够做到不满仓也不空仓但具体比例未做设定，不过我还是准备进入“25%-75%”俱乐部以保持自己的中庸操作策略不至落空。</p>
+<p>现在再回到我的投资实践：2007年末-2008年末在小幅增持部分股票的情况下现金资产比例仍然高达85%左右，当初已调整好心态准备迎接一个长期熊市的来临、所以并无计划匆匆挥霍自己的子弹，在通胀预期的背景下当出现商业地产的投资机会时我当即决定进行投资，而且投资比例也刚好与投资组合的资产总额相匹配（当时的比例占到30%左右），当时资产配置的策略是—“股市下跌就持续补仓或分红再投资、股市上涨就进行IPO套利、原有投资不减仓、商业地产提供持续的现金流入进行再投资”—这本来是个“自认为”很完整的策略，但出现两个意外：一是2009年的股市上涨幅度惊人让这个策略显得太过保守；二是商业地产直到现在仍未完成交割、期望的现金流入没有实现。当然我2010年的策略与2009年基本相同，但效果比2009年要好些，在下跌市或平衡市我有足够的信心战胜市场，目前对我最大的考验是在牛市中如何跟上市场的节奏不至被拉开太大差距。我对未来的资产配置这里还是做个大致的计划：</p>
+<p>1、  商业地产：15%-30%</p>
+<p>2、  债券：0-20%</p>
+<p>3、  股票（含可转债、基金）：25%-70%</p>
+<p>4、  现金（或套利）：10%-60%</p>
+<p>我赞同上面巴菲特的观点：虽然对资金的分配事先有一定的计划，但总的来说，实际的资金分配是非常随机的、主要取决于投资机会出现的时间。</p>
+<p>那么何为“有效”的资产配置呢？这个问题其实无解，不过综合上面几位大师的观点也许可以暂时给个我认同的说法：在对市场机会的持续关注下、在经过“价格与价值、风险与回报的匹配”评估后进行的“动态的组合再平衡”或许就是“有效”的资产配置。</p>
+<p>B、价值实现</p>
+<p>价值投资说起来非常简单就是用“0.4X的价格”买入“X的价值”，当价格与价值相匹配的时候价格从0.4X变动到0.8X或X时，价值投资者获利退出。就这么一个简单的行为过程其实细细分析并不简单：</p>
+<p>1、首先判断“X的价值”本身就是一件太过复杂甚至是不可能完成的事情，对同一项资产请10位专家来进行评估可能会得到10个不同的X，这里涉及的估值问题本身就相当难以把握、没有所谓的标准方法与标准答案，价值投资者需要在资产池中反复打捞反复过滤、需要对基本面的长期关注与研究、需要长期经验的积累与一定的悟性，就算如此对价值的判断也只能是在某个比较宽泛的区间（按巴菲特的说法就是模糊的精确），而且随着时光的流逝X本身也是一个变量需要随时进行修正，现在我坚决反对“投资很简单”的观点。正是为对冲估值的风险格兰姆最早提出的安全边际才成为一个伟大的概念并成为价值投资学派的奠基石：价值投资者首先在估值上采取保守的态度、然后在这个保守估值的基础上寻求尽可能大的安全边际。</p>
+<p>2、这里我重点探讨的是在假设估值基本正确而且又有足够安全边际的情况下如何实现价值的问题。购买到低估品种通俗的说法就是捡到了便宜货，但东西便宜并不意味着它的价格不会进一步下跌，在牛市中这类股票有可能成为表现较好的投资、但在熊市或震荡市中这类股票也是很脆弱的；再者价值回归的方式与时间周期（时间成本）也具有很大的不确定性、而且在等待价值回归的过程中价值本身也在发生持续变化，价值低估是一回事、而价值如何回归或何时回归则是另一回事，通过对价值投资前辈的实践分析价值实现有两种方式—被动方式与主动方式—</p>
+<p>A、被动方式：把价值实现交给市场、价值最终决定价格是市场有效的表达方式，但市场总在有效与无效之间徘徊，这种方式有太多的不确定性。价值投资者必须要面对这样的困局：0.4X也有可能变成0.2X，我认为在这类困局中有三种应对之策：</p>
+<p>（1）在坚持保守估值的基础上，提升安全边际的标准；</p>
+<p>（2）在低估过程中结合有效的资金管理策略在更低的价位积累更多的仓位，有效摊低持股成本，这种策略让“低估后的再低估”成为我们的朋友而不是敌人；</p>
+<p>（3）变被动为主动，通过影响公司管理层或公司营运方式，将被低估的潜在价值即时释放出来并完成价值的回归。</p>
+<p>B、主动方式：这类方式往往以某些特殊事件的形式体现，比如合并、清算、重组、分拆等等，这类价值实现的方式就是所谓的“价值套利”或“有催化剂的低估类投资”，其实巴菲特的控制类投资也可以归入此类：这是主动性价值实现的最高形式。</p>
+<p>在这里我要再赞巴菲特：他不仅是资产配置的大师也是价值实现的大师，巴菲特师从格兰姆学到的是两个核心策略：一个是安全边际另一个就是价值实现（格兰姆在早期的投资历程中就有很多通过主动介入方式实现价值回归的经典案例）。巴菲特在“主动式”、“被动式”及“变被动式为主动式”三类价值实现的领域都堪称大师、这与巴菲特在这三类资产上的灵活配置相匹配并创造出长期持续的高回报。这里记录下当时巴菲特本人的观点：“如果我们买入低估类资产的价格长期在低点徘徊我们就会考虑买入更多股份，这样低估类投资就可能演变为控制类投资；但如果低估类资产的价格在购入几年内迅速攀升我们则会考虑在高点获利了解完成一次漂亮的低估类投资。”—巴菲特不仅在资产配置上具有相当大的灵活性而且在价值实现方式上也具有相当大的灵活性，现在我认为这才是巴菲特策略的真正核心。这种投资的灵活性贯穿巴菲特的投资历程，最新的经典案例是巴菲特在2008年金融崩溃后真正大手笔的投资是可转换债券，巴菲特把资金在固定收益类资产与股权类资产间进行灵活配置而且拥有完全的主动权。</p>
+<p>在价值实现上另一个值得学习的楷模是卡拉曼，在对低估类资产的投资上卡拉曼其实是慎之又慎的，在可以选择的条件下卡拉曼更宁愿进行价值套利或有催化剂的低估类投资（所谓的催化剂就是主动式价值实现的要素），这与卡拉曼坚持“持续正绝对收益”的策略取向是一致，或者说正是坚持以主动式价值实现为主的策略才保证了卡拉曼绝对收益的目标能够基本实现。上面介绍过卡拉曼最喜欢或最擅长配置的资产是有催化剂的低估类资产其中即有股票也有优先级债券，在这个领域里卡拉曼是其中破产问题的专家，其实原因很简单破产清算本身就是价值实现的一种方式、就是最有效的催化剂之一。</p>
+<p>这里又要回到中国证劵市场的实践上来，对一般中小投资人而言很多主动式价值实现的方式在中国目前没有可行性：中国证劵市场可交易的品种还不多很多国外常规的套利品种基本没有或非常罕见、市场化程度不够（这20年中国资本市场上的破产公司基本没有）、内幕消息与内幕操作盛行、短期主义与忽悠文化喧嚣等等，一般中小投资人的价值实现方式只能以被动式的市场波动来实现，真正具有可操作性的策略还是上面探讨的资金管理策略，这让我们在被动式价值实现的困局中仍然可以具有一定的主动能力。</p>
+<p>C、现金管理</p>
+<p>一直就想写篇关于现金的文章，但一直也沉不下心情来写，这里借年终总结的机会记录一些相关思考（我的现金观深受卡拉曼的影响，这里记录下的不少观点来源于卡拉曼）。</p>
+<p>首先要明确这里所指的现金是个广义的概念：包括现钱、活期储蓄、货币基金或短期国债（我直到目前还将IPO的套利部位也视为现金资产）。现金类资产是投资组合中最易被忽视、也最易被蔑视的资产类别，它在资产配置中的重要作用被普遍低估。在目前这个短期主义盛行、资产泡沫化的世界里，持有较低收益率的现金被认为是闲置资金的无能表现，特别是在目前通胀恶化的背景下现金有时甚至被等同于不良资产；对证劵市场的参与者而言持有现金异常艰难：对个人投资者而言如果持有高比例的现金那么等于在证劵市场上无所作为；对资产管理者而言客户支付高昂的管理费可不是让你持有现金的，现金是被全球投资者一致蔑视的投资选择，大部分投资者在市场下跌时持有现金尚且是难以容忍、在市场上涨的时候持有现金更是考虑都不会考虑的策略。这里明确提出现金管理的目标是决定什么时候该持有现金或多大比例的现金、什么时候该把现金或多大比例的现金用于投资，现金管理其实是对投资组合进行持续的风险-回报评估后资产再配置时最重要手段之一。</p>
+<p>我非常认同卡拉曼的观点（巴菲特也有类似观点）：持有现金是什么都不做直至极富吸引力的投资机会出现的安全投资之道（什么都不做意味着寻找潜在的投资并排除掉那些不满足你标准的投资）。现金提供虽然很有限但是正的收益率、本金的彻底安全以及完全即时的流动性，在没有更好投资选择的情况下微小的正回报率而且几乎不存在风险的现金并不是一个很糟糕的投资对象，这里再罗列出持有一定比例现金的其它妙处：</p>
+<p>1、  只有持有现金才具备再投资的能力、才不会让自己处于不能抓住机会的境地；</p>
+<p>2、  在下跌的时候缓冲损失；</p>
+<p>3、  在别人没有弹药的时候出手捡便宜货。</p>
+<p>我对现金资产大唱赞歌主要是感觉大众对现金的误解太多而我希望自己能够坚持对现金管理的某些理解，但自己也不能走入另一个极端而不能自拔，组合中配置大量的现金类资产虽然有抗暴跌的能力但也是抗上涨的阻力，长期持有高比例的现金资产会产生相当大的机会成本：不仅会错过当前有吸引力的投资机会、而且期待的更好机会可能不会出现或出现的太迟等等，在资金管理上2008年-2010年度给我留下深刻印象，有得有失。未来我自己在现金管理上还是趋向于中庸策略并希望自己能够有更大的灵活性。</p>
+<p>2009-2010年度现金资产主要进行IPO申购，总体收益状态不错而且风险很低确实是现金类资产很好的替代方式，这有效降低了我持有高比例现金的成本，但未来不可预期：2011年的IPO会如何呢？一旦IPO的收益率降低或消失会对我的现金管理能力提出新的挑战。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/life/tags/finance/" rel="tag"><i class="fa fa-tag"></i> finance</a>
+          
+            <a href="/life/tags/future/" rel="tag"><i class="fa fa-tag"></i> future</a>
+          
+            <a href="/life/tags/stock/" rel="tag"><i class="fa fa-tag"></i> stock</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/life/finance/货币战争/货币战争1/" rel="next" title="货币战争1">
+                <i class="fa fa-chevron-left"></i> 货币战争1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/life/finance/葛卫东-我的投资原则/" rel="prev" title="葛卫东-我的投资原则">
+                葛卫东-我的投资原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/life/archives">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/life/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/life/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/life/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/life/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/life/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/life/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/life/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/life/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/life/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/life/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/life/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/life/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/life/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/life/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="概况安装vscode  安装git客户端  安装nodejs v8  添加nodejs环境变量  通过npm 安装 hexo">
+<meta name="keywords" content="hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vscode git hexo 配合使用">
+<meta property="og:url" content="http://dolphincn.github.io/hexo/vscode git hexo 配合使用/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="概况安装vscode  安装git客户端  安装nodejs v8  添加nodejs环境变量  通过npm 安装 hexo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-23T12:12:12.707Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vscode git hexo 配合使用">
+<meta name="twitter:description" content="概况安装vscode  安装git客户端  安装nodejs v8  添加nodejs环境变量  通过npm 安装 hexo">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/hexo/vscode git hexo 配合使用/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>vscode git hexo 配合使用 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/vscode git hexo 配合使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vscode git hexo 配合使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-18 10:44:15" itemprop="dateCreated datePublished" datetime="2018-06-18T10:44:15+08:00">2018-06-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-23 20:12:12" itemprop="dateModified" datetime="2018-06-23T20:12:12+08:00">2018-06-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概况"><a href="#概况" class="headerlink" title="概况"></a>概况</h2><pre><code>安装vscode
+
+安装git客户端
+
+安装nodejs v8
+
+添加nodejs环境变量
+
+通过npm 安装 hexo
+</code></pre><a id="more"></a>
+<h2 id="下载安装-vscode"><a href="#下载安装-vscode" class="headerlink" title="下载安装 vscode"></a>下载安装 vscode</h2><pre><code>https://code.visualstudio.com
+</code></pre><h2 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h2><pre><code>https://git-scm.com/download/win
+
+https://github.com/git-for-windows/git/releases/download/v2.17.1.windows.2/Git-2.17.1.2-64-bit.exe
+
+https://github.com/git-for-windows/git/releases/download/v2.17.1.windows.2/PortableGit-2.17.1.2-64-bit.7z.exe
+
+
+portable 版本，只需解压，在window环境变量里添加 解压路径\Git\cmd
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">安装版，只需命令行的，安装步骤如下：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">选择安装组件：可以全不选，或只选</span><br><span class="line">    桌面浏览（Windows Explorer integration）</span><br><span class="line">        使用Git Bash方式，shell方式</span><br><span class="line"></span><br><span class="line">是否创建开始菜单快捷方式目录:否</span><br><span class="line"></span><br><span class="line">设置环境，选择使用什么样儿的命令行工具，一般情况我们使用默认配置，使用Git Bash</span><br><span class="line"></span><br><span class="line">    Git自带：使用Git自带的Git Bash命令行工具</span><br><span class="line"></span><br><span class="line">设置HTTPS 传输加密方式，点击【Next &gt;】</span><br><span class="line"></span><br><span class="line">    使用OpenSSL库</span><br><span class="line"></span><br><span class="line">选择换行格式，点击【Next &gt;】：下面选第一个</span><br><span class="line"></span><br><span class="line">    让Git能够自动转换文件中的换行符：签出到本地时转换为Windows下的换行符，提交到服务器时转换为Unix下的换行符</span><br><span class="line">    让Git在签出到本地时不做转换，保留原始文件的换行符；提交到服务器时转换为Unix下的换行符</span><br><span class="line">    让Git在签出到本地时和提交到服务器时都不做转换</span><br><span class="line"></span><br><span class="line">配置Git bash终端仿真器，点击【Next &gt;】：最好选第二个</span><br><span class="line"></span><br><span class="line">    使用MinTTY终端</span><br><span class="line">    使用windows默认的命令行</span><br><span class="line"></span><br><span class="line">性能配置，是否启用文件系统缓存，点击【Next &gt;】</span><br><span class="line"></span><br><span class="line">开始安装</span><br></pre></td></tr></table></figure>
+<h2 id="git-环境变量配置"><a href="#git-环境变量配置" class="headerlink" title="git 环境变量配置"></a>git 环境变量配置</h2><pre><code>安装成功后需要配置Git环境变量
+
+「注意该步骤为Git在windows cmd命令中配置，如果不配置，直接使用Git Bash即可」
+
+在Path变量中增加：C:\Program Files\Git\cmd
+
+验证是否配置成功，打开windows命令行，输入git version命令，出现下列信息表示配置成功。
+
+
+git config --global user.name dolphincn
+git config --global user.email share2030cn@126.com
+
+下面三行可以不操作
+
+git config --global push.default matching
+git config --global core.quotepath false
+git config --global core.editor &quot;vim&quot;
+</code></pre><h2 id="添加ssh-密钥"><a href="#添加ssh-密钥" class="headerlink" title="添加ssh 密钥"></a>添加ssh 密钥</h2><pre><code>添加github ssh 登陆密钥，
+
+打开cmd，运行mkdir .ssh，
+
+在当前用户的home目录下创建.ssh目录，把密钥复制进去.
+
+密钥可以用ssh-key 或 GitHub上生成，私钥和公钥名字分别为：id_rsa id_rsa.pub
+
+检验是否能连上了github，windows 命令行下运行，前提配置了git环境变量
+
+$ ssh git@github.com
+</code></pre><h2 id="初始化git目录"><a href="#初始化git目录" class="headerlink" title="初始化git目录"></a>初始化git目录</h2><pre><code>$ mkdir tmp      //创建推送目录
+$ cd tmp         //进入推送目录    
+$ git init       //设置该目录为推送
+$ touch README   //生成readme
+$ git add .      //加入修改的文件
+$ git commit -m &apos;first commit&apos; //递交修改声明
+$ git remote add local git@github.com:abcd/tmp.git //将本地local 和github关联
+$ git push local master //将本地文件推送到github
+$ git pull master local //将github拉到本地
+
+参考：https://www.yiibai.com/git/
+</code></pre><h2 id="下载安装nodejs"><a href="#下载安装nodejs" class="headerlink" title="下载安装nodejs:"></a>下载安装nodejs:</h2><pre><code>https://nodejs.org/dist/v8.11.3/node-v8.11.3-x64.msi
+</code></pre><h2 id="hexo-在windows-上安装"><a href="#hexo-在windows-上安装" class="headerlink" title="hexo 在windows 上安装"></a>hexo 在windows 上安装</h2><pre><code>安装hexo之前必须先安装git nodejs
+
+
+在本地新建一个Blog文件夹，文件右键，选择Git Bash
+
+创建hexo blog 目录
+$ mkdir c:/hexo
+
+打开git命令行输入：
+
+全局安装hexo-cli
+$ npm install -g hexo-cli
+
+
+$ cd c:/hexo
+
+hexo 初始化目录
+$ hexo init
+
+在目录中安装 node_modules
+$ npm install
+
+
+部署到github配置
+
+按装本地搜索插件
+
+$ npm install hexo-generator-searchdb --save
+
+打开Hexo 站点的_config.yml,添加配置
+
+search:
+    path: search.xml
+    field: all
+    format: html
+    limit: 10000
+
+
+打开themes/next下的_config.yml,搜索关键字local_search,设置为true
+
+local_search:
+    enable: true
+
+
+
+安装hexo-deployer-git插件
+$ npm install hexo-deployer-git --save
+
+修改hexo本地网站配置文件 _config.yml
+# Deployment
+## Docs: https://hexo.io/docs/deployment.html
+deploy:
+type: git #部署环境，基于hexo+githubpage,所以这里使用git。注意：不同版本的hexo，type有可能不同，3.x以后应使用git,具体参看官方文档
+repository: git@github.com:dolphincn/dolphincn.github.io.git #git仓库地址，替换成你的username即可，其他保持不变，后面会提到如何创建git仓库
+branch: master
+
+
+主题安装
+
+安装主题和渲染器：
+
+$ cd /data/hexo_blog/
+
+$ git clone --depth 1 https://github.com/theme-next/hexo-theme-next themes/next
+
+编辑Hexo目录下的 _config.yml，将theme的值改为next
+
+
+安装图片浏览器
+$ rm -rf themes/next/source/lib/fancybox
+
+$ git clone --depth 1 https://github.com/theme-next/theme-next-fancybox3 themes/next/source/lib/fancybox
+
+编辑next 主题配置文件 _config.yml:
+
+    fancybox: true
+
+安装书签保存插件
+$ rm -rf themes/next/source/lib/bookmark
+$ git clone --depth 1 https://github.com/theme-next/theme-next-bookmark.git themes/next/source/lib/bookmark
+
+编辑next 主题配置文件 _config.yml:
+    bookmark: true
+
+
+
+其它插件，如果需要可以安装
+# npm install hexo-generator-feed --save
+# npm install hexo-generator-sitemap --save    
+$ npm install hexo-generator-json-content --save
+</code></pre><h2 id="Hexo-常用命令"><a href="#Hexo-常用命令" class="headerlink" title="Hexo 常用命令"></a>Hexo 常用命令</h2><pre><code>Hexo 安装升级
+
+npm install hexo -g #安装  
+npm update hexo -g #升级  
+hexo init #初始化
+
+常用简写
+
+hexo n &quot;我的博客&quot; == hexo new &quot;我的博客&quot; #新建文章
+hexo p == hexo publish
+hexo g == hexo generate#生成
+hexo s == hexo server #启动服务预览
+hexo d == hexo deploy#部署
+
+启动本地服务
+
+hexo server #Hexo #会监视文件变动并自动更新，您无须重启服务器。
+hexo server -s #静态模式
+hexo server -p 5000 #更改端口
+hexo server -i 192.168.1.1 #自定义 IP
+
+监视文件变动
+
+hexo generate #使用 Hexo 生成静态文件快速而且简单
+hexo generate --watch #监视文件变动
+hexo clean #清除缓存 网页正常情况下可以忽略此条命令
+
+部署
+
+#两个命令的作用是相同的
+hexo generate --deploy
+hexo deploy --generate
+hexo deploy -g
+hexo server -g
+
+草稿
+
+# 新建草稿
+hexo new draft &lt;title&gt;
+# 发布草稿为post
+hexo publish draft &lt;title&gt;
+
+模板
+
+hexo new &quot;postName&quot; #新建文章
+hexo new page &quot;pageName&quot; #新建页面
+hexo generate #生成静态页面至public目录
+hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）
+hexo deploy #将.deploy目录部署到GitHub
+hexo new [layout] &lt;title&gt;
+hexo new photo &quot;My Gallery&quot;
+hexo new &quot;Hello World&quot; --lang tw
+
+写作时间
+
+变量    描述
+:title    标题
+:year    建立的年份（4 位数）
+:month    建立的月份（2 位数）
+:i_month    建立的月份（去掉开头的零）
+:day    建立的日期（2 位数）
+:i_day    建立的日期（去掉开头的零）
+
+
+自定义配置文件的路径
+
+$ hexo --config custom.yml
+
+安全模式,在安全模式下，不会载入插件和脚本。
+
+$ hexo --safe
+
+渲染文件
+
+render
+
+$ hexo render &lt;file1&gt; [file2] ...
+
+参数     描述
+-o, --output     设置输出路径
+</code></pre><h2 id="hexo基本命令总结："><a href="#hexo基本命令总结：" class="headerlink" title="hexo基本命令总结："></a>hexo基本命令总结：</h2><pre><code>每次部署的步骤，可按以下三步来进行：
+hexo clean
+hexo generate
+hexo deploy
+
+命令总结
+
+常用命令：
+hexo new &quot;postName&quot; #新建文章
+hexo new mylayout &quot;postName&quot; #使用指定的layout模板新建文章
+hexo new page &quot;pageName&quot; #新建页面
+hexo generate #生成静态页面至public目录
+hexo server #开启预览访问端口（默认端口4000，’ctrl + c’关闭server）
+hexo server -p 80 -i 192.168.100.1 # 指定服务器端口和ip
+hexo deploy #将.deploy目录部署到GitHub
+hexo help #查看帮助
+hexo version #查看Hexo的版本
+
+复合命令：
+hexo deploy -g #生成加部署
+hexo server -g #生成加预览
+hexo server -s #使用已生成的静态文件预览
+
+
+
+
+命令的简写为：
+hexo n == hexo new
+hexo g == hexo generate
+hexo s == hexo server
+hexo d == hexo deploy
+</code></pre><h2 id="备份source源文件"><a href="#备份source源文件" class="headerlink" title="备份source源文件"></a>备份source源文件</h2><figure class="highlight dos"><figcaption><span>windwos 10 下更新备份重要的文件到 icloud 目录下</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 注意：是按时间来更新备份，所以需要系统时间正常</span><br><span class="line"></span><br><span class="line"><span class="built_in">xcopy</span> "C:\share\hexo\source" "C:\Users\lion\iCloudDrive\hexo_blog\source" /e/c/I/d/r/y</span><br><span class="line"><span class="built_in">xcopy</span> "C:\share\hexo\scaffolds" "C:\Users\lion\iCloudDrive\hexo_blog\scaffolds" /e/c/I/d/r/y</span><br><span class="line"><span class="built_in">xcopy</span> "C:\share\hexo\*.yml" "C:\Users\lion\iCloudDrive\hexo_blog" /c/I/d/r/y</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><pre><code>https://blog.csdn.net/dietime1943/article/details/71751007
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"><i class="fa fa-tag"></i> hexo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/hexo/Hexo渲染时排除部分文件或目录/" rel="next" title="Hexo渲染时排除部分文件或目录">
+                <i class="fa fa-chevron-left"></i> Hexo渲染时排除部分文件或目录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/windows/backup/xcopy 备份文件夹/" rel="prev" title="xcopy 备份文件夹">
+                xcopy 备份文件夹 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概况"><span class="nav-number">1.</span> <span class="nav-text">概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装-vscode"><span class="nav-number">2.</span> <span class="nav-text">下载安装 vscode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装-git"><span class="nav-number">3.</span> <span class="nav-text">下载安装 git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-环境变量配置"><span class="nav-number">4.</span> <span class="nav-text">git 环境变量配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加ssh-密钥"><span class="nav-number">5.</span> <span class="nav-text">添加ssh 密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化git目录"><span class="nav-number">6.</span> <span class="nav-text">初始化git目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装nodejs"><span class="nav-number">7.</span> <span class="nav-text">下载安装nodejs:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo-在windows-上安装"><span class="nav-number">8.</span> <span class="nav-text">hexo 在windows 上安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo-常用命令"><span class="nav-number">9.</span> <span class="nav-text">Hexo 常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo基本命令总结："><span class="nav-number">10.</span> <span class="nav-text">hexo基本命令总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#备份source源文件"><span class="nav-number">11.</span> <span class="nav-text">备份source源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">12.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

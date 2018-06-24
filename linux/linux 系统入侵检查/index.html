@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="查看登陆日志# wtmp日志记录每个用户登录、注销及系统的启动、停机的事件  last  last -f /var/log/wtmp  who /var/log/wtmp  # last命令往回搜索wtmp来显示自从文件第一次创建以来登录过的用户.  # who命令查询utmp文件并报告当前登录的每个用户。 # who的默认输出包括用户名、终端类型、登录日期及远程主机。">
+<meta name="keywords" content="security">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux 系统入侵检查">
+<meta property="og:url" content="http://dolphincn.github.io/linux/linux 系统入侵检查/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="查看登陆日志# wtmp日志记录每个用户登录、注销及系统的启动、停机的事件  last  last -f /var/log/wtmp  who /var/log/wtmp  # last命令往回搜索wtmp来显示自从文件第一次创建以来登录过的用户.  # who命令查询utmp文件并报告当前登录的每个用户。 # who的默认输出包括用户名、终端类型、登录日期及远程主机。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-21T10:18:21.047Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux 系统入侵检查">
+<meta name="twitter:description" content="查看登陆日志# wtmp日志记录每个用户登录、注销及系统的启动、停机的事件  last  last -f /var/log/wtmp  who /var/log/wtmp  # last命令往回搜索wtmp来显示自从文件第一次创建以来登录过的用户.  # who命令查询utmp文件并报告当前登录的每个用户。 # who的默认输出包括用户名、终端类型、登录日期及远程主机。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/linux/linux 系统入侵检查/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>linux 系统入侵检查 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/linux/linux 系统入侵检查/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux 系统入侵检查
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-21 16:13:28 / 修改时间：18:18:21" itemprop="dateCreated datePublished" datetime="2018-06-21T16:13:28+08:00">2018-06-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/security/" itemprop="url" rel="index"><span itemprop="name">security</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="查看登陆日志"><a href="#查看登陆日志" class="headerlink" title="查看登陆日志"></a>查看登陆日志</h2><pre><code># wtmp日志记录每个用户登录、注销及系统的启动、停机的事件
+
+last
+
+last -f /var/log/wtmp
+
+who /var/log/wtmp
+
+# last命令往回搜索wtmp来显示自从文件第一次创建以来登录过的用户.
+
+# who命令查询utmp文件并报告当前登录的每个用户。
+# who的默认输出包括用户名、终端类型、登录日期及远程主机。
+</code></pre><a id="more"></a>
+<h2 id="查看security日志"><a href="#查看security日志" class="headerlink" title="查看security日志"></a>查看security日志</h2><pre><code>more /var/log/secure
+
+# /var/log/secure：记录登录系统存取数据的文件;
+
+# 例如:pop3，ssh，telnet，ftp等都会记录在此.
+</code></pre><h2 id="记录登陆后的IP地址和某用户名所操作的历史记录"><a href="#记录登陆后的IP地址和某用户名所操作的历史记录" class="headerlink" title="记录登陆后的IP地址和某用户名所操作的历史记录"></a>记录登陆后的IP地址和某用户名所操作的历史记录</h2><pre><code>通过在/etc/profile里面加入以下代码就可以实现：
+
+
+PS1=&quot;`whoami`@`hostname`:&quot;&apos;[$PWD]&apos;
+history
+USER_IP=`who -u am i 2&gt;/dev/null| awk &apos;{print $NF}&apos;|sed -e &apos;s/[()]//g&apos;`
+if [ &quot;$USER_IP&quot; = &quot;&quot; ]
+then
+USER_IP=`hostname`
+fi
+if [ ! -d /tmp/dbasky ]
+then
+mkdir /tmp/dbasky
+chmod 777 /tmp/dbasky
+fi
+if [ ! -d /tmp/dbasky/${LOGNAME} ]
+then
+mkdir /tmp/dbasky/${LOGNAME}
+chmod 300 /tmp/dbasky/${LOGNAME}
+fi
+export HISTSIZE=4096
+DT=`date &quot;+%Y-%m-%d_%H:%M:%S&quot;`
+export HISTFILE=&quot;/tmp/dbasky/${LOGNAME}/${USER_IP} dbasky.$DT&quot;
+chmod 600 /tmp/dbasky/${LOGNAME}/*dbasky* 2&gt;/dev/null
+source /etc/profile 使用脚本生效
+
+退出用户，重新登录
+</code></pre><h2 id="查看文件修改属性"><a href="#查看文件修改属性" class="headerlink" title="查看文件修改属性"></a>查看文件修改属性</h2><pre><code>find /data/wwwroot -name &quot;*.php&quot; -mtime -10 | xargs ls -l
+
+stat filename #查看指定文件的信息
+</code></pre><h2 id="查找webshell-关键字"><a href="#查找webshell-关键字" class="headerlink" title="查找webshell 关键字"></a>查找webshell 关键字</h2><pre><code>find /data/wwwroot -name &quot;*.php&quot; |xargs grep &quot;eval&quot; |more
+find /data/wwwroot -name &quot;*.php&quot; |xargs grep &quot;shell_exec&quot; |more
+find /data/wwwroot -name &quot;*.php&quot; |xargs grep &quot;passthru&quot; |more
+find /data/wwwroot -name &quot;*.php&quot; |xargs grep &quot;fsockopen&quot; |more
+</code></pre><h2 id="常用日志文件"><a href="#常用日志文件" class="headerlink" title="常用日志文件"></a>常用日志文件</h2><pre><code>系统日志是由一个名为syslog的服务管理的，如以下日志文件都是由syslog日志服务驱动的：
+
+/var/log/boot.log：录了系统在引导过程中发生的事件，就是Linux系统开机自检过程显示的信息
+
+/var/log/lastlog ：记录最后一次用户成功登陆的时间、登陆IP等信息
+
+/var/log/messages ：记录Linux操作系统常见的系统和服务错误信息
+
+/var/log/secure ：Linux系统安全日志，记录用户和工作组变坏情况、用户登陆认证情况
+
+/var/log/btmp ：记录Linux登陆失败的用户、时间以及远程IP地址
+
+/var/log/syslog：只记录警告信息，常常是系统出问题的信息，使用lastlog查看
+
+/var/log/wtmp：该日志文件永久记录每个用户登录、注销及系统的启动、停机的事件，使用last命令查看
+
+/var/run/utmp：该日志文件记录有关当前登录的每个用户的信息。如 who、w、users、finger等就需要访问这个文件
+
+
+
+wtmp和utmp文件都是二进制文件，它们不能被诸如tail之类的命令剪贴或合并（使用cat命令）。用户需要使用who、w、users、last和ac等命令来使用这两个文件包含的信息。
+
+lastlog 文件在每次有用户登录时被查询。
+
+可以使用lastlog命令检查某特 定用户上次登录的时间，并格式化输出上次登录日志 /var/log/lastlog的内容。
+
+它根据UID排序显示登录名、端口号（tty）和上次登录时间。
+
+如果一个用户从未登录过，lastlog显示 **Never logged**。注意需要以root身份运行该命令.
+
+&quot;last -u 102&quot;命令将报告UID为102的用户；&quot;last -t 7&quot;命令表示限制为上一周的报告。
+</code></pre><h2 id="sshd-加固配置"><a href="#sshd-加固配置" class="headerlink" title="sshd 加固配置"></a>sshd 加固配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    <span class="comment"># 仅允许SSH协议版本2</span></span><br><span class="line">    <span class="comment"># SSH协议版本1有安全问题，包括中间人攻击(man-in-the-middle)和注入(insertion)攻击</span></span><br><span class="line"></span><br><span class="line">    Protocol 2</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 修改端口，密码尝试3次以上断开，超过30秒还未登陆成功端开</span></span><br><span class="line">    <span class="comment"># 修改selinux: semanage port -a -t ssh_port_t -p tcp 55555</span></span><br><span class="line"></span><br><span class="line">    Port 55555</span><br><span class="line">    LoginGraceTime 30 </span><br><span class="line">    MaxAuthTries 3 </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 禁止root用户和空密码登陆</span></span><br><span class="line"></span><br><span class="line">    PermitRootLogin no</span><br><span class="line">    PermitEmptyPasswords no</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 如果需要</span></span><br><span class="line">    ChallengeResponseAuthentication no</span><br><span class="line">    UsePAM no</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 禁用密码验证，开启密钥验证</span></span><br><span class="line"></span><br><span class="line">    PasswordAuthentication no</span><br><span class="line">    PubkeyAuthentication yes</span><br><span class="line"></span><br><span class="line">    AuthenticationMethods publickey</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 仅允许特定的用户通过SSH登陆</span></span><br><span class="line"></span><br><span class="line">    AllowUsers ceph.admin mysql.admin</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 配置空闲超时注销时长，以秒为单位设置一个空闲超时时间（300秒 = 5分钟）。</span></span><br><span class="line">    <span class="comment"># 一旦空闲时间超过这个值，空闲用户就会被踢出会话。</span></span><br><span class="line">    ClientAliveInterval 300</span><br><span class="line">    ClientAliveCountMax 0</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 禁用基于主机的授权（需核实）</span></span><br><span class="line"></span><br><span class="line">    HostbasedAuthentication no</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 允许特定用户用特定IP或域名通过SSH登陆，域名需要开启DNS</span></span><br><span class="line">    UseDNS yes</span><br><span class="line">    AllowUsers ceph.admin@189.12.1.4 mysql.admin@xyz.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">``` bash 使用rsa 或 ed25519 加密密匙</span><br><span class="line"></span><br><span class="line">    $ ssh-keygen -t ed25519 -C <span class="string">"Login to production cluster at xyz corp"</span></span><br><span class="line">    或</span><br><span class="line">    $ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_aws_$(date +%Y-%m-%d) -C <span class="string">"AWS key for abc corp clients"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>随机产生用户密码</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$ vi genpasswd</span><br><span class="line"></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">genpasswd</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> l=<span class="variable">$1</span></span><br><span class="line">    [ <span class="string">"<span class="variable">$l</span>"</span> == <span class="string">""</span> ] &amp;&amp; l=20</span><br><span class="line">    tr -dc A-Za-z0-9_ &lt; /dev/urandom | head -c <span class="variable">$&#123;l&#125;</span> | xargs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># genpasswd 16</span></span><br><span class="line">genpasswd <span class="variable">$1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ bash genpasswd 32</span><br></pre></td></tr></table></figure>
+<pre><code># 在默认配置文件 /etc/ssh/sshd_config 追加如下内容（ 将arcfour cipher 停用）
+Ciphers   aes128-ctr,aes192-ctr,aes256-ctr
+
+# 禁用弱MAC算法，在默认配置文件 /etc/ssh/sshd_config追加如下内容
+MACs  hmac-sha1,umac-64@openssh.com,hmac-ripemd160,hmac-md5-96,
+hmac-sha2-256,hmac-sha2-512,hmac-ripemd160@openssh.com
+
+# 使用以下命令获取 OpenSSH 支持的加密方法：
+
+$ ssh -Q cipher
+$ ssh -Q cipher-auth
+$ ssh -Q mac
+$ ssh -Q kex
+$ ssh -Q key
+
+# 在重启 sshd 前检查配置文件的有效性和密匙的完整性，运行：
+
+$ sudo sshd -t
+
+# 扩展测试模式：
+
+$ sudo sshd -T
+
+
+# 限制登录设置主要是对hosts.allow与hosts.deny就行改动
+
+# 首先限制所有IP都无法连接，我们顺便将FTP的限制也加入其中。
+# 注意要想FTP限制起作用，需要修改配置中的tcp_wrappers=YES。
+</code></pre><p>　　vi /etc/hosts.deny</p>
+<p>　　sshd:ALL<br>　　vsftpd:ALL</p>
+<p>　　设定允许指定的IP地址连接：</p>
+<p>　　vi /etc/hosts.allow # xxx.xxx.xxx.表示网段<br>　　sshd:192.168.1.<br>　　vsftpd:192.168.1.</p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><pre><code>https://linux.cn/article-9394-1.html
+</code></pre><h2 id="保护-SSH-的三把锁"><a href="#保护-SSH-的三把锁" class="headerlink" title="保护 SSH 的三把锁"></a>保护 SSH 的三把锁</h2><p><a href="https://www.ibm.com/developerworks/cn/aix/library/au-sshlocks/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/aix/library/au-sshlocks/</a></p>
+<p>增加黑客入侵的难度<br><a href="http://www.ibm.com/developerworks/i/p-fkereki.jpg" target="_blank" rel="noopener">http://www.ibm.com/developerworks/i/p-fkereki.jpg</a><br>Federico Kereki<br>2010 年 11 月 30 日发布</p>
+<p>Weibo<br>Google+<br>用电子邮件发送本页面<br>Comments<br>1<br>简介</p>
+<p>如果需要远程访问计算机并启用了 Secure Shell (SSH) 连接，黑客就会尝试突破您的防线并控制您的计算机，您必须接受这个事实。尽管不能保证计算机不会被 “黑客” 占领，但是一些简单的解决方案有助于保护 SSH，可以让攻击困难一些。本文讨论三种技术：<br>常用缩写词</p>
+<pre><code>API: 应用程序编程接口
+DNS: 域名系统
+IETF: Internet 工程工作小组
+LDAP: 轻量级目录访问协议
+RFC: 请求注解
+TCP: 传输控制协议
+UDP: 用户数据报协议
+
+把 SSH 的标准端口改为不常用的值并增强 SSH 配置，从而挡住最简单的攻击。
+定义有限的用户列表，只允许这些用户登录。
+完全隐藏允许 SSH 访问的事实，要求根据特殊的 “敲门” 序列识别有效用户。 
+</code></pre><p>要想应用这些技术，需要能够访问根账户。另外，可能必须安装一些包，需要配置防火墙和路由器（如果有路由器的话），打开和关闭特定的端口并把数据包转发到您的计算机。<br>加强保护</p>
+<p>“隐匿产生安全” 这个概念尽人皆知而且受到大家的嘲笑，因为采用隐匿的方式，希望没人了解您的方法，这只是一厢情愿的想法。但是，在某些场景中，隐匿一点儿会有帮助。尽管简单的措施无法阻止下定决心的黑客，但是至少能够挡住那些 “脚本小子”，他们的脚本往往水平很一般。</p>
+<p>人人都知道 SSH 连接的标准端口是 22。因此，为了让计算机更安全，应该采取的第一个措施是把端口改为另一个不常用的非标准端口号，比如 22960。1024 以上的号码通常都可以使用，但是应该查阅参考资料以避免导致问题。这一修改对您的影响仅仅是必须使用下面的命令连接计算机：<br>1</p>
+<p>ssh -p 22960 your.machine.url</p>
+<p>为了实现这个小措施，只需在 /etc/ssh/sshd_config 文件中做简单的修改。编辑此文件（必须作为根用户），寻找 Port 22 行，把端口号改为您选择的号码（如果这一行以镑符 [#] 开头，表示它被注释掉了，那么应该取消注释标志）。保存文件，用 /etc/init.d/sshd restart 命令重新启动 SSH。应该在防火墙上打开您选择的端口并关闭端口 22。</p>
+<p>但是，还可以更进一步。编辑配置文件，在其中包含 清单 1 所示的行。注意，其中一些行可能已经存在，但是可以把它们注释掉。<br>清单 1. 通过修改 SSH 配置文件简便地增强安全性<br>1<br>2<br>3<br>4<br>5</p>
+<p>Port 22960<br>LoginGraceTime 30<br>MaxAuthTries 3<br>Protocol 2<br>PermitRootLogin no</p>
+<p>LoginGraceTime 允许一次登录花费 30 秒；如果用户花费的时间超过 30 秒，就不允许他访问，必须重新登录。MaxAuthTries 把错误尝试的次数限制为 3 次，3 次之后拒绝登录尝试。上面的 Protocol 2 行禁止使用比较弱的协议。最后一行不允许任何人作为根用户登录，这会让黑客攻击更困难。还可以使用 DenyUsers、AllowUsers、DenyGroups 和 AllowGroups 选项实现其他限制。这些修改不会显著增强计算机的安全性，但是只尝试强力攻击标准端口 22 的一般脚本会失败，不会造成损害。无论如何，这是向正确的方向迈出了第一步。在本文后面，我们将使用更安全的方法，不仅修改端口号，而且完全隐藏它。<br>谁可以进入？</p>
+<p>对于大多数人，PAM 是一种罐装的烹调油。但是作为 Linux® 安全术语，PAM 代表可插入身份验证模块（Pluggable Authentication Modules）。这些模块提供额外的身份验证规则，保护对计算机的访问。</p>
+<p>首先讨论一个基本问题：究竟为什么要使用 PAM？如果每个程序不得不定义自己的身份验证逻辑，就会很混乱。如何确定所有应用程序都实现了相同的测试和检查？如果需要额外的控制手段，那么怎么办？难道要重新编写所有程序吗？在计算机科学领域，有时候可以用额外的一层解决所有问题，至少在安全方面是这样。如果一个程序需要验证用户的身份，它可以调用 PAM API。这个 API 负责执行在 PAM 配置文件中指定的所有检查。这种方法还允许方便地修改身份验证规则，所有感知 PAM 的程序都会自动地应用新规则，不需要修改它们的代码。如果希望使用某种生物学检查（比如虹膜扫描器或指纹采集器），而且生产商提供了 PAM，就可以方便地设置它。在配置文件中包含模块调用，所有应用程序就可以使用这个设备了。<br>配置 PAM</p>
+<p>PAM 提供四个安全领域的特性，但是应用程序不太可能同时需要所有这些方面。例如，passwd 命令只需要下面列表中的第三组：</p>
+<pre><code>account 处理账户限制。对于有效的用户，允许他做什么？
+auth 处理用户识别 — 例如，通过输入用户名和密码。
+password 只处理与密码相关的问题，比如设置新密码。
+session 处理连接管理，包括日志记录。 
+</code></pre><p>在 /etc/pam.d 目录中为将使用 PAM 的每个应用程序创建一个配置文件，文件名与应用程序名相同。例如，login 命令的配置文件是 /etc/pam.d/login。</p>
+<p>必须定义将应用哪些模块，创建一个动作 “堆”。PAM 运行堆中的所有模块，根据它们的结果允许或拒绝用户的请求。还必须定义检查是否是必需的。最后，other 文件为没有特殊规则的所有应用程序提供默认规则。</p>
+<pre><code>optional 模块可以成功，也可以失败；PAM 根据模块是否最终成功返回 success 或 failure。
+required 模块必须成功。如果失败，PAM 返回 failure，但是会在运行堆中的其他模块之后返回。
+requisite 模块也必须成功。但是，如果失败，PAM 立即返回 failure，不再运行其他模块。
+sufficient 模块在成功时导致 PAM 立即返回 success，不再运行其他模块。 
+</code></pre><p>配置文件的结构很简单。可以包含注释，注释以散列符 (#) 开头；通过在换行处加上反斜杠 ()，可以把长的行分为多行。行有三个字段：领域 (account、auth、password 或 session）、控制标志（optional、required、requisite 或 sufficient）、将运行的模块的路径和参数。注意，第二个字段可以更复杂；更多信息见 参考资料。另外，可以使用 include 规则以包含其他文件中的规则，比如 auth include common-account。</p>
+<p>特殊的 /etc/pam.d/other 文件是 “默认的” 配置文件（见 清单 2），其中的规则自动地应用于没有自己的配置文件的所有应用程序。为了确保安全，应该快速检查 /etc/pam.d 目录，把您不使用的所有配置文件改为其他名称（这样就会使用 other 配置）。如果认为确实需要某个应用程序，那么只需把配置文件改回原来的名称。默认配置通常拒绝所有请求（通过使用 pam_deny.so 模块）并警告管理员（通过 pam_warn.so 模块），让管理员解决问题。</p>
+<p>标准的 “other” 配置文件为没有自己的配置文件的所有应用程序提供安全的默认规则（拒绝所有请求）。<br>清单 2. 标准的 “other” 配置文件<br>1<br>2<br>3<br>4<br>5<br>6</p>
+<p>account required pam_deny.so<br>auth required pam_deny.so<br>auth required pam_warn.so<br>password required pam_deny.so<br>password required pam_warn.so<br>session required pam_deny.so</p>
+<p>如果把 pam_deny.so 替换为 pam_unix.so，就应用标准的身份验证方法（输入用户名和密码）。如果您不关心安全性，那么使用 pam_permit.so，这会允许任何请求！<br>一些可用方法</p>
+<p>尽管没有标准的模块列表，但是所有发行版都包含以下模块中的大多数。请检查驻留模块的 /lib/security 或 /usr/lib/security 目录。对于 64 位操作系统，用 lib64 替换 lib。如果需要更多信息，可以尝试执行 man the.name.of.the.module，而不要直接执行它；PAM 不是可执行的二进制代码。</p>
+<pre><code>pam_access 根据 /etc/security/access.conf 文件允许或拒绝访问。稍后将使用此模块决定允许哪些用户登录。
+pam_cracklib 和 pam_pwcheck 检查新密码的强度。
+pam_deny 和 pam_permit 是基本模块，分别拒绝或允许访问。
+pam_echo 向用户显示指定文件的内容。
+pam_lastlog 向用户显示他上一次登录的日期和时间。
+pam_ldap.so 让用户根据 LDAP 服务器进行身份验证，提供跨网络的集中式身份验证。
+pam_limits 模块允许指定系统资源限制，限制在 /etc/security/limits.conf 文件中定义。
+pam_listfile 提供根据一个文件的内容允许或拒绝服务的另一种方法。
+pam_mail 检查用户是否有未处理的邮件。
+pam_motd 向用户显示 “message of the day” 文件。
+如果 /etc/nologin 文件存在，pam_nologin 阻止所有登录。
+pam_rootok 允许根用户访问，不执行进一步检查。/etc/pam.d/su 中常常包含这个模块；必需的行是 auth sufficient pam_rootok.so。根用户可以作为任何用户操作，不需要提供密码。
+pam_succeed_if 检查账户的特定属性，比如是否是某个组的成员。
+pam_time 可以根据 /etc/security/time.conf 中的规则限制对服务的访问。
+pam_unix（或 pam_unix2）提供基于 /etc/passwd 和 /etc/shadow 文件的传统 UNIX® 身份验证。
+pam_userdb 根据一个 Berkeley 数据库执行身份验证。
+pam_warn 在系统日志中记录信息。
+pam_wheel 只向 wheel 组的成员提供根访问权；必需的行是 auth required pam_wheel.so。 
+</code></pre><p>关于其他模块和编写自己的模块的信息，请查阅 参考资料。现在，使用 PAM 决定谁可以登录您的计算机。<br>用 PAM 限制访问</p>
+<p>现在，我们来使用 PAM 限制谁可以连接您的服务器。必须编辑 /etc/pam.d/sshd 文件，让它像清单 3 这样。<br>清单 3. 在 sshd PAM 文件中添加 pam_access.so<br>1<br>2<br>3<br>4<br>5<br>6<br>7</p>
+<p>#%PAM-1.0<br>account include common-account<br>account required pam_access.so<br>auth include common-auth<br>auth required pam_nologin.so<br>password include common-password<br>session include common-session</p>
+<p>在 sshd PAM 文件中添加 pam_access.so，就可以轻松地定义谁可以使用 SSH 连接您的计算机。pam_access.so 模块实现基于 /etc/security/access.conf 文件的安全控制，见清单 4。<br>清单 4. 通过使用 pam_access.so，定义谁可以或不可以使用 SSH<br>1<br>2<br>3<br>4</p>
+<ul>
+<li>: ALL : 192.168.1. </li>
+<li>: jack : ALL </li>
+<li>: jill : ALL </li>
+</ul>
+<ul>
+<li>: ALL : ALL</li>
+</ul>
+<p>第一行允许任何用户 (ALL) 从内部网络登录。后两行允许用户 jack 和 jill 从任何地方访问服务器。最后一行拒绝其他任何用户从其他任何地方访问。允许多个用户访问的另一种方法是使用 pam_listfile.so，这需要创建一个允许访问的用户列表（例如 /etc/ssh_users）。在 /etc/pam.d/sshd 文件中添加以下行：<br>1<br>2</p>
+<p>auth required pam_listfile.so item=user sense=allow<br>   file=/etc/ssh_users onerr=fail</p>
+<p>这还没有完。必须修改 /etc/ssh/sshd_config 文件，让它使用 PAM。在此文件中添加 UsePAM yes 行，重新启动 sshd 守护进程，这样就行了！<br>究竟是否有门？</p>
+<p>即使应用了前两节中的方法，无论您怎么预防，黑客仍然会尝试穿越您系统中任何开放的门户。改变 SSH 端口号对于经验丰富的黑客只能造成小小的麻烦。限制允许访问的用户会有帮助，但前提是没有用户落入黑客或社会工程攻击的圈套而泄露密码。无论如何，只要您的系统中有门，就会吸引黑客。</p>
+<p>增强计算机安全性的最后一种方案是最激进的：关闭打开的端口，这会让任何攻击都无法攻破您的计算机。只向能够提供 “秘密敲门暗号” 的用户开放所需的端口，让用户能够输入密码并访问计算机。</p>
+<p>这种技术称为端口敲门，适用于需要访问不向公众开放的服务器的用户。服务器可以关闭所有端口，直到用户提供一个秘密的敲门序列 （序列很容易实现，而且需要的资源不多）。</p>
+<p>打开秘密端口之后，应用常用的安全机制（比如密码或证书）。只需在防火墙级上提供一个额外的安全层，需要秘密端口的所有服务就会正常工作。</p>
+<p>这种方法的要点在于关闭所有端口并监视外部连接尝试。当识别出预定义的尝试序列（称为敲门序列 ）时，可以执行打开端口等操作，让外部的用户能够进来。敲门序列的复杂程度由您决定，从简单的列表（比如依次尝试 TCP 端口 7000、UDP 端口 7100 和 TCP 端口 7200）到一次性序列集合都可以。（按密码学术语来说，一次性序列与 “一次一密” 相似，这是已知最安全的加密方法。）外面的用户必须知道使用 SSH 所需的端口号和密码，还必须知道打开端口并启用密码所需的敲门序列。如果没有这个序列，连接尝试就会静悄悄地失败。</p>
+<p>这为什么是非常安全的方案？因为有 65,535 个端口（见 参考资料）。即使考虑到已经分配的端口，仍然有超过 60,000 个可用端口。如果敲门序列只包含四次 “敲门”，黑客要想通过强力攻击猜出序列，就必须测试大约 13,000,000,000,000,000,000 个序列（13 后面 18 个零）。这样的攻击显然不太可能奏效！当然，强力攻击或胡乱猜测并不是猜出正确序列的惟一方法。因此，不要只使用单一安全方法；而是使用一系列安全层来增加攻击的难度。</p>
+<p>必须安装敲门守护进程 knockd；它监视敲门序列，当发现有效的序列时执行相应的操作。如果愿意，可以从头构建它，但是大多数（如果不是所有的话）发行版中都有这个包。最好使用包管理工具安装它。例如，在 OpenSUSE 中，可以使用 Yast2 或通过执行 sudo zypper install knockd 安装它。在 Ubuntu 中可以使用 sudo apt-get install knockd，在 Debian 中使用 sudo aptitude install knockd。用发行版的软件安装工具搜索 knockd 往往能够找到它。</p>
+<p>安装这个包之后，必须编辑 /etc/knockd.conf 文件以指定端口敲门规则，然后启动守护进程。为了完成所需的设置，必须了解您的防火墙的工作方式。例如，在 OpenSUSE 中，可以使用 清单 5 这样的设置。<br>清单 5. 针对 OpenSUSE 防火墙设计的示例配置文件<br>1<br>2<br>3<br>4<br>5<br>6<br>7</p>
+<p>[opencloseSSH]<br>  sequence= 7000,8000,9000<br>  tcpflags= syn<br>  seq_timeout= 15<br>  cmd_timeout= 30<br>  start_command= /usr/sbin/iptables -s %IP% -I input_ext 1 -p tcp –dport 22960 -j ACCEPT<br>  stop_command= /usr/sbin/iptables -s %IP% -D input_ext -p tcp –dport 22960 -j ACCEPT</p>
+<p>这个示例在用户依次在端口 7000、8000 和 9000 上敲门之后启用 SSH 访问。</p>
+<p>在启动 knockd 之前，关闭端口 22960 并尝试远程登录。这个尝试应该会失败，见清单 6。<br>清单 6. 如果禁用 SSH 访问而且不启动敲门守护进程，登录尝试会失败<br>1<br>2</p>
+<blockquote>
+<p>ssh the.url.for.your.site -p 22960 -o ConnectTimeout=15<br>ssh: connect to host the.url.for.your.site port 22960: Connection timed out</p>
+</blockquote>
+<p>现在，使用 sudo /etc/init.d/knockd start 或 sudo knockd -d 启动端口敲门守护进程（这两个命令是等效的），然后再试一下；端口敲门序列要求在端口 7000、8000 和 9000 上敲门。必须在 15 秒内完成这个序列。识别出序列之后端口打开，必须在 30 秒内登录。否则，端口再次关闭。</p>
+<p>为了检验这个过程，回到您的远程机器上并登录。这一次提供所需的敲门序列，见 清单 7。注意，在安装 knockd 时通常也会安装 knock 命令。如果不是这样，只需用发行版的包管理工具搜索它。<br>清单 7. 提供所需的敲门序列之后登录成功<br>1<br>2<br>3<br>4<br>5</p>
+<blockquote>
+<p>knock the.url.for.your.site 7000<br>knock the.url.for.your.site 8000<br>knock the.url.for.your.site 9000<br>ssh the.url.for.your.site -p 22960 -o ConnectTimeout=10<br>Password:</p>
+</blockquote>
+<p>如果提供了错误的敲门序列（或根本没有敲门），会收到 “Connection timed out” 消息，SSH 端口仍然完全关闭，看不出它是存在的。<br>如果您处于路由器后面</p>
+<p>如果您的服务器通过路由器连接 Internet，就必须修改它的配置。具体细节因路由器和防火墙类型而异，但是一般来说应该：</p>
+<pre><code>打开敲门端口并把数据包转发到您的计算机，让 knockd 能够识别并处理它们。
+把端口 22960（SSH 连接使用的端口）上的数据包转发到您计算机上的端口 22960。
+配置您计算机的防火墙，让它拒绝对端口 22960 和敲门端口的连接。 
+</code></pre><p>尽管路由器会打开一些端口，但是对它们的所有访问都会到达您计算机的防火墙。访问会被阻止，除非探测到正确的端口敲门序列。<br>敲门配置</p>
+<p>/etc/knockd.conf 文件有一个一般选项小节 options，希望使用的每个敲门序列各有一个小节。选项可以是大写、小写或大小写混合形式。</p>
+<pre><code>在默认情况下，knockd 监视 eth0 接口。要想使用另一个接口（例如 eth1），可以包含 Interface=eth1 行。注意，只使用设备名而不是设备的完整路径。
+如果希望启用日志记录，可以通过包含 useSyslog 行使用标准的 Linux 日志文件，也可以通过包含 LogFile=/the/full/path/to/your/file 使用自己的文件。但是，应该认识到日志记录是一个漏洞；如果黑客获得了日志，入侵者就会掌握端口敲门序列。
+如果希望能够检查 knockd 是否仍然在运行，那么包含 PidFile=/the/full/path/to/a/PID/file。这个守护进程的进程 ID (PID) 将存储在这个文件中。应该通过一个 cron 任务定期检查 knockd 是否仍然在运行并在需要时重新启动它。注意，当这个守护进程停止运行时，系统是安全的；所有端口关闭，不可访问。在守护进程重新启动之前，用户无法登录。 
+</code></pre><p>可以让 knockd 监听多个序列并以不同方式响应各个序列。在前面的示例中，让 knockd 打开 SSH 端口；可以简单地启用 HTTP 端口，让用户能够访问 web 服务器，也可以运行特定的进程。在配置文件中，每个序列都有相应的小节。</p>
+<pre><code>使用 sequence 定义敲门序列，比如 7000,8000,9000。在默认情况下，敲门使用 TCP，但是可以添加 UDP 以增加复杂性，比如 7000,8000:udp,9000。
+除了使用固定的序列之外，还可以指定一个包含 “一次性序列” 的文件，这些序列在使用之后就会删除，不能再次使用。指定这种序列的方法如下：
+1
+
+one_time_sequences=/the/full/path/to/a/sequences/file
+
+使用任何文本编辑器创建此文件；其中每行包含一个序列（按照上面所示的格式）。应该在远程计算机上保存此文件的拷贝以便记住如何登录。
+可以指定应该扫描哪些到达的 TCP 数据包，丢弃不与 ACK、FIN、PSH、RST、SYN 或 URG 标志匹配的数据包。对于 SSH 连接，应该使用 TCPFlags=SYN。
+可以用 Seq_Timeout=seconds.to.wait 指定完成一个序列的最大时间。如果在此时间内没有输入完整的序列，就不会识别出它，访问被拒绝。
+可以用 Cmd_Timeout=seconds.to.wait 指定在识别出序列之后用户执行第二个命令的最大时间。如果提供了敲门序列的用户没有快速地输入下一个命令（例如登录），端口会再次关闭。
+最重要的参数是 Start_command=some.command.to.execute，它指定成功地识别出敲门序列之后要执行的命令或脚本。如果需要引用敲门者的 IP 地址（例如为了允许从他的计算机连接您的计算机），可以使用 %IP%。在运行时，它会替换为正确的值。在上面的示例中指定：
+1
+
+/usr/sbin/iptables -s %IP% -I input_ext 1 -p tcp --dport 22960 -j ACCEPT
+
+iptables 向提供敲门序列的 IP 地址上的用户开放端口 22960。
+另一个重要的参数是 Stop_command=some.command.to.execute；当超过 Cmd_timeout 时间之后，执行它指定的命令或脚本。 
+</code></pre><p>在这里，因为只希望打开或关闭端口 22960，所以使用单一命令就够了。如果需要更复杂的操作，可以通过调用脚本执行所需的任何操作 — 操作甚至可以完全不涉及打开端口。可以触发任何操作，比如运行进程或执行备份。当然，了解要使用的命令可能有点儿难度。例如，因为我运行 OpenSUSE，它提供自己的防火墙前端，所以我不得不通过查看 iptables -l 的输出了解应该执行哪个命令来打开或关闭端口 22960。</p>
+<p>对于 knockd 本身，有几个选项需要考虑：</p>
+<pre><code>-c：允许指定默认配置文件 /etc/knockd.conf 之外的另一个配置文件
+-d：让 knockd 作为后台守护进程运行，这是标准运行方式
+-D：提供输出调试消息
+-h：提供关于语法和选项的帮助
+-i：允许指定默认的 eth0 接口之外的其他接口
+-l：为日志项启用 DNS 查找 — 这是一种不好的做法，因为这强迫计算机使用 DNS 通信流，会产生漏洞
+-v：提供更详细的消息和解释
+-V：提供程序的版本号 
+</code></pre><p>最后，可以使用多种方法产生敲门序列本身，编写 knock 命令是最简单的方法。</p>
+<p>以下命令在 TCP 端口 7000 上敲门：<br>1</p>
+<p>knock the.url.for.your.site 7000</p>
+<p>以下命令在 UDP 端口 8000 上敲门：<br>1</p>
+<p>knock the.url.for.your.site -u 8000</p>
+<p>或<br>1</p>
+<p>knock the.url.for.your.site 8000:udp</p>
+<p>-h 参数提供这个命令的帮助。<br>结束语</p>
+<p>您看到了三种保护 SSH 访问的方法：修改 sshd 的配置参数，通过 PAM 限制可以登录的用户，以及使用端口敲门序列隐藏存在 SSH 访问的事实。尽管没有任何方法能够完全保护任何计算机，但是采取这三个措施会让您的服务器安全一些。 </p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/security/" rel="tag"><i class="fa fa-tag"></i> security</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/nginx/wordpress/WordPress Nginx 安全配置 – 禁用某些目录执行PHP/" rel="next" title="WordPress Nginx 安全配置 – 禁用某些目录执行PHP">
+                <i class="fa fa-chevron-left"></i> WordPress Nginx 安全配置 – 禁用某些目录执行PHP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/docker/docker CE 安装/" rel="prev" title="docker CE 安装">
+                docker CE 安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看登陆日志"><span class="nav-number">1.</span> <span class="nav-text">查看登陆日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看security日志"><span class="nav-number">2.</span> <span class="nav-text">查看security日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录登陆后的IP地址和某用户名所操作的历史记录"><span class="nav-number">3.</span> <span class="nav-text">记录登陆后的IP地址和某用户名所操作的历史记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看文件修改属性"><span class="nav-number">4.</span> <span class="nav-text">查看文件修改属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找webshell-关键字"><span class="nav-number">5.</span> <span class="nav-text">查找webshell 关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用日志文件"><span class="nav-number">6.</span> <span class="nav-text">常用日志文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sshd-加固配置"><span class="nav-number">7.</span> <span class="nav-text">sshd 加固配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考："><span class="nav-number">8.</span> <span class="nav-text">参考：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保护-SSH-的三把锁"><span class="nav-number">9.</span> <span class="nav-text">保护 SSH 的三把锁</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
