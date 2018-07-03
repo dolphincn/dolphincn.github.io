@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限">
+<meta name="keywords" content="sync,syncthing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="syncthing 同步文件">
+<meta property="og:url" content="http://dolphincn.github.io/sync/syncthing 安装配置/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-25T08:46:00.633Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="syncthing 同步文件">
+<meta name="twitter:description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/sync/syncthing 安装配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>syncthing 同步文件 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/syncthing 安装配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">syncthing 同步文件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-25 10:05:00 / 修改时间：16:46:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sync/" itemprop="url" rel="index"><span itemprop="name">sync</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>syncthing 安装配置</p>
+<h2 id="使用总结："><a href="#使用总结：" class="headerlink" title="使用总结："></a>使用总结：</h2><pre><code>一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。
+
+同步的文件所有者和所有组，改为syncthing运行的用户名和组
+
+同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。
+
+支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限
+
+The following are not synchronized;
+
+    File or Directory Owners and Groups (not preserved)
+    Directory Modification Times (not preserved)
+    Hard Links (followed, not preserved)
+    Extended Attributes, Resource Forks (not preserved)
+    Windows, POSIX or NFS ACLs (not preserved)
+    Devices, FIFOs, and Other Specials (ignored)
+    Sparse file sparseness (will become sparse, when supported by the OS &amp; filesystem)
+</code></pre><h2 id="配置参考："><a href="#配置参考：" class="headerlink" title="配置参考："></a>配置参考：</h2><pre><code>https://docs.syncthing.net/users/config.html
+</code></pre><h2 id="需要安装配置时间同步"><a href="#需要安装配置时间同步" class="headerlink" title="需要安装配置时间同步"></a>需要安装配置时间同步</h2><pre><code>yum install chrony
+systemctl start chronyd
+systemctl enable chronyd
+</code></pre><h2 id="防火墙开放端口，还需要关闭selinux"><a href="#防火墙开放端口，还需要关闭selinux" class="headerlink" title="防火墙开放端口，还需要关闭selinux"></a>防火墙开放端口，还需要关闭selinux</h2><pre><code>firewall-cmd --add-port={22000/tcp,8888/tcp}
+firewall-cmd --add-port={22000/tcp,8888/tcp} --permanent
+</code></pre><h2 id="如果文件夹很多，需要调整"><a href="#如果文件夹很多，需要调整" class="headerlink" title="如果文件夹很多，需要调整"></a>如果文件夹很多，需要调整</h2><pre><code>echo &quot;fs.inotify.max_user_watches=204800&quot; | sudo tee -a /etc/sysctl.conf
+sudo sh -c &apos;echo 204800 &gt; /proc/sys/fs/inotify/max_user_watches&apos;
+</code></pre><h2 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h2><pre><code>cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</code></pre><h2 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h2><pre><code>## 官网：https://syncthing.net/
+
+## 安装 syncthing
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">wget https://github.com/syncthing/syncthing/releases/download/v0.14.48/syncthing-linux-amd64-v0.14.48.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxf syncthing-linux-amd64-v0.14.48.tar.gz -C /usr/<span class="built_in">local</span></span><br><span class="line"></span><br><span class="line">mv /usr/<span class="built_in">local</span>/syncthing-linux-amd64-v0.14.48 /usr/<span class="built_in">local</span>/syncthing</span><br><span class="line"></span><br><span class="line">cp /usr/<span class="built_in">local</span>/syncthing/etc/linux-systemd/system/syncthing@.service /usr/lib/systemd/system/</span><br><span class="line"></span><br><span class="line">vi /usr/lib/systemd/system/syncthing@.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Syncthing - Open Source Continuous File Synchronization <span class="keyword">for</span> %I</span><br><span class="line">Documentation=man:syncthing(1)</span><br><span class="line">After=network.target</span><br><span class="line"><span class="comment">#Wants=syncthing-inotify@.service</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 地址不能用引号</span></span><br><span class="line">[Service]</span><br><span class="line">User=%i</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/syncthing/syncthing -no-browser -no-restart -logflags=1 -home=/web/syncthing/%i</span><br><span class="line">Restart=on-failure</span><br><span class="line">SuccessExitStatus=3 4</span><br><span class="line">RestartForceExitStatus=3 4</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 下面两参数不需要，centos运行不了</span></span><br><span class="line"><span class="comment">#environment = STNORESTART="1", HOME="/web/syncthing/%i"</span></span><br><span class="line"><span class="comment">#directory = /web/syncthing/%i</span></span><br></pre></td></tr></table></figure>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><pre><code># 创建同步账户
+
+groupadd -g 2222 g_sync
+useradd -u 2222 -g 2222 -M -s /sbin/nologin u_sync
+
+mkdir /web/syncthing/u_sync -p
+chown -R u_sync:g_sync /web/syncthing/u_sync
+
+systemctl start syncthing@&lt;启动用户名&gt;
+
+## 启动时如果没配置-home 参数，将会自动在运行用户home目录下创建运行配置目录，如： ~/.config/syncthing
+</code></pre><h2 id="webui-访问"><a href="#webui-访问" class="headerlink" title="webui 访问"></a>webui 访问</h2><pre><code># 编辑配置文件
+
+vi /data/syncthing/&lt;user_name_folder&gt;/.config.xml
+&lt;gui enabled=&quot;true&quot; tls=&quot;false&quot;&gt;
+&lt;address&gt;0.0.0.0:8384&lt;/address&gt;
+改为
+&lt;gui enabled=&quot;true&quot; tls=&quot;true&quot;&gt;
+&lt;address&gt;200.200.200.221:8888&lt;/address&gt;
+</code></pre><h2 id="两台服务器数据同步"><a href="#两台服务器数据同步" class="headerlink" title="两台服务器数据同步"></a>两台服务器数据同步</h2><h2 id="基本必须的配置"><a href="#基本必须的配置" class="headerlink" title="基本必须的配置"></a>基本必须的配置</h2><pre><code>actions--&gt;settings--&gt;general:
+
+    Device Name: vm01
+    Automatic upgrades: No upgrades
+    Default Folder Path: /sync/www
+
+actions--&gt;settings--&gt;GUI:
+
+    GUI Listen Address: 200.200.200.221:8888
+    GUI Authentication User: test
+    GUI Authentication Password: test
+    Use HTTPS for GUI： checked
+    Start Browser ：checked
+
+## 本机连接配置, 局域网用并手动配置同步服务器地址，所以不启用NAT端口转换，局域网搜索服务器，英特网搜索服务器，中继服务服务器
+actions--&gt;settings--&gt;Connection:
+    Sync Protocol Listen Addresses: tcp://200.200.200.221:22000
+
+    Enable NAT traversal: unchecked
+    Local Discovery: unchecked
+    Global Discovery: unchecked
+    Enable Relaying: unchecked
+
+    Incoming Rate Limit (KiB/s) ：0
+    Outgoing Rate Limit (KiB/s) : 0
+
+actions--&gt;settings--&gt;advanced:
+Device &quot;vm03&quot; :
+    Addresses: tcp://200.200.200.221:22000
+    Allowed Networks: 200.200.200.0/24
+</code></pre><h2 id="服务器连接配置-局域网用，所有服务器都手动添加对方服务器连接信息"><a href="#服务器连接配置-局域网用，所有服务器都手动添加对方服务器连接信息" class="headerlink" title="服务器连接配置,局域网用，所有服务器都手动添加对方服务器连接信息"></a>服务器连接配置,局域网用，所有服务器都手动添加对方服务器连接信息</h2><pre><code>主界面--&gt;Remote Devices--&gt;Add remote Device：
+
+    ## 对方的id，在actions--&gt;show id
+    Device ID：FOYBGA7-CMD2C6O-5JFBWNW-5D34HJ4-TXTEY6C-UZ7E7EE-X4ZR3DR-S6BCQA2
+    ## 对方的设备名
+    Device Name：vm02
+    ## 对方的连接地址，actions--&gt;settings--&gt;Connection--&gt;Sync Protocol Listen Addresses
+    Addresses：tcp://200.200.200.222:22000
+
+    # 自动在默认的共享文件夹下创建和共享目录，这个最好取消，最好手动配置共享和同步目录
+    Auto Accept：unchecked
+    # 对方不是中继服务就不需要选
+    Introducer: uncehcked
+</code></pre><h2 id="同步共享文件夹-同步的服务器配置最好都一致，folder-id-必须一致"><a href="#同步共享文件夹-同步的服务器配置最好都一致，folder-id-必须一致" class="headerlink" title="同步共享文件夹,同步的服务器配置最好都一致，folder id 必须一致"></a>同步共享文件夹,同步的服务器配置最好都一致，folder id 必须一致</h2><pre><code>主界面--&gt;Folders--&gt;add folder
+
+Folders--&gt;add folder--&gt; General：
+
+    ## 显示名可以和folder id 一样
+    Folder Label : wwwroot
+
+    ## 唯一标记用于同步和共享文件夹，同步的同一个文件夹，所有的服务器上都要一致
+    Folder ID : wwwroot
+
+    ## 在服务上要共享同步的目录
+    Folder Path : /sync/wwwroot
+
+    ## 勾选同步和共享给哪些设备或服务器，没有列出需要添加服务器或设备
+    Share With Devices： 
+
+Folders--&gt;add folder--&gt; File Versioning：
+
+    ## 这里不启用文件本版管理，相当于github功能
+    File Versioning：no File Versioning
+
+Folders--&gt;add folder--&gt;  ignore patterns：
+
+    ## 忽略哪些文件同步或共享，采用模式匹配
+
+Folders--&gt;add folder--&gt; Advance:
+
+    Scanning:
+
+        ## 监控变更
+        Watch for Changes : checked
+
+        ## 完整扫描间隔，单位秒
+        Full Rescan Interval (s)： 3600
+
+    ## 如果选Send only, 则表示作为master不会自动同步其它设备的文件最新的变更，也不会去覆盖其它设备的最新变更.
+    Folder Type： Send &amp; Receive
+
+    File Pull Order ：Newest First
+
+    Minimum Free Disk Space: 5 %
+
+    Permissions： 
+
+            Ignore： unchecked
+</code></pre><h2 id="提升同步速度和限制共享网络"><a href="#提升同步速度和限制共享网络" class="headerlink" title="提升同步速度和限制共享网络"></a>提升同步速度和限制共享网络</h2><pre><code># 添加同步服务器和设置好同步文件夹后，分别需要在高级里面设置各个设备的连接地址，地址栏里不要有dynamic，否则同步速度很慢
+
+actions--&gt;settings--&gt;advanced:
+
+Addresses: tcp://200.200.200.222:22000
+Allowed Networks: 200.200.200.0/24
+
+# 可能需要重启syncthing
+</code></pre><h2 id="如果无法及时更新文件变更，请安装inotify-tools"><a href="#如果无法及时更新文件变更，请安装inotify-tools" class="headerlink" title="如果无法及时更新文件变更，请安装inotify-tools"></a>如果无法及时更新文件变更，请安装inotify-tools</h2><pre><code>yum install inotify-tools
+
+#添加以下代码
+vi /etc/sysctl.conf
+
+fs.inotify.max_queued_events=99999999
+
+fs.inotify.max_user_watches=99999999
+
+fs.inotify.max_user_instances=65535
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sync/" rel="tag"><i class="fa fa-tag"></i> sync</a>
+          
+            <a href="/tags/syncthing/" rel="tag"><i class="fa fa-tag"></i> syncthing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/nginx/magento/Magento 文件夹及文件权限/" rel="next" title="Magento 文件夹及文件权限">
+                <i class="fa fa-chevron-left"></i> Magento 文件夹及文件权限
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/windows/winrar 命令行使用/" rel="prev" title="winrar 命令行使用">
+                winrar 命令行使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用总结："><span class="nav-number">1.</span> <span class="nav-text">使用总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置参考："><span class="nav-number">2.</span> <span class="nav-text">配置参考：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要安装配置时间同步"><span class="nav-number">3.</span> <span class="nav-text">需要安装配置时间同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙开放端口，还需要关闭selinux"><span class="nav-number">4.</span> <span class="nav-text">防火墙开放端口，还需要关闭selinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果文件夹很多，需要调整"><span class="nav-number">5.</span> <span class="nav-text">如果文件夹很多，需要调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置时区"><span class="nav-number">6.</span> <span class="nav-text">设置时区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置"><span class="nav-number">7.</span> <span class="nav-text">安装配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">8.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webui-访问"><span class="nav-number">9.</span> <span class="nav-text">webui 访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两台服务器数据同步"><span class="nav-number">10.</span> <span class="nav-text">两台服务器数据同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本必须的配置"><span class="nav-number">11.</span> <span class="nav-text">基本必须的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器连接配置-局域网用，所有服务器都手动添加对方服务器连接信息"><span class="nav-number">12.</span> <span class="nav-text">服务器连接配置,局域网用，所有服务器都手动添加对方服务器连接信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步共享文件夹-同步的服务器配置最好都一致，folder-id-必须一致"><span class="nav-number">13.</span> <span class="nav-text">同步共享文件夹,同步的服务器配置最好都一致，folder id 必须一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升同步速度和限制共享网络"><span class="nav-number">14.</span> <span class="nav-text">提升同步速度和限制共享网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果无法及时更新文件变更，请安装inotify-tools"><span class="nav-number">15.</span> <span class="nav-text">如果无法及时更新文件变更，请安装inotify-tools</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
