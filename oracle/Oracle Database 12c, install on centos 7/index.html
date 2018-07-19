@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="下载地址：oracle: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html  sql developer http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html  PL/">
+<meta name="keywords" content="oracle,install">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install Oracle Database 12c on centos 7">
+<meta property="og:url" content="http://dolphincn.github.io/oracle/Oracle Database 12c, install on centos 7/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="下载地址：oracle: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html  sql developer http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html  PL/">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-15T02:49:33.610Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Install Oracle Database 12c on centos 7">
+<meta name="twitter:description" content="下载地址：oracle: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html  sql developer http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html  PL/">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/oracle/Oracle Database 12c, install on centos 7/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Install Oracle Database 12c on centos 7 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/oracle/Oracle Database 12c, install on centos 7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Install Oracle Database 12c on centos 7
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-15 10:49:33" itemprop="dateModified" datetime="2018-07-15T10:49:33+08:00">2018-07-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/install/" itemprop="url" rel="index"><span itemprop="name">install</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="下载地址："><a href="#下载地址：" class="headerlink" title="下载地址："></a>下载地址：</h2><pre><code>oracle:
+http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
+
+sql developer
+http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html
+
+PL/SQL Developer
+http://files.allroundautomations.com/plsqldev1207x64.msi
+
+
+## 通过wget下载，首先需要用chrome 登陆下载Oracle安装包，然后通过chrome查看下载内容获取下载连接地址, 这个地址包含AuthParam，这个值是变的
+## Oracle Database 12c Release 2 (12.2.0.1.0) for Linux x86-64 (cksum - 4170261901)
+
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1531550179_0b36f7a93d74a319d16d912549e8f200&quot; -O linuxx64_12201_database.zip
+## 或者
+wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1531550179_0b36f7a93d74a319d16d912549e8f200&quot;
+
+## Oracle Database 12c Release 2 Grid Infrastructure (12.2.0.1.0) for Linux x86-64 (cksum - 1523222538)  
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_gsm.zip?AuthParam=1531550996_aafa7bf31f418173242a4d5220592b4b&quot;
+
+## Oracle Database Gateways 12c Release 2 (12.2.0.1.0) for Linux x86-64 (cksum - 2671223080) 
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_gateways.zip?AuthParam=1531551201_626b9d693e0e19eaa903a50d34774984&quot;
+
+## Oracle Database 12c Release 2 Examples (12.2.0.1.0) for Linux x86-64
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_examples.zip?AuthParam=1531551390_b6f3aa6b20993c7afabe834d72459cc9&quot;
+
+## 解压
+yum install -y zip unzip
+mkdir /data/install
+unzip linuxx64_12201_database.zip -d /data/install/
+</code></pre><a id="more"></a>
+<h2 id="官方帮助文档"><a href="#官方帮助文档" class="headerlink" title="官方帮助文档"></a>官方帮助文档</h2><pre><code>http://www.oracle.com/technetwork/database/enterprise-edition/documentation/index.html
+</code></pre><h2 id="配置计算机名，添加host解析"><a href="#配置计算机名，添加host解析" class="headerlink" title="配置计算机名，添加host解析"></a>配置计算机名，添加host解析</h2><pre><code>hostnamectl set-hostname db.test.com
+
+cat /etc/hostname
+db.test.com
+
+sestatus
+
+echo &quot;127.0.0.1 db.test.com&quot; &gt;&gt; /etc/hosts
+echo &quot;200.200.200.50 db.test.com&quot; &gt;&gt; /etc/hosts
+
+## 关闭防火墙和selinux , 否则安装会有问题
+</code></pre><h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><pre><code>firewall-cmd --get-active-zones
+
+firewall-cmd --zone=public --add-port={1521/tcp,5500/tcp,5520/tcp,3938/tcp --permanent
+
+firewall-cmd --reload
+
+firewall-cmd --list-ports
+</code></pre><h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><figure class="highlight bash"><figcaption><span>## 安装需要的包</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum -y install binutils compat-libcap1 compat-libstdc++-33 gcc gcc-c++ \</span><br><span class="line">glibc glibc-devel ksh libaio libaio-devel libgcc libstdc++ \</span><br><span class="line">libstdc++-devel libXext libXtst libX11 libXau libXi make sysstat</span><br><span class="line"></span><br><span class="line"><span class="comment">## 或者</span></span><br><span class="line"></span><br><span class="line">yum install -y binutils \</span><br><span class="line">compat-libcap1 \</span><br><span class="line">compat-libstdc++-33 \</span><br><span class="line">compat-libstdc++-33.i686 \</span><br><span class="line">glibc \</span><br><span class="line">glibc.i686 \</span><br><span class="line">glibc-devel \</span><br><span class="line">glibc-devel.i686 \</span><br><span class="line">gcc \</span><br><span class="line">gcc-c++ \</span><br><span class="line">ksh \</span><br><span class="line">libaio \</span><br><span class="line">libaio.i686 \</span><br><span class="line">libaio-devel \</span><br><span class="line">libaio-devel.i686 \</span><br><span class="line">libX11 \</span><br><span class="line">libX11.i686 \</span><br><span class="line">libXau \</span><br><span class="line">libXau.i686 \</span><br><span class="line">libXi \</span><br><span class="line">libXi.i686 \</span><br><span class="line">libXtst \</span><br><span class="line">libXtst.i686 \</span><br><span class="line">libgcc \</span><br><span class="line">libgcc.i686 \</span><br><span class="line">libstdc++ \</span><br><span class="line">libstdc++.i686 \</span><br><span class="line">libstdc++-devel \</span><br><span class="line">libstdc++-devel.i686 \</span><br><span class="line">libXext \</span><br><span class="line">libXext.i686 \</span><br><span class="line">make \</span><br><span class="line">sysstat \</span><br><span class="line">libxcb \</span><br><span class="line">libxcb.i686 \</span><br><span class="line">unixODBC \</span><br><span class="line">unixODBC-devel \</span><br><span class="line">zlib-devel \</span><br><span class="line">zlib-devel.i686 \</span><br><span class="line">nfs-utils \</span><br><span class="line">net-tools \</span><br><span class="line">smartmontools</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## 安装sqlplus wrapb包，方便光标移动（上下键，退格键）</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum install rlwrap</span><br><span class="line"></span><br><span class="line">cat &gt; /home/oracle/.bash_profile &lt;&lt; EOF</span><br><span class="line"><span class="built_in">alias</span> sqlplus=<span class="string">'rlwrap sqlplus'</span></span><br><span class="line"><span class="built_in">alias</span> rman=<span class="string">'rlwrap rman'</span></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="查看CentOS自带JDK是否已安装。命令：yum-list-installed-grep-java"><a href="#查看CentOS自带JDK是否已安装。命令：yum-list-installed-grep-java" class="headerlink" title="查看CentOS自带JDK是否已安装。命令：yum list installed |grep java"></a>查看CentOS自带JDK是否已安装。命令：yum list installed |grep java</h2><pre><code>若有自带安装的JDK，如何卸载CentOS系统自带Java环境？
+
+    卸载JDK相关文件输入：yum -y remove java-1.7.0-openjdk*
+
+    卸载tzdata-java输入：yum -y remove tzdata-java.noarch
+
+查看yum库中的Java安装包 命令：yum -y list java*
+</code></pre><h2 id="添加oracle用户"><a href="#添加oracle用户" class="headerlink" title="添加oracle用户"></a>添加oracle用户</h2><pre><code>groupadd -g 54321 oinstall
+groupadd -g 54322 dba             # 数据库管理员
+groupadd -g 54323 oper            # 数据库操作员
+groupadd -g 54324 backupdba       # 数据备份恢复管理员
+groupadd -g 54325 dgdba           # 数据库卫士
+groupadd -g 54326 kmdba           # 加密密钥管理员
+groupadd -g 54327 asmdba
+groupadd -g 54328 asmoper
+groupadd -g 54329 asmadmin
+groupadd -g 54330 racdba
+
+useradd -u 54321 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,racdba,asmdba,asmoper,asmadmin oracle
+
+passwd oracle
+</code></pre><h2 id="修改内核参数"><a href="#修改内核参数" class="headerlink" title="修改内核参数"></a>修改内核参数</h2><pre><code>## 查看系统信息
+
+## 默认分页大小
+getconf PAGESIZE
+4096
+
+sysctl -a | grep sem
+kernel.sem = 250    32000    32    128
+kernel.sem_next_id = -1
+
+sysctl -a | grep shm
+kernel.shm_next_id = -1
+kernel.shm_rmid_forced = 0
+kernel.shmall = 18446744073692774399
+kernel.shmmax = 18446744073692774399
+kernel.shmmni = 4096
+vm.hugetlb_shm_group = 0
+
+sysctl -a | grep file-max
+fs.file-max = 96145
+
+sysctl -a | grep ip_local_port_range
+net.ipv4.ip_local_port_range = 32768    60999
+
+
+## 修改内核参数
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt;  /etc/sysctl.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">fs.aio-max-nr = 1048576</span><br><span class="line">fs.file-max = 6815744</span><br><span class="line"></span><br><span class="line"><span class="comment">## 4G, 大概使用系统内存的一半</span></span><br><span class="line">kernel.shmmax = 4294967296</span><br><span class="line"></span><br><span class="line"><span class="comment">## kernel.shmmax/PAGESIZE</span></span><br><span class="line">kernel.shmall = 1048576</span><br><span class="line"></span><br><span class="line"><span class="comment">## getconf PAGESIZE</span></span><br><span class="line">kernel.shmmni = 4096</span><br><span class="line"></span><br><span class="line">kernel.sem = 250 32000 100 128</span><br><span class="line">net.ipv4.ip_local_port_range = 9000 65500</span><br><span class="line">net.core.rmem_default = 262144</span><br><span class="line">net.core.rmem_max = 4194304</span><br><span class="line">net.core.wmem_default = 262144</span><br><span class="line">net.core.wmem_max = 1048586</span><br><span class="line">vm.hugetlb_shm_group = 54322</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<pre><code>## 使之生效
+sysctl -p
+
+
+
+shmmax - Half the server memory
+shmmni - 4096 (or greater)
+fs.file-max - 6815744 (or greater)
+fs.aio-max-nr - 1048576 (or greater)
+net.core.rmem_default - 262144 (or greater)
+net.core.rmem_max - 4194304 or greater)
+net.core.wmem_default - 262144 (or greater)
+net.core.wmem_max - 1048576 (or greater)
+sem - 250 32000 100 128 (or greater)
+net.ipv4.ip_local_port_range - 9000 65535
+
+注：
+vm.hugetlb_shm_group 与 dba 组id一致，hugetlb_shm_group contains group id that is allowed to create SysV shared memory segment using hugetlb page
+
+sem  4个参数依次为SEMMSL(每个用户拥有信号量最大数)；
+SEMMNS(系统信号量最大数)；
+SEMOPM(每次semopm系统调用操作数)；
+SEMMNI(系统辛苦量集数最大数)。
+Shmmax 最大共享内存2GB, 物理内存如果小的话可以设置成512M, 即: 536870912。
+Shmmni 最小共享内存 4096KB。
+Shmall 所有内存大小。shmall 的大小为 kernel.shmmax/4096(getconf PAGESIZE可得到)= 3774873
+
+一般情况下可以设置最大共享内存为物理内存的一半，如果物理内存是 2G，则可以设置最大共享内存为 1073741824，如上；如物理内存是 1G，则可以设置最大共享内存为 512 * 1024 * 1024 = 536870912；以此类推。
+
+在redhat上最大共享内存不建议超过
+
+4*1024*1024*1024-1=4294967295
+
+设置完成后用命令 more /etc/sysctl.conf |grep kernel.s 检查。
+
+kernel.shmall: 共享内存页数的最大值
+Linux共享内存页大小为4KB， 共享内存段的大小都是共享内存页大小的整数倍。一个共享内存段的最大大小是16G，需要共享内存页数是
+16GB/4KB=16777216KB/4KB=4194304(页)
+
+kernel.shmmax:单个共享内存段的最大值
+shmmax是核心参数中最重要的参数之一，用于定义单个共享内存段的最大值，shmmax设置应足够大，能在一个共享内存段下容纳下整个的SGA，设置的过低可能会导致需要创建多个共享内存段，可能导致系统性能的下降 。
+
+kernel.shmmni:共享内存段的最大数量
+注意该参数不是shmmin，是shmmni，shmmin 表示内存段最小大小 ）
+shmmni缺省值4096 足够。
+shmmax(bytes) = shmmni(page size, default 4k) * shmall (page的个数）
+
+下面专门说说kernel.sem：对应4个值
+SEMMSL、SEMMNS、SEMOPM、SEMMNI
+
+SEMMSL: 每个信号集的最大信号数量
+数据库最大 PROCESS 实例参数的设置值再加上 10 。
+Oracle 建议将 SEMMSL 的值设置为不少于 100 。
+SEMMNS：用于控制整个 Linux 系统中信号（而不是信号集）的最大数。
+Oracle 建议将 SEMMNS 设置为：系统中每个数据库的 PROCESSES 实例参数设置值的总和，加上最大 PROCESSES 值的两倍，最后根据系统中 Oracle 数据库的数量，每个加 10 。
+使用以下计算式来确定在 Linux 系统中可以分配的信号的最大数量。它将是以下两者中较小的一个值：SEMMNS 或 (SEMMSL * SEMMNI)
+
+SEMOPM： 内核参数用于控制每个 semop 系统调用可以执行的信号操作的数量。semop 系统调用（函数）提供了利用一个 semop 系统调用完成多项信号操作的功能。一个信号集能够拥有每个信号集中最大数量的SEMMSL 信号，因此建议设置 SEMOPM 等于SEMMSL 。
+Oracle 建议将 SEMOPM 的值设置为不少于 100 。
+SEMMNI ：内核参数用于控制整个 Linux 系统中信号集的最大数量。
+Oracle 建议将 SEMMNI 的值设置为不少于 100 。 
+</code></pre><figure class="highlight bash"><figcaption><span>## 设置oracle 用户限制，改文件限制：vi</span><a href="/etc/security/limits.conf，添加：">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/security/limits.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">oracle soft nproc 16384</span><br><span class="line">oracle hard nproc 16384</span><br><span class="line">oracle soft nofile 20480</span><br><span class="line">oracle hard nofile 65536</span><br><span class="line">oracle soft stack 10240</span><br><span class="line">oracle hard stack 32768</span><br><span class="line">oracle   hard   memlock    134217728</span><br><span class="line">oracle   soft   memlock    134217728</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/pam.d/login &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line"><span class="comment">#session required /lib64/security/pam_limits.so</span></span><br><span class="line">session required pam_limits.so</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<pre><code>修改ulimit：vi /etc/profile，添加：
+
+    if [ $USER = &quot;oracle&quot; ]; then
+        if [ $SHELL = &quot;/bin/ksh&quot; ]; then
+            ulimit -u 16384
+            ulimit -n 65536
+        else
+            ulimit -u 16384 -n 65536
+        fi
+    fi
+</code></pre><h2 id="修改环境变量"><a href="#修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt; /home/oracle/.bash_profile &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> TMP=/tmp</span><br><span class="line"><span class="built_in">export</span> TMPDIR=\<span class="variable">$TMP</span></span><br><span class="line"></span><br><span class="line">ORACLE_HOSTNAME=db.test.com  </span><br><span class="line">ORACLE_UNQNAME=orcl </span><br><span class="line">ORACLE_BASE=/data/oracle</span><br><span class="line">ORACLE_HOME=\<span class="variable">$ORACLE_BASE</span>/product/db12c</span><br><span class="line">ORACLE_SID=orcl</span><br><span class="line"><span class="built_in">export</span> ORACLE_BASE ORACLE_HOME ORACLE_SID</span><br><span class="line">PATH=\<span class="variable">$ORACLE_HOME</span>/bin:\<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=\<span class="variable">$ORACLE_HOME</span>/lib:/lib:/usr/lib  </span><br><span class="line"><span class="built_in">export</span> CLASSPATH=\<span class="variable">$ORACLE_HOME</span>/jlib:\<span class="variable">$ORACLE_HOME</span>/rdbms/jlib  </span><br><span class="line"></span><br><span class="line"><span class="built_in">alias</span> cdob=<span class="string">'cd $ORACLE_BASE'</span></span><br><span class="line"><span class="built_in">alias</span> cdoh=<span class="string">'cd $ORACLE_HOME'</span></span><br><span class="line"><span class="built_in">alias</span> tns=<span class="string">'cd $ORACLE_HOME/network/admin'</span></span><br><span class="line"><span class="built_in">alias</span> envo=<span class="string">'env | grep ORACLE'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">umask</span> 022</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="准备安装目录"><a href="#准备安装目录" class="headerlink" title="准备安装目录"></a>准备安装目录</h2><pre><code># oracle/oraInventory是存放oracle 安装日志和脚本的临时目录
+# oracle/product/db12c是Oracle 软件二进制程序安装保存路径
+# oracle/flush_recovery_area 数据恢复目录
+# oradata 存放数据库文件
+
+mkdir -p /data/oracle/{oradata,product/db12c,flush_recovery_area,oraInventory}
+
+chown -R oracle:oinstall /data/oracle
+
+chmod -R 775 /data/oracle
+</code></pre><h2 id="准备安装应答文件"><a href="#准备安装应答文件" class="headerlink" title="准备安装应答文件"></a>准备安装应答文件</h2><pre><code>db_install.rsp - 用于安装oracle二进制文件，以静默方式安装/升级数据库
+
+dbca.rsp - 用于以静默方式安装/配置/删除数据库
+
+netca.rsp - 用于在静默模式下为oracle数据库配置简单网络
+
+应答文件配置在本文后面
+</code></pre><h2 id="以oracle用户登录，开始安装："><a href="#以oracle用户登录，开始安装：" class="headerlink" title="以oracle用户登录，开始安装："></a>以oracle用户登录，开始安装：</h2><pre><code>su  oracle  
+cd /opt/oracle
+unzip linuxx64_12201_database.zip 
+export LANG=&quot;en_US&quot;
+
+## 安装，如果提示系统符合安装要求，可以添加-ignoreSysPreReqs
+
+./runInstaller -force -silent -noconfig -responseFile /data/oracle/db_install.rsp
+
+## -silent 表示以静默方式安装,不会有任何提示
+
+## -force 允许安装到一个非空目录
+
+## -noconfig 表示不运行配置助手netca
+
+## -responseFile 表示使用哪个响应文件,必需使用绝对路径
+
+
+## 安装成功后，以 root 用户的身份执行以下脚本:
+
+exist
+
+/data/oracle/oraInventory/orainstRoot.sh
+
+/data/oracle/product/db12c/root.sh
+</code></pre><h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><pre><code>## 使用应答文件创建数据
+## 应答文件(dbca.rsp)配置在本文后面
+dbca -silent -createDatabase  -responseFile  /data/oracle/dbca.rsp
+
+
+
+## 通过命令行创建数据库
+## 创建一个数据库 testdb ，所有管理员密码都为welcome
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dbca -silent \</span><br><span class="line">-createDatabase \</span><br><span class="line">-templateName General_Purpose.dbc \</span><br><span class="line">-gdbName db.test.com \</span><br><span class="line">-sid orcl \</span><br><span class="line">-createAsContainerDatabase <span class="literal">true</span> \</span><br><span class="line">-numberOfPdbs 1 \</span><br><span class="line">-pdbName testdb \</span><br><span class="line">-pdbadminUsername pdba \</span><br><span class="line">-pdbadminPassword lion.net \</span><br><span class="line">-SysPassword lion.net \</span><br><span class="line">-SystemPassword lion.net \</span><br><span class="line">-emConfiguration NONE \</span><br><span class="line">-recoveryAreaDestination <span class="variable">$ORACLE_BASE</span>/flush_recovery_area \</span><br><span class="line">-characterSet <span class="string">"AL32UTF8"</span> \</span><br><span class="line">-nationalCharacterSet <span class="string">"AL16UTF16"</span> \</span><br><span class="line">-enableArchive <span class="literal">true</span> \</span><br><span class="line">-redoLogFileSize 100</span><br></pre></td></tr></table></figure>
+<pre><code>## 登陆数据库，查看一下数据库实例的状态：
+
+## 以 DBA 身份进入 sqlplus
+$ sqlplus / as sysdba
+SQL&gt; select instance_name, status from v$instance;
+SQL&gt; show pdbs
+SQL&gt; select name from v$datafile;
+SQL&gt; select name from v$controlfile;
+SQL&gt; select member from v$logfile;
+
+
+
+## 错误排查：
+
+安装数据库实例的时候日志文件中显示的错误内容：
+ORA-27104: system-defined limits for shared memory was misconfigured 
+
+解决方案：修改/etc/sysctl.conf中kernel.shmall的值为536870912。
+
+在服务器上使用sqlplus访问数据库，中文不能正常显示（显示问号） 
+解决方案：导出环境变量export NLS_LANG=&quot;AMERICAN_AMERICA.AL32UTF8&quot;
+</code></pre><h2 id="配置监听"><a href="#配置监听" class="headerlink" title="配置监听"></a>配置监听</h2><pre><code>## 以静默方式配置监听
+
+netca -silent -responsefile /data/oracle/netca.rsp
+
+## 启动命令
+/data/oracle/product/db12c/bin/lsnrctl start LISTENER
+
+## 查看监听状态
+lsnrctl status
+</code></pre><h2 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h2><pre><code>## 启动过程，先启动监听，验证数据库管理员身份后，才能启动数据库
+
+su - oracle         ## 切换到 oracle 用户且切换到它的环境
+lsnrctl status      ## 查看监听及数据库状态
+lsnrctl start       ## 启动监听
+sqlplus / as sysdba ## 以 DBA 身份进入 sqlplus
+SQL&gt;startup         ## 启动 db
+
+## 停止
+
+su - oracle             ## 切换到 oracle 用户且切换到它的环境
+lsnrctl stop            ## 停止监听
+sqlplus / as sysdba     ## 以 DBA 身份进入 sqlplus
+SQL&gt;SHUTDOWN IMMEDIATE  ## 关闭 db
+
+
+## 运行startup, 遇到的问题
+LRM-00109: could not open parameter file &apos;/data/oracle/product/db12c/dbs/initorcl.ora
+
+## 解决方法
+cp /data/oracle/product/db12c/dbs/init.ora /data/oracle/product/db12c/dbs/initorcl.ora
+</code></pre><h2 id="oracle-三种身份验证："><a href="#oracle-三种身份验证：" class="headerlink" title="oracle 三种身份验证："></a>oracle 三种身份验证：</h2><pre><code>系统验证（默认首先采用的身份验证，如果当前用户是oracle管理员，就直接登陆，不需要再验证用户和密码）
+密码文件验证（验证oracle管理员)
+数据库验证（验证普通用户）
+</code></pre><h2 id="sqlplus登陆方式"><a href="#sqlplus登陆方式" class="headerlink" title="sqlplus登陆方式"></a>sqlplus登陆方式</h2><pre><code>sqlplus有几种登陆方式 比如：
+&gt; sqlplus &quot;/as sysdba&quot;                  --以操作系统权限认证的oracle sys管理员登陆
+
+&gt; sqlplus /nolog                        --不在cmd或者terminal当中暴露密码的登陆方式
+SQL&gt; conn /as sysdba
+&amp;
+SQL&gt; conn sys/password as sysdba
+
+&gt; sqlplus scott/tiger                   --非管理员用户登陆
+
+&gt; sqlplus scott/tiger@orcl              --非管理员用户使用tns别名登陆
+
+&gt; sqlplus sys/password@orcl as sysdba   --管理员用户使用tns别名登陆
+
+&gt; sqlplus                               --不显露密码的登陆方式
+Enter user-name：sys
+Enter password：password as sysdba       --以sys用户登陆的话 必须要加上 as sysdba 子句
+</code></pre><h2 id="创建数据库的应答文件"><a href="#创建数据库的应答文件" class="headerlink" title="创建数据库的应答文件"></a>创建数据库的应答文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /data/oracle/dbca.rsp &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line"><span class="comment">## global database name</span></span><br><span class="line">GDBNAME = <span class="string">"db.test.com"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## instance database name</span></span><br><span class="line">SID = <span class="string">"orcl"</span></span><br><span class="line"></span><br><span class="line">CREATEASCONTAINERDATABASE = <span class="literal">true</span></span><br><span class="line">NUMBEROFPDBS = 1</span><br><span class="line">PDBNAME = testdb</span><br><span class="line">PDBADMINUSERNAME = <span class="string">"testuser"</span></span><br><span class="line">PDBADMINPASSWORD = <span class="string">"lion.net"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## template name used to create database</span></span><br><span class="line">TEMPLATENAME = <span class="string">"General_Purpose.dbc"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## password for user sys,system,</span></span><br><span class="line">SYSPASSWORD = <span class="string">"lion.net"</span></span><br><span class="line">SYSTEMPASSWORD = <span class="string">"lion.net"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## configure dbexpress with port 5500</span></span><br><span class="line">EMCONFIGURATION = <span class="string">"DBEXPRESS"</span></span><br><span class="line">EMEXPRESSPORT = <span class="string">"5500"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## password for dbsnmp user and sysman user</span></span><br><span class="line">SYSMANPASSWORD = <span class="string">"lion.net"</span></span><br><span class="line">DBSNMPPASSWORD = <span class="string">"lion.net"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## default directory for oracle database datafiles</span></span><br><span class="line">DATAFILEDESTINATION = /data/oracle/oradata</span><br><span class="line"></span><br><span class="line"><span class="comment">## default directory for flashback data</span></span><br><span class="line">RECOVERYAREADESTINATION = /data/oracle/flush_recovery_area</span><br><span class="line"></span><br><span class="line"><span class="comment">## storage used for database installation</span></span><br><span class="line"><span class="comment">## FS - OS filesystem</span></span><br><span class="line">STORAGETYPE = FS</span><br><span class="line"></span><br><span class="line"><span class="comment">## database character set</span></span><br><span class="line">CHARACTERSET = <span class="string">"AL32UTF8"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## national database character set</span></span><br><span class="line">NATIONALCHARACTERSET = <span class="string">"AL16UTF16"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## listener name to register database to</span></span><br><span class="line">LISTENERS = <span class="string">"LISTENER"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## specify database type</span></span><br><span class="line"><span class="comment">## has influence on some instance parameters</span></span><br><span class="line">DATABASETYPE = <span class="string">"OLTP"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## </span></span><br><span class="line">AUTOMATICMEMORYMANAGEMENT = <span class="string">"TRUE"</span></span><br><span class="line">TOTALMEMORY = <span class="string">"512"</span></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="监听配置文件"><a href="#监听配置文件" class="headerlink" title="监听配置文件"></a>监听配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /data/oracle/netca.rsp &lt;&lt; EOF</span><br><span class="line">[GENERAL]</span><br><span class="line">RESPONSEFILE_VERSION=<span class="string">"12.2"</span></span><br><span class="line">CREATE_TYPE=<span class="string">"CUSTOM"</span></span><br><span class="line">SHOW_GUI=<span class="literal">false</span></span><br><span class="line">[oracle.net.ca]</span><br><span class="line">INSTALLED_COMPONENTS=&#123;<span class="string">"server"</span>,<span class="string">"net8"</span>,<span class="string">"javavm"</span>&#125;</span><br><span class="line">INSTALL_TYPE=<span class="string">""</span>typical<span class="string">""</span></span><br><span class="line">LISTENER_NUMBER=1</span><br><span class="line">LISTENER_NAMES=&#123;<span class="string">"LISTENER"</span>&#125;</span><br><span class="line">LISTENER_PROTOCOLS=&#123;<span class="string">"TCP;1521"</span>&#125;</span><br><span class="line">LISTENER_START=<span class="string">""</span>LISTENER<span class="string">""</span></span><br><span class="line">NAMING_METHODS=&#123;<span class="string">"TNSNAMES"</span>,<span class="string">"ONAMES"</span>,<span class="string">"HOSTNAME"</span>&#125;</span><br><span class="line">NSN_NUMBER=1</span><br><span class="line">NSN_NAMES=&#123;<span class="string">"EXTPROC_CONNECTION_DATA"</span>&#125;</span><br><span class="line">NSN_SERVICE=&#123;<span class="string">"PLSExtProc"</span>&#125;</span><br><span class="line">NSN_PROTOCOLS=&#123;<span class="string">"TCP;HOSTNAME;1521"</span>&#125;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<pre><code>重启时自动启动数据库
+
+以root用户，修改/etc/oratab的最后一行，将N改成Y，保证数据库在系统重启之后自动启动。
+
+# vi /etc/oratab
+orcl:/data/oracle/product/db12c:Y
+
+创建自启动脚本/etc/init.d/dbora
+
+# vi /etc/init.d/dbora
+
+    ORA_HOME=/data/oracle/product/db12c
+    ORA_OWNER=oracle
+    case &quot;$1&quot; in
+    &apos;start&apos;)
+        # Start the Oracle databases:
+        # The following command assumes that the oracle login
+        # will not prompt the user for any values
+        # Remove &quot;&amp;&quot; if you don&apos;t want startup as a background process.
+        su - $ORA_OWNER -c &quot;$ORA_HOME/bin/dbstart $ORA_HOME&quot; &amp;
+        touch /var/lock/subsys/dbora
+        ;;
+    &apos;stop&apos;)
+        # Stop the Oracle databases:
+        # The following command assumes that the oracle login
+        # will not prompt the user for any values
+        su - $ORA_OWNER -c &quot;$ORA_HOME/bin/dbshut $ORA_HOME&quot; &amp;
+        rm -f /var/lock/subsys/dbora
+        ;;
+    esac
+
+
+# EM express 开启
+
+$ sqlplus / as sysdba
+SQL&gt; show parameter dispatchers
+SQL&gt; exec DBMS_XDB_CONFIG.setHTTPPort(5500);
+
+# web 访问管理界面
+http://200.200.200.50:5500/em
+
+注意，登录的时候使用用户名sys，密码welcome，不指定容器名，并选择以sysdba身份登录。
+
+http://xintq.net/2017/04/18/install-db12c-ol73/#%E9%87%8D%E5%90%AF%E6%97%B6%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8%E6%95%B0%E6%8D%AE%E5%BA%93
+</code></pre><h2 id="静默安装应答文件"><a href="#静默安装应答文件" class="headerlink" title="静默安装应答文件"></a>静默安装应答文件</h2><pre><code>## 复制oracle 安装目录下的db_install.rsp
+
+cp ./database/response/db_install.rsp ./db_install.rsp
+
+## 简单配置
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v12.2.0
+oracle.install.option=INSTALL_DB_SWONLY
+ORACLE_HOSTNAME=db.test.com
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/data/oracle/oraInventory
+SELECTED_LANGUAGES=en,zh_CN
+ORACLE_HOME=/data/oracle/product/db12c
+ORACLE_BASE=/data/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.OSDBA_GROUP=dba
+oracle.install.db.OSOPER_GROUP=oper
+oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+oracle.install.db.OSDGDBA_GROUP=dgdba
+oracle.install.db.OSKMDBA_GROUP=kmdba
+oracle.install.db.OSRACDBA_GROUP=racdba
+
+oracle.install.db.config.starterdb.globalDBName=db.test.com
+oracle.install.db.config.starterdb.SID=orc1
+oracle.install.db.config.starterdb.characterSet=AL32UTF8
+oracle.install.db.config.starterdb.memoryOption=true
+oracle.install.db.config.starterdb.memoryLimit=1024
+oracle.install.db.config.starterdb.installExampleSchemas=false
+
+oracle.install.db.config.starterdb.password.ALL=lion.net
+
+SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
+DECLINE_SECURITY_UPDATES=true
+</code></pre><figure class="highlight bash"><figcaption><span>## 详细配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /data/oracle/db_install.rsp &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="comment">## Copyright(c) Oracle Corporation 1998,2017. All rights reserved.##</span></span><br><span class="line"><span class="comment">##                                                                ##</span></span><br><span class="line"><span class="comment">## Specify values for the variables listed below to customize     ##</span></span><br><span class="line"><span class="comment">## your installation.                                             ##</span></span><br><span class="line"><span class="comment">##                                                                ##</span></span><br><span class="line"><span class="comment">## Each variable is associated with a comment. The comment        ##</span></span><br><span class="line"><span class="comment">## can help to populate the variables with the appropriate        ##</span></span><br><span class="line"><span class="comment">## values.                                                        ##</span></span><br><span class="line"><span class="comment">##                                                                ##</span></span><br><span class="line"><span class="comment">## IMPORTANT <span class="doctag">NOTE:</span> This file contains plain text passwords and    ##</span></span><br><span class="line"><span class="comment">## should be secured to have read permission only by oracle user  ##</span></span><br><span class="line"><span class="comment">## or db administrator who owns this installation.                ##</span></span><br><span class="line"><span class="comment">##                                                                ##</span></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Do not change the following system generated value. </span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v12.2.0</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the installation option.</span></span><br><span class="line"><span class="comment"># It can be one of the following:</span></span><br><span class="line"><span class="comment">#   - INSTALL_DB_SWONLY</span></span><br><span class="line"><span class="comment">#   - INSTALL_DB_AND_CONFIG</span></span><br><span class="line"><span class="comment">#   - UPGRADE_DB</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.option=INSTALL_DB_SWONLY</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the Unix group to be set for the inventory directory.  </span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">UNIX_GROUP_NAME=oinstall</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the location which holds the inventory files.</span></span><br><span class="line"><span class="comment"># This is an optional parameter if installing on</span></span><br><span class="line"><span class="comment"># Windows based Operating System.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">INVENTORY_LOCATION=/data/oracle/oraInventory</span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the complete path of the Oracle Home. </span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">ORACLE_HOME=/data/oracle/product/db12c</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the complete path of the Oracle Base. </span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">ORACLE_BASE=/data/oracle</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the installation edition of the component.                     </span></span><br><span class="line"><span class="comment">#                                                             </span></span><br><span class="line"><span class="comment"># The value should contain only one of these choices.  </span></span><br><span class="line"><span class="comment">#   - EE     : Enterprise Edition </span></span><br><span class="line"><span class="comment">#   - SE2     : Standard Edition 2</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">oracle.install.db.InstallEdition=EE</span><br><span class="line"></span><br><span class="line">SELECTED_LANGUAGES=en,zh_CN</span><br><span class="line">ORACLE_HOSTNAME=db.test.com</span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment"># PRIVILEGED OPERATING SYSTEM GROUPS                                          #</span></span><br><span class="line"><span class="comment"># ------------------------------------------                                  #</span></span><br><span class="line"><span class="comment"># Provide values for the OS groups to which SYSDBA and SYSOPER privileges     #</span></span><br><span class="line"><span class="comment"># needs to be granted. If the install is being performed as a member of the   #</span></span><br><span class="line"><span class="comment"># group "dba", then that will be used unless specified otherwise below.       #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment"># The value to be specified for OSDBA and OSOPER group is only for UNIX based #</span></span><br><span class="line"><span class="comment"># Operating System.                                                           #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># The OSDBA_GROUP is the OS group which is to be granted SYSDBA privileges.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.OSDBA_GROUP=dba</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># The OSOPER_GROUP is the OS group which is to be granted SYSOPER privileges.</span></span><br><span class="line"><span class="comment"># The value to be specified for OSOPER group is optional.</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.OSOPER_GROUP=oper</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># The OSBACKUPDBA_GROUP is the OS group which is to be granted SYSBACKUP privileges.</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.OSBACKUPDBA_GROUP=backupdba</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># The OSDGDBA_GROUP is the OS group which is to be granted SYSDG privileges.</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.OSDGDBA_GROUP=dgdba</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># The OSKMDBA_GROUP is the OS group which is to be granted SYSKM privileges.</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.OSKMDBA_GROUP=kmdba</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># The OSRACDBA_GROUP is the OS group which is to be granted SYSRAC privileges.</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.OSRACDBA_GROUP=racdba</span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">#                               Grid Options                                  #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the type of Real Application Cluster Database</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment">#   - ADMIN_MANAGED: Admin-Managed</span></span><br><span class="line"><span class="comment">#   - POLICY_MANAGED: Policy-Managed</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># If left unspecified, default will be ADMIN_MANAGED </span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.rac.configurationType=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Value is required only if RAC database type is ADMIN_MANAGED</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Specify the cluster node names selected during the installation.</span></span><br><span class="line"><span class="comment"># Leaving it blank will result in install on local server only (Single Instance)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Example : oracle.install.db.CLUSTER_NODES=node1,node2</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.CLUSTER_NODES=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># This variable is used to enable or disable RAC One Node install.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   - true  : Value of RAC One Node service name is used.</span></span><br><span class="line"><span class="comment">#   - false : Value of RAC One Node service name is not used.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># If left blank, it will be assumed to be false.</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.isRACOneInstall=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Value is required only if oracle.install.db.isRACOneInstall is true.</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Specify the name for RAC One Node Service</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.racOneServiceName=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Value is required only if RAC database type is POLICY_MANAGED</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Specify a name for the new Server pool that will be configured</span></span><br><span class="line"><span class="comment"># Example : oracle.install.db.rac.serverpoolName=pool1</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.rac.serverpoolName=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Value is required only if RAC database type is POLICY_MANAGED</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Specify a number as cardinality for the new Server pool that will be configured</span></span><br><span class="line"><span class="comment"># Example : oracle.install.db.rac.serverpoolCardinality=2</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.rac.serverpoolCardinality=</span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">#                        Database Configuration Options                       #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the type of database to create.</span></span><br><span class="line"><span class="comment"># It can be one of the following:</span></span><br><span class="line"><span class="comment">#   - GENERAL_PURPOSE                       </span></span><br><span class="line"><span class="comment">#   - DATA_WAREHOUSE </span></span><br><span class="line"><span class="comment"># GENERAL_PURPOSE: A starter database designed for general purpose use or transaction-heavy applications.</span></span><br><span class="line"><span class="comment"># DATA_WAREHOUSE : A starter database optimized for data warehousing applications.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.type=GENERAL_PURPOSE</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the Starter Database Global Database Name. </span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.globalDBName=db.test.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the Starter Database SID.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.SID=orc1</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify whether the database should be configured as a Container database.</span></span><br><span class="line"><span class="comment"># The value can be either "true" or "false". If left blank it will be assumed</span></span><br><span class="line"><span class="comment"># to be "false".</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.ConfigureAsContainerDB=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the  Pluggable Database name for the pluggable database in Container Database.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.PDBName=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the Starter Database character set.</span></span><br><span class="line"><span class="comment">#  通常中文选择的有ZHS16GBK简体中文库，建议选择unicode的AL32UTF8国际字符集</span></span><br><span class="line"><span class="comment">#  One of the following</span></span><br><span class="line"><span class="comment">#  AL32UTF8, WE8ISO8859P15, WE8MSWIN1252, EE8ISO8859P2,</span></span><br><span class="line"><span class="comment">#  EE8MSWIN1250, NE8ISO8859P10, NEE8ISO8859P4, BLT8MSWIN1257,</span></span><br><span class="line"><span class="comment">#  BLT8ISO8859P13, CL8ISO8859P5, CL8MSWIN1251, AR8ISO8859P6,</span></span><br><span class="line"><span class="comment">#  AR8MSWIN1256, EL8ISO8859P7, EL8MSWIN1253, IW8ISO8859P8,</span></span><br><span class="line"><span class="comment">#  IW8MSWIN1255, JA16EUC, JA16EUCTILDE, JA16SJIS, JA16SJISTILDE,</span></span><br><span class="line"><span class="comment">#  KO16MSWIN949, ZHS16GBK, TH8TISASCII, ZHT32EUC, ZHT16MSWIN950,</span></span><br><span class="line"><span class="comment">#  ZHT16HKSCS, WE8ISO8859P9, TR8MSWIN1254, VN8MSWIN1258</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.characterSet=AL32UTF8</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># This variable should be set to true if Automatic Memory Management </span></span><br><span class="line"><span class="comment"># in Database is desired.</span></span><br><span class="line"><span class="comment"># If Automatic Memory Management is not desired, and memory allocation</span></span><br><span class="line"><span class="comment"># is to be done manually, then set it to false.</span></span><br><span class="line"><span class="comment"># 自动内存管理，也就是SGA_TARGET和PAG_AGGREGATE_TARGET都不用设置了，Oracle会自动调配两部分大小。</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.memoryOption=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the total memory allocation for the database. Value(in MB) should be</span></span><br><span class="line"><span class="comment"># at least 256 MB, and should not exceed the total physical memory available </span></span><br><span class="line"><span class="comment"># on the system.</span></span><br><span class="line"><span class="comment"># Example: oracle.install.db.config.starterdb.memoryLimit=512</span></span><br><span class="line"><span class="comment"># 指定Oracle自动管理内存的大小，最小是256MB</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.memoryLimit=1024</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># This variable controls whether to load Example Schemas onto</span></span><br><span class="line"><span class="comment"># the starter database or not.</span></span><br><span class="line"><span class="comment"># The value can be either "true" or "false". If left blank it will be assumed</span></span><br><span class="line"><span class="comment"># to be "false".</span></span><br><span class="line"><span class="comment"># 是否载入模板示例</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.installExampleSchemas=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment"># Passwords can be supplied for the following four schemas in the	          #</span></span><br><span class="line"><span class="comment"># starter database:      						                              #</span></span><br><span class="line"><span class="comment">#   SYS                                                                       #</span></span><br><span class="line"><span class="comment">#   SYSTEM                                                                    #</span></span><br><span class="line"><span class="comment">#   DBSNMP (used by Enterprise Manager)                                       #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment"># Same password can be used for all accounts (not recommended) 		          #</span></span><br><span class="line"><span class="comment"># or different passwords for each account can be provided (recommended)       #</span></span><br><span class="line"><span class="comment"># 设置数据库用户密码                                                            #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># This variable holds the password that is to be used for all schemas in the</span></span><br><span class="line"><span class="comment"># starter database.</span></span><br><span class="line"><span class="comment"># 设定所有数据库用户使用同一个密码，其它数据库用户就不用单独设置了</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.password.ALL=lion.net</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the SYS password for the starter database.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.password.SYS=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the SYSTEM password for the starter database.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.password.SYSTEM=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the DBSNMP password for the starter database.</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.managementOption=CLOUD_CONTROL</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.password.DBSNMP=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the PDBADMIN password required for creation of Pluggable Database in the Container Database.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.password.PDBADMIN=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the management option to use for managing the database.</span></span><br><span class="line"><span class="comment"># Options are:</span></span><br><span class="line"><span class="comment"># 1. CLOUD_CONTROL - If you want to manage your database with Enterprise Manager Cloud Control along with Database Express.</span></span><br><span class="line"><span class="comment"># 2. DEFAULT   -If you want to manage your database using the default Database Express option.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.managementOption=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the OMS host to connect to Cloud Control.</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.managementOption=CLOUD_CONTROL</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.omsHost=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the OMS port to connect to Cloud Control.</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.managementOption=CLOUD_CONTROL</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.omsPort=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the EM Admin user name to use to connect to Cloud Control.</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.managementOption=CLOUD_CONTROL</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.emAdminUser=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the EM Admin password to use to connect to Cloud Control.</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.managementOption=CLOUD_CONTROL</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.emAdminPassword=</span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment"># SPECIFY RECOVERY OPTIONS                                 	              #</span></span><br><span class="line"><span class="comment"># ------------------------------------		                              #</span></span><br><span class="line"><span class="comment"># Recovery options for the database can be mentioned using the entries below  #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># This variable is to be set to false if database recovery is not required. Else </span></span><br><span class="line"><span class="comment"># this can be set to true.</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.enableRecovery=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the type of storage to use for the database.</span></span><br><span class="line"><span class="comment"># It can be one of the following:</span></span><br><span class="line"><span class="comment">#   - FILE_SYSTEM_STORAGE</span></span><br><span class="line"><span class="comment">#   - ASM_STORAGE</span></span><br><span class="line"><span class="comment"># 要求指定使用的文件系统存放数据库文件还是ASM</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.storageType=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the database file location which is a directory for datafiles, control</span></span><br><span class="line"><span class="comment"># files, redo logs.         </span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.storage=FILE_SYSTEM_STORAGE </span></span><br><span class="line"><span class="comment"># 使用文件系统存放数据库文件才需要指定数据文件、控制文件、Redo log的存放目录</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the recovery location.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.storage=FILE_SYSTEM_STORAGE </span></span><br><span class="line"><span class="comment"># 使用文件系统存放数据库文件才需要指定备份恢复目录</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the existing ASM disk groups to be used for storage.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.storageType=ASM_STORAGE</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.asm.diskGroup=</span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the password for ASMSNMP user of the ASM instance.                 </span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Applicable only when oracle.install.db.config.starterdb.storage=ASM_STORAGE </span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------------</span></span><br><span class="line">oracle.install.db.config.asm.ASMSNMPPassword=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the My Oracle Support Account Username.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  Example   : MYORACLESUPPORT_USERNAME=abc@oracle.com</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">MYORACLESUPPORT_USERNAME=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the My Oracle Support Account Username password.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : MYORACLESUPPORT_PASSWORD=password</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">MYORACLESUPPORT_PASSWORD=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify whether to enable the user to set the password for</span></span><br><span class="line"><span class="comment"># My Oracle Support credentials. The value can be either true or false.</span></span><br><span class="line"><span class="comment"># If left blank it will be assumed to be false.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : SECURITY_UPDATES_VIA_MYORACLESUPPORT=true</span></span><br><span class="line"><span class="comment"># 用户是否可以设置metalink密码</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">SECURITY_UPDATES_VIA_MYORACLESUPPORT=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify whether user doesn't want to configure Security Updates.</span></span><br><span class="line"><span class="comment"># The value for this variable should be true if you don't want to configure</span></span><br><span class="line"><span class="comment"># Security Updates, false otherwise.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The value can be either true or false. If left blank it will be assumed</span></span><br><span class="line"><span class="comment"># to be true.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : DECLINE_SECURITY_UPDATES=false</span></span><br><span class="line"><span class="comment"># False表示不需要设置安全更新，注意，在11.2的静默安装中疑似有一个BUG</span></span><br><span class="line"><span class="comment"># Response File中必须指定为true，否则会提示错误,不管是否正确填写了邮件地址</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">DECLINE_SECURITY_UPDATES=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the Proxy server name. Length should be greater than zero.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : PROXY_HOST=proxy.domain.com </span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">PROXY_HOST=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the proxy port number. Should be Numeric and at least 2 chars.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : PROXY_PORT=25</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">PROXY_PORT=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the proxy user name. Leave PROXY_USER and PROXY_PWD</span></span><br><span class="line"><span class="comment"># blank if your proxy server requires no authentication.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : PROXY_USER=username</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">PROXY_USER=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the proxy password. Leave PROXY_USER and PROXY_PWD  </span></span><br><span class="line"><span class="comment"># blank if your proxy server requires no authentication.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example    : PROXY_PWD=password</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">PROXY_PWD=</span><br><span class="line"></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Specify the Oracle Support Hub URL. </span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># Example    : COLLECTOR_SUPPORTHUB_URL=https://orasupporthub.company.com:8080/</span></span><br><span class="line"><span class="comment">#------------------------------------------------------------------------------</span></span><br><span class="line">COLLECTOR_SUPPORTHUB_URL=</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><pre><code>https://blog.csdn.net/gengyuntuo/article/details/79607595
+
+http://xintq.net/2017/09/22/silent-install-ora12c-ol7/
+
+https://docs.oracle.com/en/database/oracle/oracle-database/index.html
+
+https://www.jianshu.com/p/309bb3504285?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation
+
+http://blog.csdn.net/github_39294367/article/details/77057149
+
+http://www.gimoo.net/t/1803/5a975ea1b3e13.html
+
+https://wiki.centos.org/HowTos/Oracle12onCentos7
+
+http://blog.csdn.net/jssg_tzw/article/details/53402743
+
+http://blog.csdn.net/jc_benben/article/details/69911904
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oracle/" rel="tag"><i class="fa fa-tag"></i> oracle</a>
+          
+            <a href="/tags/install/" rel="tag"><i class="fa fa-tag"></i> install</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/keepalived/Keepalived和Haproxy/" rel="next" title="Keepalived和Haproxy">
+                <i class="fa fa-chevron-left"></i> Keepalived和Haproxy
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/mssql/Install Microsoft SQL Server On CentOS/" rel="prev" title="Install Microsoft SQL Server On CentOS Linux">
+                Install Microsoft SQL Server On CentOS Linux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载地址："><span class="nav-number">1.</span> <span class="nav-text">下载地址：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#官方帮助文档"><span class="nav-number">2.</span> <span class="nav-text">官方帮助文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置计算机名，添加host解析"><span class="nav-number">3.</span> <span class="nav-text">配置计算机名，添加host解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙"><span class="nav-number">4.</span> <span class="nav-text">防火墙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装环境"><span class="nav-number">5.</span> <span class="nav-text">安装环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看CentOS自带JDK是否已安装。命令：yum-list-installed-grep-java"><span class="nav-number">6.</span> <span class="nav-text">查看CentOS自带JDK是否已安装。命令：yum list installed |grep java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加oracle用户"><span class="nav-number">7.</span> <span class="nav-text">添加oracle用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改内核参数"><span class="nav-number">8.</span> <span class="nav-text">修改内核参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改环境变量"><span class="nav-number">9.</span> <span class="nav-text">修改环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备安装目录"><span class="nav-number">10.</span> <span class="nav-text">准备安装目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备安装应答文件"><span class="nav-number">11.</span> <span class="nav-text">准备安装应答文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以oracle用户登录，开始安装："><span class="nav-number">12.</span> <span class="nav-text">以oracle用户登录，开始安装：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建数据库"><span class="nav-number">13.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置监听"><span class="nav-number">14.</span> <span class="nav-text">配置监听</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动数据库"><span class="nav-number">15.</span> <span class="nav-text">启动数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#oracle-三种身份验证："><span class="nav-number">16.</span> <span class="nav-text">oracle 三种身份验证：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlplus登陆方式"><span class="nav-number">17.</span> <span class="nav-text">sqlplus登陆方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建数据库的应答文件"><span class="nav-number">18.</span> <span class="nav-text">创建数据库的应答文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监听配置文件"><span class="nav-number">19.</span> <span class="nav-text">监听配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静默安装应答文件"><span class="nav-number">20.</span> <span class="nav-text">静默安装应答文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">21.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

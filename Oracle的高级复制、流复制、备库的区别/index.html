@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Oracle备份功能包括：高级复制（Advanced Replication）  流复制（Streams Replication）  备库（Dataguard）">
+<meta name="keywords" content="oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle的高级复制、流复制、备库的区别">
+<meta property="og:url" content="http://dolphincn.github.io/Oracle的高级复制、流复制、备库的区别/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="Oracle备份功能包括：高级复制（Advanced Replication）  流复制（Streams Replication）  备库（Dataguard）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-05T03:45:08.493Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle的高级复制、流复制、备库的区别">
+<meta name="twitter:description" content="Oracle备份功能包括：高级复制（Advanced Replication）  流复制（Streams Replication）  备库（Dataguard）">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/Oracle的高级复制、流复制、备库的区别/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Oracle的高级复制、流复制、备库的区别 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/Oracle的高级复制、流复制、备库的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle的高级复制、流复制、备库的区别
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-29 10:10:00" itemprop="dateCreated datePublished" datetime="2018-06-29T10:10:00+08:00">2018-06-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-05 11:45:08" itemprop="dateModified" datetime="2018-07-05T11:45:08+08:00">2018-07-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Oracle备份功能包括："><a href="#Oracle备份功能包括：" class="headerlink" title="Oracle备份功能包括："></a>Oracle备份功能包括：</h2><pre><code>高级复制（Advanced Replication）
+
+流复制（Streams Replication）
+
+备库（Dataguard）
+</code></pre><a id="more"></a>
+<h2 id="一-dataguard："><a href="#一-dataguard：" class="headerlink" title="一 dataguard："></a>一 dataguard：</h2><p>dataguard在高可用及容灾方面一般是dba的首选，毕竟dataguard在这方面 存在压倒性的优势，不管是物理备用库（physical standby database）还是逻辑备用库（logical standby database），它们都具有一些共同的待征。</p>
+<p>配置和管理方面的成本：dataguard比stream replication简单方便；安全与稳定方面的成本：dataguard比stream replication稳定可靠。</p>
+<p>对对于一个24x7的系统来说，这些是非常重要的，系统宕机时间的增加不仅影响着公司的形象，还会影响公司的效益；采用dataguard，数据的安全性相当有保障，物理备用库可以在最短的时间完成故障切换，逻辑备用库在保障数据安全的同时， 也可以承担大量的报表等业务；由于dataguard的配置与管理比较简单，同理也降低了dba的工作强度；</p>
+<h2 id="二-流复制"><a href="#二-流复制" class="headerlink" title="二 流复制"></a>二 流复制</h2><p>（12c以下版本，12c级12c以上的流复制功能被整合到OGG中）</p>
+<p>适用于如下情况：</p>
+<p>1、局部复制 stream可以只复制某些表或某些模式</p>
+<p>2、异构环境 充分利用现有的设备与技术</p>
+<p>3、远程容灾 stream对网络的要求较dataguard低</p>
+<p>stream replication有灵活的复制策略，不仅可以配置只复制某些表，还可以配置仅复制某些表上的ddl或dml，相比dataguard必须整个数据库复制而言，可以节省相当的存储投资，毕竟对于某些海量数据而言，有许多是不必要复制的。</p>
+<p>如果在异构环境，即不同的操作系统，那dataguard将会束手无策，非stream replication莫属，这样可以充分利用现有的环境，配置高用可方案，在异构环境，stream replication将会是advanced replication的强劲对手。</p>
+<p>stream replication传播的是经过logmnr挖掘并包装的逻辑改变记录（LCRs），相比dataguard传送archived redo log、advanced replication的mview log与mview刷新的方式，stream replication对网络的需求降低了很多，在远程异地容灾的过程中，租用网络带宽是一笔较高的费用，stream replication可以适当地降低这笔费用。</p>
+<h2 id="三-高级复制："><a href="#三-高级复制：" class="headerlink" title="三 高级复制："></a>三 高级复制：</h2><p>advanced replication相对于dataguard，缺点是：配置与管理较复杂、安全与稳定性不够；优点：局部复制、异构环境等。advanced replication是一种相当成熟的技术，在许多关键系统中得到成功的运用，相对于9iR2推出的stream replication而言，双方适用的环境虽然相当，比如都可以进行局部复制、异构复制、远程容灾等，advanced replication目前在稳定性与安全性方面更经得起考验。</p>
+<p>对比stream replication与advanced replication底层的实现技术，stream replication在实时性、稳定性、高效率、低消耗（较少的cpu/network资源）等方面更有优势，但凡一些新推出的功能，都或多或少存在一些不确定的因素。</p>
+<p>在10gR1中，oracle针对目前stream replication存在的弱点进行了增强，不仅提供了从advanced replication迁移到stream replication的脚本，还提供了stream replication的配置与监控工具，stream replication在配置与管理方面必将智能化、简单化，担负起与shareplex争夺企业数据复制市场的重任。</p>
+<h2 id="四-高级复制与流复制区别"><a href="#四-高级复制与流复制区别" class="headerlink" title="四 高级复制与流复制区别"></a>四 高级复制与流复制区别</h2><p>高级复制与Streams Replication的原理是完全不同的，Streams Replication可以到表，用户，数据库级别，但高级复制似乎只能到表一级。</p>
+<p>Streams Replication不是高级复制的升级版。</p>
+<p>异构环境下，oracle的高可用和容灾有高级复制和stream 复制两种，两种的异同点如下：</p>
+<p>1.高级复制是基于触发器（trigger）原理，而stream是基于日志挖掘原理，因此stream复制对源数据库的性能影响更小，但实时性不如高级复制。</p>
+<p>2.高级复制复制的对象是基于数据库目标（object）的，如表、索引和存储过程，而stream复制可以针对表、方案（schema）和整个数据库，因此如果出于容灾整个数据库的考虑，stream复制的配置相对简单。</p>
+<p>3.高级复制是一种相当成熟的技术，在许多关键系统中得到成功的运用，相对于9iR2推出的stream复制，高级复制目前在稳定性与安全性方面更经得起考验。</p>
+<p>4.从发展的角度看，流的应用会越来越多，从oracle10g，oracle公司提供了从高级复制向流复制移植的工具，可以看出，oracle公司会更偏重于基于流的新技术。</p>
+<p>5.由于高级复制是基于触发器的，因此所有的复制对象结构（ddl）的改变，都必须通过oracle提供的复制包来实施，和应用结合的比较紧，更适合于开发者使用，而流复制则更适合dba来实施。</p>
+<ol start="6">
+<li><p>流复制支持双向数据复制，而高级复制会有冲突；</p>
+</li>
+<li><p>流复制支持异构数据库复制，而没有资料说明高级复制也有相同功能；</p>
+</li>
+</ol>
+<p>两种实际使用来看，streams复制需要更少的带宽，2m带宽，如果 streams复制不行，高级复制大概更没戏，但是用streams最好别网络断线时间过长，不知道是bug还是oracle没考虑这种情况，如果复制停 顿一段时间，再恢复正常，大概是队列表中消息太多了，入队出队都很慢，非线性增长啊，这样就需要不短的一段时间来同步数据，高级复制就没这种状况。</p>
+<p>bug，反正10，2，0，1有一些，看你碰的到碰不到了，严重的能让你删掉队列表重建才行，意味着基本是重建整个复制了，不过想重复一下又不出现了；还有使用negative rule如果站点多了遇到大的更新事务速度就变得极慢，站点多了要先设计好结构；会不停在有apply进程的站点udump目录下生成trc文件，虽然还算不上很成熟，不过streams复制真是好东西，以后必定会取代高级复制，建议打10.2.0.3补丁，据说修正了不少bug.</p>
+<p>stream对系统的设计与维护方要有相当的对stream技术的把控能力，而大多数系分与 DBA对这个东西都没有经验，所以难以推广；dataguard胜在维护简单可靠，一般dba都可以维护。stream以后会的前景会非常广阔！ 尤其是双向复制，解决了很多实际问题。</p>
+<h2 id="五-Data-Guard-和Stream-区别"><a href="#五-Data-Guard-和Stream-区别" class="headerlink" title="五 Data Guard 和Stream 区别"></a>五 Data Guard 和Stream 区别</h2><p>Date Guard有两种类型：physical standby 和 logical standby。 这两中standby 都有3个功能模块： 日志传送；日志接收，日志恢复。两种standby在前两个模块中是一样的，都是通过LGWR或者ARCn进程发送日志，通过RFS进程接受日志。 区别在第三个模块：</p>
+<p>Physical Standby 使用的是Media Recovery技术直接在数据块级别进行恢复， 因此Physical Standby 能够做到两个数据库的完全同步， 没有数据类型限制。 </p>
+<p>Logical Standby实际是通过Logminer技术，把日志中的记录还原成SQL语句，然后通过Apply Engine 执行这些语句实现数据同步， 因此Logical Standby不能保证数据的完全一致。 比如Logical Standby 不支持某些数据类型，这一点在选择Logical Standby时必须要考虑. Logical Standby 不支持的数据类型可以从DBA_LOGSTDBY_UNSUPPORTED是不里查看.</p>
+<blockquote>
+<p>SQL&gt;SELECT * FROM DBA_LOGSTDBY_UNSUPPORTED;</p>
+</blockquote>
+<p>Stream 使用的是Logical Standby 第三个模块，也就是在Source Database一端，Capture 进程利用Logminer 技术把日志内容还原成LCR， 然后发送到Target Database， 而在Target database 一端， 也是通过Apply Engine 执行这些LCR。 因此Stream在使用上也有些限制条件。这些可以从视图ALL/DBA_STREAMS_NEWLY_SUPPORTED,  ALL/DBA_STREAMS_UNSUPPORTED 查看stream复制不支持的数据类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt;SELECT table_name, reason FROM ALL_STREAMS_NEWLY_SUPPORTED;</span><br><span class="line">SQL&gt;SELECT table_name, reason FROM DBA_STREAMS_NEWLY_SUPPORTED;</span><br><span class="line"> </span><br><span class="line">SQL&gt;SELECT table_name, reason FROM DBA_STREAMS_UNSUPPORTED;</span><br><span class="line">SQL&gt;SELECT table_name, reason FROM ALL_STREAMS_UNSUPPORTED;</span><br></pre></td></tr></table></figure>
+<p>下面以图表的形式列举他们的区别：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Streams</th>
+<th style="text-align:left">Data Guard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">主要目的是数据共享</td>
+<td style="text-align:left">主要目的是灾难恢复和高可用性</td>
+</tr>
+<tr>
+<td style="text-align:left">可以多方向同步</td>
+<td style="text-align:left">只能是单向，从Primary–&gt; Standby</td>
+</tr>
+<tr>
+<td style="text-align:left">数据粒度可以是数据库，Schema，Table三个级别</td>
+<td style="text-align:left">只有数据库级别</td>
+</tr>
+<tr>
+<td style="text-align:left">支持异种平台的同步(Heterogeneous Platforms)</td>
+<td style="text-align:left">必须同种平台 (Homogeneous Platforms)</td>
+</tr>
+<tr>
+<td style="text-align:left">参与复制的每个数据库可以读写</td>
+<td style="text-align:left">只有Primary可以读写，Standby 只读</td>
+</tr>
+<tr>
+<td style="text-align:left">支持Oracle 和非Oracle 数据库间的同步</td>
+<td style="text-align:left">只能是Oracle数据库间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><pre><code>Oracle 最高可用性体系结构 — MAA
+http://www.oracle.com/technetwork/cn/database/maa-088017-zhs.html
+
+ORACLE集群概念和原理
+http://www.cnblogs.com/baiboy/p/orc2.html?spm=a2c4e.11153940.blogcont604235.13.60885f58gTplbC#_label1
+
+Oracle的高级复制、流复制、备库的区别
+http://apps.hi.baidu.com/share/detail/34247695
+
+Oracle Stream Replication技术:
+https://blog.csdn.net/tianlesoftware/article/details/4759356
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oracle/" rel="tag"><i class="fa fa-tag"></i> oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/nginx/config/如何用Nginx搬运整个世界/" rel="next" title="如何用Nginx搬运整个世界">
+                <i class="fa fa-chevron-left"></i> 如何用Nginx搬运整个世界
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/nginx/config/Nginx AB测试/" rel="prev" title="Nginx AB测试">
+                Nginx AB测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle备份功能包括："><span class="nav-number">1.</span> <span class="nav-text">Oracle备份功能包括：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一-dataguard："><span class="nav-number">2.</span> <span class="nav-text">一 dataguard：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-流复制"><span class="nav-number">3.</span> <span class="nav-text">二 流复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-高级复制："><span class="nav-number">4.</span> <span class="nav-text">三 高级复制：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-高级复制与流复制区别"><span class="nav-number">5.</span> <span class="nav-text">四 高级复制与流复制区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-Data-Guard-和Stream-区别"><span class="nav-number">6.</span> <span class="nav-text">五 Data Guard 和Stream 区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

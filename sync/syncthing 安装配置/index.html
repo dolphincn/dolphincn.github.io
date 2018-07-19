@@ -112,18 +112,18 @@
 
 
 
-  <meta name="description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限">
+  <meta name="description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动">
 <meta name="keywords" content="sync,syncthing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="syncthing 同步文件">
 <meta property="og:url" content="http://dolphincn.github.io/sync/syncthing 安装配置/index.html">
 <meta property="og:site_name" content="克隆人战争">
-<meta property="og:description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限">
+<meta property="og:description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-25T08:46:00.633Z">
+<meta property="og:updated_time" content="2018-07-09T03:04:38.158Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="syncthing 同步文件">
-<meta name="twitter:description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动,保存syncthing运行配置文件的目录必须有读写权限，同步目录也必须有读写权限">
+<meta name="twitter:description" content="syncthing 安装配置 使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。  共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。  同步的文件所有者和所有组，改为syncthing运行的用户名和组  同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。  支持无登陆权限的用户启动">
 
 
 
@@ -362,12 +362,24 @@
                 
               
 
-              <time title="创建时间：2018-06-25 10:05:00 / 修改时间：16:46:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
+              <time title="创建时间：2018-06-25 10:05:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-09 11:04:38" itemprop="dateModified" datetime="2018-07-09T11:04:38+08:00">2018-07-09</time>
               
             
           </span>
@@ -421,6 +433,8 @@
         <p>syncthing 安装配置</p>
 <h2 id="使用总结："><a href="#使用总结：" class="headerlink" title="使用总结："></a>使用总结：</h2><pre><code>一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。
 
+共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。
+
 同步的文件所有者和所有组，改为syncthing运行的用户名和组
 
 同步间隔内(一分钟内)，多个服务器同一个文件变更，按时间优先原则选择，有冲突的文件会自动重命名。
@@ -465,9 +479,13 @@ systemctl start syncthing@&lt;启动用户名&gt;
 vi /data/syncthing/&lt;user_name_folder&gt;/.config.xml
 &lt;gui enabled=&quot;true&quot; tls=&quot;false&quot;&gt;
 &lt;address&gt;0.0.0.0:8384&lt;/address&gt;
-改为
+
+改为(user:test.admin,pwd:test.admin!9595)
+
 &lt;gui enabled=&quot;true&quot; tls=&quot;true&quot;&gt;
 &lt;address&gt;200.200.200.221:8888&lt;/address&gt;
+&lt;user&gt;test.admin&lt;/user&gt;
+&lt;password&gt;$2a$10$ddH.7NbCZPrBzvn95dANT.bpFBKW/9anJ8a6xq44CZbcGJcE3kJGG&lt;/password&gt;
 </code></pre><h2 id="两台服务器数据同步"><a href="#两台服务器数据同步" class="headerlink" title="两台服务器数据同步"></a>两台服务器数据同步</h2><h2 id="基本必须的配置"><a href="#基本必须的配置" class="headerlink" title="基本必须的配置"></a>基本必须的配置</h2><pre><code>actions--&gt;settings--&gt;general:
 
     Device Name: vm01
@@ -574,7 +592,18 @@ fs.inotify.max_queued_events=99999999
 fs.inotify.max_user_watches=99999999
 
 fs.inotify.max_user_instances=65535
-</code></pre>
+</code></pre><h2 id="完整配置文件"><a href="#完整配置文件" class="headerlink" title="完整配置文件"></a>完整配置文件</h2><pre><code>## 只需把自动生成的配置文件里对应的
+&lt;device id=&quot;DER7MDE-ACFAHGP-U5NMSCL-FEY7NJK-KKQYAHP-7LBSOHD-7WFW76J-IPCGMQM&quot;
+&lt;address&gt;tcp://10.100.100.5:22000&lt;/address&gt;
+&lt;urUniqueID&gt;cfxLXRKZ&lt;/urUniqueID&gt;
+&lt;listenAddress&gt;tcp://10.100.100.5:22000&lt;/listenAddress&gt;
+&lt;localAnnounceMCAddr&gt;[ff12::8384]:22000&lt;/localAnnounceMCAddr&gt;
+
+## 密码和apikey需要重新生成
+&lt;password&gt;$2a$10$ddH.7NbCZPrBzvn95dANT.bpFBKW/9anJ8a6xq44CZbcGJcE3kJGG&lt;/password&gt;
+&lt;apikey&gt;KgfbYLfLVjf7LJhh4vuYrHbmEXdZhix7&lt;/apikey&gt;
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;configuration version=&quot;28&quot;&gt;</span><br><span class="line">    &lt;folder id=&quot;sweet&quot; label=&quot;sweet&quot; path=&quot;/data/wwwroot/sweet&quot; type=&quot;readwrite&quot; rescanIntervalS=&quot;3600&quot; fsWatcherEnabled=&quot;true&quot; fsWatcherDelayS=&quot;10&quot; ignorePerms=&quot;false&quot; autoNormalize=&quot;true&quot;&gt;</span><br><span class="line">        &lt;filesystemType&gt;basic&lt;/filesystemType&gt;</span><br><span class="line">        &lt;device id=&quot;DER7MDE-ACFAHGP-U5NMSCL-FEY7NJK-KKQYAHP-7LBSOHD-7WFW76J-IPCGMQM&quot; introducedBy=&quot;&quot;&gt;&lt;/device&gt;</span><br><span class="line">        &lt;device id=&quot;2Y75F2E-66PD3UW-EJZZOTD-67VNT2R-6RBGWXX-GAGWSMX-KO73YJK-NSLFSQU&quot; introducedBy=&quot;&quot;&gt;&lt;/device&gt;</span><br><span class="line">        &lt;minDiskFree unit=&quot;%&quot;&gt;10&lt;/minDiskFree&gt;</span><br><span class="line">        &lt;versioning&gt;&lt;/versioning&gt;</span><br><span class="line">        &lt;copiers&gt;0&lt;/copiers&gt;</span><br><span class="line">        &lt;pullerMaxPendingKiB&gt;0&lt;/pullerMaxPendingKiB&gt;</span><br><span class="line">        &lt;hashers&gt;0&lt;/hashers&gt;</span><br><span class="line">        &lt;order&gt;newestFirst&lt;/order&gt;</span><br><span class="line">        &lt;ignoreDelete&gt;false&lt;/ignoreDelete&gt;</span><br><span class="line">        &lt;scanProgressIntervalS&gt;0&lt;/scanProgressIntervalS&gt;</span><br><span class="line">        &lt;pullerPauseS&gt;0&lt;/pullerPauseS&gt;</span><br><span class="line">        &lt;maxConflicts&gt;10&lt;/maxConflicts&gt;</span><br><span class="line">        &lt;disableSparseFiles&gt;false&lt;/disableSparseFiles&gt;</span><br><span class="line">        &lt;disableTempIndexes&gt;false&lt;/disableTempIndexes&gt;</span><br><span class="line">        &lt;paused&gt;false&lt;/paused&gt;</span><br><span class="line">        &lt;weakHashThresholdPct&gt;25&lt;/weakHashThresholdPct&gt;</span><br><span class="line">        &lt;markerName&gt;.stfolder&lt;/markerName&gt;</span><br><span class="line">        &lt;useLargeBlocks&gt;false&lt;/useLargeBlocks&gt;</span><br><span class="line">    &lt;/folder&gt;</span><br><span class="line">    &lt;device id=&quot;DER7MDE-ACFAHGP-U5NMSCL-FEY7NJK-KKQYAHP-7LBSOHD-7WFW76J-IPCGMQM&quot; name=&quot;web02&quot; compression=&quot;metadata&quot; introducer=&quot;false&quot; skipIntroductionRemovals=&quot;false&quot; introducedBy=&quot;&quot;&gt;</span><br><span class="line">        &lt;address&gt;tcp://10.100.100.5:22000&lt;/address&gt;</span><br><span class="line">        &lt;paused&gt;false&lt;/paused&gt;</span><br><span class="line">        &lt;allowedNetwork&gt;10.100.100.0/24&lt;/allowedNetwork&gt;</span><br><span class="line">        &lt;autoAcceptFolders&gt;false&lt;/autoAcceptFolders&gt;</span><br><span class="line">        &lt;maxSendKbps&gt;0&lt;/maxSendKbps&gt;</span><br><span class="line">        &lt;maxRecvKbps&gt;0&lt;/maxRecvKbps&gt;</span><br><span class="line">    &lt;/device&gt;</span><br><span class="line">    &lt;device id=&quot;2Y75F2E-66PD3UW-EJZZOTD-67VNT2R-6RBGWXX-GAGWSMX-KO73YJK-NSLFSQU&quot; name=&quot;web03&quot; compression=&quot;metadata&quot; introducer=&quot;false&quot; skipIntroductionRemovals=&quot;false&quot; introducedBy=&quot;&quot;&gt;</span><br><span class="line">        &lt;address&gt;tcp://10.100.100.6:22000&lt;/address&gt;</span><br><span class="line">        &lt;paused&gt;false&lt;/paused&gt;</span><br><span class="line">        &lt;allowedNetwork&gt;10.100.100.0/24&lt;/allowedNetwork&gt;</span><br><span class="line">        &lt;autoAcceptFolders&gt;false&lt;/autoAcceptFolders&gt;</span><br><span class="line">        &lt;maxSendKbps&gt;0&lt;/maxSendKbps&gt;</span><br><span class="line">        &lt;maxRecvKbps&gt;0&lt;/maxRecvKbps&gt;</span><br><span class="line">    &lt;/device&gt;</span><br><span class="line">    &lt;gui enabled=&quot;true&quot; tls=&quot;true&quot; debugging=&quot;false&quot;&gt;</span><br><span class="line">        &lt;address&gt;10.100.100.5:8888&lt;/address&gt;</span><br><span class="line">        &lt;user&gt;test.admin&lt;/user&gt;</span><br><span class="line">        &lt;password&gt;$2a$10$ddH.7NbCZPrBzvn95dANT.bpFBKW/9anJ8a6xq44CZbcGJcE3kJGG&lt;/password&gt;</span><br><span class="line">        &lt;apikey&gt;KgfbYLfLVjf7LJhh4vuYrHbmEXdZhix7&lt;/apikey&gt;</span><br><span class="line">        &lt;theme&gt;default&lt;/theme&gt;</span><br><span class="line">    &lt;/gui&gt;</span><br><span class="line">    &lt;options&gt;</span><br><span class="line">        &lt;listenAddress&gt;tcp://10.100.100.5:22000&lt;/listenAddress&gt;</span><br><span class="line">        &lt;globalAnnounceServer&gt;default&lt;/globalAnnounceServer&gt;</span><br><span class="line">        &lt;globalAnnounceEnabled&gt;false&lt;/globalAnnounceEnabled&gt;</span><br><span class="line">        &lt;localAnnounceEnabled&gt;false&lt;/localAnnounceEnabled&gt;</span><br><span class="line">        &lt;localAnnouncePort&gt;21027&lt;/localAnnouncePort&gt;</span><br><span class="line">        &lt;localAnnounceMCAddr&gt;[ff12::8384]:21027&lt;/localAnnounceMCAddr&gt;</span><br><span class="line">        &lt;maxSendKbps&gt;0&lt;/maxSendKbps&gt;</span><br><span class="line">        &lt;maxRecvKbps&gt;0&lt;/maxRecvKbps&gt;</span><br><span class="line">        &lt;reconnectionIntervalS&gt;60&lt;/reconnectionIntervalS&gt;</span><br><span class="line">        &lt;relaysEnabled&gt;false&lt;/relaysEnabled&gt;</span><br><span class="line">        &lt;relayReconnectIntervalM&gt;10&lt;/relayReconnectIntervalM&gt;</span><br><span class="line">        &lt;startBrowser&gt;false&lt;/startBrowser&gt;</span><br><span class="line">        &lt;natEnabled&gt;false&lt;/natEnabled&gt;</span><br><span class="line">        &lt;natLeaseMinutes&gt;60&lt;/natLeaseMinutes&gt;</span><br><span class="line">        &lt;natRenewalMinutes&gt;30&lt;/natRenewalMinutes&gt;</span><br><span class="line">        &lt;natTimeoutSeconds&gt;10&lt;/natTimeoutSeconds&gt;</span><br><span class="line">        &lt;urAccepted&gt;-1&lt;/urAccepted&gt;</span><br><span class="line">        &lt;urSeen&gt;3&lt;/urSeen&gt;</span><br><span class="line">        &lt;urUniqueID&gt;cfxLXRKZ&lt;/urUniqueID&gt;</span><br><span class="line">        &lt;urURL&gt;&lt;/urURL&gt;</span><br><span class="line">        &lt;urPostInsecurely&gt;false&lt;/urPostInsecurely&gt;</span><br><span class="line">        &lt;urInitialDelayS&gt;1800&lt;/urInitialDelayS&gt;</span><br><span class="line">        &lt;restartOnWakeup&gt;true&lt;/restartOnWakeup&gt;</span><br><span class="line">        &lt;autoUpgradeIntervalH&gt;0&lt;/autoUpgradeIntervalH&gt;</span><br><span class="line">        &lt;upgradeToPreReleases&gt;false&lt;/upgradeToPreReleases&gt;</span><br><span class="line">        &lt;keepTemporariesH&gt;24&lt;/keepTemporariesH&gt;</span><br><span class="line">        &lt;cacheIgnoredFiles&gt;false&lt;/cacheIgnoredFiles&gt;</span><br><span class="line">        &lt;progressUpdateIntervalS&gt;5&lt;/progressUpdateIntervalS&gt;</span><br><span class="line">        &lt;limitBandwidthInLan&gt;false&lt;/limitBandwidthInLan&gt;</span><br><span class="line">        &lt;minHomeDiskFree unit=&quot;%&quot;&gt;10&lt;/minHomeDiskFree&gt;</span><br><span class="line">        &lt;releasesURL&gt;&lt;/releasesURL&gt;</span><br><span class="line">        &lt;alwaysLocalNet&gt;10.100.100.0/24&lt;/alwaysLocalNet&gt;</span><br><span class="line">        &lt;overwriteRemoteDeviceNamesOnConnect&gt;false&lt;/overwriteRemoteDeviceNamesOnConnect&gt;</span><br><span class="line">        &lt;tempIndexMinBlocks&gt;10&lt;/tempIndexMinBlocks&gt;</span><br><span class="line">        &lt;trafficClass&gt;0&lt;/trafficClass&gt;</span><br><span class="line">        &lt;defaultFolderPath&gt;/data/wwwroot&lt;/defaultFolderPath&gt;</span><br><span class="line">        &lt;setLowPriority&gt;true&lt;/setLowPriority&gt;</span><br><span class="line">        &lt;minHomeDiskFreePct&gt;0&lt;/minHomeDiskFreePct&gt;</span><br><span class="line">    &lt;/options&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -609,8 +638,8 @@ fs.inotify.max_user_instances=65535
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/nginx/magento/Magento 文件夹及文件权限/" rel="next" title="Magento 文件夹及文件权限">
-                <i class="fa fa-chevron-left"></i> Magento 文件夹及文件权限
+              <a href="/sync/Rsync/" rel="next" title="Rsync 同步文件">
+                <i class="fa fa-chevron-left"></i> Rsync 同步文件
               </a>
             
           </div>
@@ -695,7 +724,7 @@ fs.inotify.max_user_instances=65535
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-count">53</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -744,7 +773,41 @@ fs.inotify.max_user_instances=65535
                     
                       
                     
-                    <span class="site-state-item-count">18</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -793,7 +856,53 @@ fs.inotify.max_user_instances=65535
                     
                       
                     
-                    <span class="site-state-item-count">18</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -829,7 +938,7 @@ fs.inotify.max_user_instances=65535
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用总结："><span class="nav-number">1.</span> <span class="nav-text">使用总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置参考："><span class="nav-number">2.</span> <span class="nav-text">配置参考：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要安装配置时间同步"><span class="nav-number">3.</span> <span class="nav-text">需要安装配置时间同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙开放端口，还需要关闭selinux"><span class="nav-number">4.</span> <span class="nav-text">防火墙开放端口，还需要关闭selinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果文件夹很多，需要调整"><span class="nav-number">5.</span> <span class="nav-text">如果文件夹很多，需要调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置时区"><span class="nav-number">6.</span> <span class="nav-text">设置时区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置"><span class="nav-number">7.</span> <span class="nav-text">安装配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">8.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webui-访问"><span class="nav-number">9.</span> <span class="nav-text">webui 访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两台服务器数据同步"><span class="nav-number">10.</span> <span class="nav-text">两台服务器数据同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本必须的配置"><span class="nav-number">11.</span> <span class="nav-text">基本必须的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器连接配置-局域网用，所有服务器都手动添加对方服务器连接信息"><span class="nav-number">12.</span> <span class="nav-text">服务器连接配置,局域网用，所有服务器都手动添加对方服务器连接信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步共享文件夹-同步的服务器配置最好都一致，folder-id-必须一致"><span class="nav-number">13.</span> <span class="nav-text">同步共享文件夹,同步的服务器配置最好都一致，folder id 必须一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升同步速度和限制共享网络"><span class="nav-number">14.</span> <span class="nav-text">提升同步速度和限制共享网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果无法及时更新文件变更，请安装inotify-tools"><span class="nav-number">15.</span> <span class="nav-text">如果无法及时更新文件变更，请安装inotify-tools</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用总结："><span class="nav-number">1.</span> <span class="nav-text">使用总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置参考："><span class="nav-number">2.</span> <span class="nav-text">配置参考：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要安装配置时间同步"><span class="nav-number">3.</span> <span class="nav-text">需要安装配置时间同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙开放端口，还需要关闭selinux"><span class="nav-number">4.</span> <span class="nav-text">防火墙开放端口，还需要关闭selinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果文件夹很多，需要调整"><span class="nav-number">5.</span> <span class="nav-text">如果文件夹很多，需要调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置时区"><span class="nav-number">6.</span> <span class="nav-text">设置时区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置"><span class="nav-number">7.</span> <span class="nav-text">安装配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">8.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webui-访问"><span class="nav-number">9.</span> <span class="nav-text">webui 访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两台服务器数据同步"><span class="nav-number">10.</span> <span class="nav-text">两台服务器数据同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本必须的配置"><span class="nav-number">11.</span> <span class="nav-text">基本必须的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器连接配置-局域网用，所有服务器都手动添加对方服务器连接信息"><span class="nav-number">12.</span> <span class="nav-text">服务器连接配置,局域网用，所有服务器都手动添加对方服务器连接信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步共享文件夹-同步的服务器配置最好都一致，folder-id-必须一致"><span class="nav-number">13.</span> <span class="nav-text">同步共享文件夹,同步的服务器配置最好都一致，folder id 必须一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升同步速度和限制共享网络"><span class="nav-number">14.</span> <span class="nav-text">提升同步速度和限制共享网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果无法及时更新文件变更，请安装inotify-tools"><span class="nav-number">15.</span> <span class="nav-text">如果无法及时更新文件变更，请安装inotify-tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整配置文件"><span class="nav-number">16.</span> <span class="nav-text">完整配置文件</span></a></li></ol></div>
             
 
           </div>

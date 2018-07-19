@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="生成haproxy 终结证书openssl genrsa -out /etc/haproxy/server.key 2048 openssl req -new -key /etc/haproxy/server.key -out /etc/haproxy/server.csr openssl x509 -req -days 3655 -in /etc/haproxy/server.csr -sign">
+<meta name="keywords" content="HAProxy,SSL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HAProxy 反向代理 SSL">
+<meta property="og:url" content="http://dolphincn.github.io/Haproxy/HAProxy 反向代理 SSL/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="生成haproxy 终结证书openssl genrsa -out /etc/haproxy/server.key 2048 openssl req -new -key /etc/haproxy/server.key -out /etc/haproxy/server.csr openssl x509 -req -days 3655 -in /etc/haproxy/server.csr -sign">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-10T08:19:39.210Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HAProxy 反向代理 SSL">
+<meta name="twitter:description" content="生成haproxy 终结证书openssl genrsa -out /etc/haproxy/server.key 2048 openssl req -new -key /etc/haproxy/server.key -out /etc/haproxy/server.csr openssl x509 -req -days 3655 -in /etc/haproxy/server.csr -sign">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/Haproxy/HAProxy 反向代理 SSL/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HAProxy 反向代理 SSL | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/Haproxy/HAProxy 反向代理 SSL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HAProxy 反向代理 SSL
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-10 16:19:39" itemprop="dateModified" datetime="2018-07-10T16:19:39+08:00">2018-07-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HAProxy/" itemprop="url" rel="index"><span itemprop="name">HAProxy</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HAProxy/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="生成haproxy-终结证书"><a href="#生成haproxy-终结证书" class="headerlink" title="生成haproxy 终结证书"></a>生成haproxy 终结证书</h2><pre><code>openssl genrsa -out /etc/haproxy/server.key 2048
+openssl req -new -key /etc/haproxy/server.key -out /etc/haproxy/server.csr
+openssl x509 -req -days 3655 -in /etc/haproxy/server.csr -signkey /etc/haproxy/server.key -out /etc/haproxy/server.crt
+
+## 以上三步合为一步操作
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/haproxy/server.key -out /etc/haproxy/server.crt
+
+## 除了cn需要输入网站名,其它可以随意输入
+## openssl：    这是OpenSSL提供的基本命令行工具，用于创建和管理证书，密钥，签名请求等。
+## req：        这指定了X.509证书签名请求（CSR）管理的子命令。X.509是SSL为其密钥和证书管理所遵循的公钥基础结构标准。由于我们想要创建一个新的X.509证书，这就是我们想要的。
+## -x509：      此选项指定我们要创建自签名证书文件，而不是生成证书请求。
+## -nodes：     此选项告诉OpenSSL我们不希望使用密码来保护我们的密钥文件。拥有受密码保护的密钥文件会妨碍Apache自动启动，因为每次服务重新启动时都必须输入密码。
+## -days 365：  这指定我们创建的证书有效期为一年。
+## -newkey rsa：2048：此选项将同时创建证书请求和新私钥。这是必要的，因为我们没有提前创建私钥。该rsa:2048告诉OpenSSL生成RSA密钥是2048位。
+## -keyout：    此参数为正在创建的私钥文件命名输出文件。
+## -out：       此选项为我们生成的证书命名输出文件。
+
+
+## pem文件本质上只是将证书、密钥及证书认证中心证书（可有可无）拼接成一个文件
+
+cat /etc/haproxy/server.crt /etc/haproxy/server.key | tee /etc/haproxy/server.pem
+</code></pre><a id="more"></a>
+<h2 id="Haproxy日志记录"><a href="#Haproxy日志记录" class="headerlink" title="Haproxy日志记录"></a>Haproxy日志记录</h2><pre><code>在配置前，我们先来了解一下日志的level：local0～local7 16～23保留为本地使用：
+
+    emerg 0 系统不可用；
+    alert 1 必须马上采取行动的事件；
+    crit 2 关键的事件；
+    err 3 错误事件；
+    warning 4 警告事件；
+    notice 5 普通但重要的事件；
+    info 6 有用的信息；
+    debug 7 调试信息。
+
+默认 haproxy 是不记录日志的，为了记录日志还需要配置 syslog 模块，在 linux 下是 rsyslogd 服务。
+
+如果要发送日志到远程主机，还需修改远程主机中的/etc/sysconfig/rsyslog中的参数。
+</code></pre><figure class="highlight bash"><figcaption><span>安装配置rsyslog</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 此步centos 默认已安装，可以跳过</span></span><br><span class="line">yum -y install rsyslog</span><br><span class="line">    </span><br><span class="line"><span class="comment">## 修改"SYSLOGD_OPTIONS"参数，</span></span><br><span class="line"><span class="comment">## -c 2 使用兼容模式，默认是 -c 5；</span></span><br><span class="line"><span class="comment">## -r 开启远程日志；</span></span><br><span class="line"><span class="comment">## -m 0 标记时间戳，单位是分钟，0表示禁用该功能。</span></span><br><span class="line"></span><br><span class="line">cp /etc/sysconfig/rsyslog&#123;,.$(date <span class="string">'%F_%T'</span>)&#125;</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/sysconfig/rsyslog &lt;&lt; EOF</span><br><span class="line">SYSLOGD_OPTIONS=<span class="string">"-c 2 -r -m 0"</span></span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sed -i <span class="string">"s/#\$ModLoad imudp/\$ModLoad imudp/g"</span> /etc/rsyslog.conf</span><br><span class="line">sed -i <span class="string">"s/#\$UDPServerRun 514/\$UDPServerRun 514/g"</span> /etc/rsyslog.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">## #文件最末尾的"&amp;~"，如果没有此配置，日志除写入指定文件外，会同步写入messages文件；</span></span><br><span class="line">cat &gt; /etc/rsyslog.d/haproxy.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">local2.*    /var/<span class="built_in">log</span>/haproxy.log</span><br><span class="line">&amp;~</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl restart rsyslog.service</span><br></pre></td></tr></table></figure>
+<h2 id="配置-Haproxy"><a href="#配置-Haproxy" class="headerlink" title="配置 Haproxy"></a>配置 Haproxy</h2><figure class="highlight bash"><figcaption><span>##Haproxy 基本配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">cp /etc/haproxy/haproxy.cfg&#123;,.$(date +<span class="string">'%F_%T'</span>)&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat &gt; /etc/haproxy/haproxy.cfg &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">global</span><br><span class="line">    <span class="comment">#定义全局日志, 配置在本地, 通过local0 输出, 默认是info级别，可配置两条</span></span><br><span class="line">    <span class="built_in">log</span>         127.0.0.1 local2 warning</span><br><span class="line"></span><br><span class="line">    chroot      /var/lib/haproxy</span><br><span class="line">    pidfile     /var/run/haproxy.pid</span><br><span class="line"></span><br><span class="line">    <span class="comment">#设置每haproxy进程的最大并发连接数, 其等同于命令行选项“-n”; “ulimit -n”自动计算的结果参照此参数设定.</span></span><br><span class="line">    maxconn     4000</span><br><span class="line">    user        haproxy</span><br><span class="line">    group       haproxy</span><br><span class="line"></span><br><span class="line">    <span class="comment">#后台运行haproxy</span></span><br><span class="line">    daemon</span><br><span class="line"></span><br><span class="line">    <span class="comment">## 设置启动的haproxy进程数量, 只能用于守护进程模式的haproxy;</span></span><br><span class="line">    <span class="comment">## 默认只启动一个进程</span></span><br><span class="line">    <span class="comment">#nbproc 1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">#定义统计信息保存位置</span></span><br><span class="line">    <span class="comment">#stats socket /var/lib/haproxy/stats</span></span><br><span class="line">    stats socket /run/haproxy/admin.sock mode 660 level admin</span><br><span class="line">    stats timeout 30s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">##===============https相关========================================</span></span><br><span class="line">    <span class="comment"># Default SSL material locations</span></span><br><span class="line"></span><br><span class="line">    ca-base /etc/ssl/certs</span><br><span class="line"></span><br><span class="line">    crt-base /etc/ssl/private</span><br><span class="line"></span><br><span class="line">    <span class="comment">## Default ciphers to use on SSL-enabled listening sockets.</span></span><br><span class="line">    <span class="comment">## 参考：https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/</span></span><br><span class="line">    <span class="comment">## 需要处理以下事：</span></span><br><span class="line">    <span class="comment">## 禁用SSL 2.0（FUBAR）和SSL 3.0 1（POODLE），</span></span><br><span class="line">    <span class="comment">## 禁用TLS 1.0压缩（CRIME），</span></span><br><span class="line">    <span class="comment">## 禁用弱密码（DES / 3DES，RC4），更喜欢现代密码（AES），模式（GCM）和协议（TLS 1.2）。</span></span><br><span class="line">    <span class="comment">## OpenSSL更新为1.0.1c +，以便尽快支持TLS 1.2，GCM和ECDHE</span></span><br><span class="line">    <span class="comment">## OpenSSL安装进行测试：</span></span><br><span class="line">    <span class="comment">## openssl ciphers -v 'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ssl-default-bind-options no-sslv3</span><br><span class="line">    ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS</span><br><span class="line"></span><br><span class="line">    ssl-default-server-options no-sslv3</span><br><span class="line">    ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS</span><br><span class="line">    </span><br><span class="line">    tune.ssl.default-dh-param 2048</span><br><span class="line"></span><br><span class="line">    <span class="comment">##============================================================</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">defaults</span><br><span class="line"></span><br><span class="line">    <span class="comment">#默认的模式【tcp:4层； http:7层； health:只返回OK】</span></span><br><span class="line">    mode                    http</span><br><span class="line"></span><br><span class="line">    <span class="comment">#日志类别, httplog</span></span><br><span class="line">    <span class="built_in">log</span>                     global</span><br><span class="line"></span><br><span class="line">    <span class="comment">#日志类别, httplog</span></span><br><span class="line">    option                  httplog</span><br><span class="line">    <span class="comment">#如果产生了一个空连接，那这个空连接的日志将不会记录.</span></span><br><span class="line">    option                  dontlognull</span><br><span class="line"></span><br><span class="line">    <span class="comment">#开启http协议中服务器端关闭功能, 每个请求完毕后主动关闭http通道, 使得支持长连接，使得会话可以被重用，使得每一个日志记录都会被记录.</span></span><br><span class="line">    option http-server-close</span><br><span class="line"></span><br><span class="line">    <span class="comment">## 需要长连接就注释掉此</span></span><br><span class="line">    <span class="comment"># option httpclose</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#当haproxy负载很高时, 自动结束掉当前队列处理比较久的链接.</span></span><br><span class="line">    option abortonclose</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#如果后端服务器需要记录客户端真实ip, 需要在HTTP请求中添加”X-Forwarded-For”字段;</span></span><br><span class="line">    <span class="comment">#但haproxy自身的健康检测机制访问后端服务器时, 不应将记录访问日志，可用except来排除127.0.0.0，即haproxy本身.</span></span><br><span class="line">    option forwardfor       except 127.0.0.0/8</span><br><span class="line"></span><br><span class="line">    <span class="comment">#当与后端服务器的会话失败(服务器故障或其他原因)时, 把会话重新分发到其他健康的服务器上; 当故障服务器恢复时, 会话又被定向到已恢复的服务器上;</span></span><br><span class="line">    <span class="comment">#还可以用”retries”关键字来设定在判定会话失败时的尝试连接的次数</span></span><br><span class="line">    option                  redispatch</span><br><span class="line">    retries                 3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">#默认http请求超时时间</span></span><br><span class="line">    timeout http-request    10s</span><br><span class="line"></span><br><span class="line">    <span class="comment">#默认队列超时时间, 后端服务器在高负载时, 会将haproxy发来的请求放进一个队列中.</span></span><br><span class="line">    timeout queue           1m</span><br><span class="line"></span><br><span class="line">    <span class="comment">#haproxy与后端服务器连接超时时间.</span></span><br><span class="line">    timeout connect         10s</span><br><span class="line"></span><br><span class="line">    <span class="comment">#客户端与haproxy连接后, 数据传输完毕, 不再有数据传输, 即非活动连接的超时时间.</span></span><br><span class="line">    timeout client          1m</span><br><span class="line"></span><br><span class="line">    <span class="comment">#haproxy与后端服务器非活动连接的超时时间.</span></span><br><span class="line">    timeout server          1m</span><br><span class="line"></span><br><span class="line">    <span class="comment">#默认新的http请求连接建立的超时时间，时间较短时可以尽快释放出资源，节约资源.</span></span><br><span class="line">    timeout http-keep-alive 10s</span><br><span class="line"></span><br><span class="line">    <span class="comment">#心跳检测超时时间</span></span><br><span class="line">    timeout check           10s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">#设置默认的负载均衡方式</span></span><br><span class="line">    <span class="comment">#balance source</span></span><br><span class="line">    <span class="comment">#balnace leastconn</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">listen admin_stats</span><br><span class="line">    <span class="built_in">bind</span> 0.0.0.0:1080</span><br><span class="line">    mode http</span><br><span class="line">    option httplog</span><br><span class="line">    maxconn 10</span><br><span class="line"></span><br><span class="line">    <span class="comment">## 状态监控可以直接防在default里，任何监听域名或地址都可以访问，也可以单独放在listen里</span></span><br><span class="line">    stats <span class="built_in">enable</span></span><br><span class="line">    stats hide-version</span><br><span class="line">    stats refresh 30s</span><br><span class="line">    stats uri     /stats</span><br><span class="line">    stats realm   Haproxy\ Statistics</span><br><span class="line">    stats auth    test.admin:test.admin!9595</span><br><span class="line">    stats refresh 30s</span><br><span class="line">    stats admin <span class="keyword">if</span> TRUE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## HAProxy作为SSL终端</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 让负载均衡器处理SSL连接。这就意味着要将SSL证书放在负载均衡服务器上。</span></span><br><span class="line"><span class="comment">## SSL连接终止在负载均衡器haproxy ---&gt;解码SSL连接并发送非加密连接到后端应用tomcat.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 多个不同域名的证书 bind *:443 ssl crt &lt;cert_path&gt; crt &lt;cert_path&gt; ...</span></span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/haproxy/haproxy.cfg &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">frontend  server_ssl</span><br><span class="line">    <span class="built_in">bind</span> *:80</span><br><span class="line">    <span class="built_in">bind</span> *:443 ssl crt /etc/haproxy/server.pem</span><br><span class="line"></span><br><span class="line">    <span class="comment">## 将http转发至https</span></span><br><span class="line">    redirect scheme https <span class="keyword">if</span> !&#123; ssl_fc &#125;</span><br><span class="line"></span><br><span class="line">    mode http</span><br><span class="line">    default_backend  server</span><br><span class="line"></span><br><span class="line">backend server</span><br><span class="line">    mode http</span><br><span class="line">    balance     roundrobin</span><br><span class="line">    option      forwardfor</span><br><span class="line"><span class="comment">#   option      httpchk HEAD / HTTP/1.1\r\nHost:localhost</span></span><br><span class="line">    server      web01  10.0.0.4:80 maxconn 1024 weight 1 check inter 2000 rise 2 fall 4</span><br><span class="line">    server      web02  10.0.0.6:80 maxconn 1024 weight 1 check inter 2000 rise 2 fall 4</span><br><span class="line"><span class="comment">#   http-request set-header X-Forwarded-Port %[dst_port]</span></span><br><span class="line"><span class="comment">#   http-request add-header X-Forwarded-Proto https if &#123; ssl_fc &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## HAProxy实现SSL穿透</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 使用SSL穿透，让后台服务器处理SSL连接，而非负载均衡器来处理。</span></span><br><span class="line"><span class="comment">## 负载均衡器的工作就只是简单地将请求转发到配置好的后台服务器。连接还保持加密状态。</span></span><br><span class="line"><span class="comment">## 在这个配置中，需要在前端和后台配置中同时使用TCP模式而不是HTTP模式,HAProxy只会把连接当作信息流来转发到其他服务器.</span></span><br><span class="line"><span class="comment">## 然而，这样做会让你失去增加或修改HTTP报头的能力，这意味着应用服务器会失去获取 X-Forwarded-* 报头的能力，这个报头包含了客户端IP地址、端口和使用的协议。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 可以使用ssl-hello-chk来检查连接及它处理SSL（特别是SSLv3）连接的能力</span></span><br><span class="line"><span class="comment">## 使用SSL 穿越，不需要给HAProxy创建或使用SSL证书。</span></span><br><span class="line"><span class="comment">## option forwardfor和http-request选项 - 这些不能用于TCP模式，而且我们也不能向已加密的请求添加报头</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/haproxy/haproxy.cfg &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">frontend server_ssl</span><br><span class="line">    <span class="built_in">bind</span> *:80</span><br><span class="line">    <span class="built_in">bind</span> *:443</span><br><span class="line">    option tcplog</span><br><span class="line">    mode tcp</span><br><span class="line">    default_backend server</span><br><span class="line"></span><br><span class="line">backend server</span><br><span class="line">    mode tcp</span><br><span class="line">    balance roundrobin</span><br><span class="line">    option ssl-hello-chk</span><br><span class="line">    server      web01  10.0.0.4:80 weight 1 check inter 2000 rise 2 fall 4</span><br><span class="line">    server      web02  10.0.0.6:80 weight 1 check inter 2000 rise 2 fall 4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="keepalvied-高可用"><a href="#keepalvied-高可用" class="headerlink" title="keepalvied 高可用"></a>keepalvied 高可用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /etc/keepalived.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line">                            </span><br><span class="line">global_defs &#123;</span><br><span class="line">notification_email &#123;</span><br><span class="line">        root@sanyu.com</span><br><span class="line">&#125;</span><br><span class="line">notification_email_from kanotify@sanyu.com</span><br><span class="line">smtp_connect_timeout 30</span><br><span class="line">smtp_server 127.0.0.1</span><br><span class="line">router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_haproxy &#123;</span><br><span class="line">    script <span class="string">"killall -0 haproxy"</span></span><br><span class="line">    interval 1</span><br><span class="line">    weight 2</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_mantaince_down &#123;</span><br><span class="line">script <span class="string">"[[ -f /etc/keepalived/down ]] &amp;&amp; exit 1 || exit 0"</span></span><br><span class="line">interval 1</span><br><span class="line">weight 2</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER  <span class="comment"># BACKUP for slave routers</span></span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 70</span><br><span class="line">    priority 101  <span class="comment"># 100 for BACKUP</span></span><br><span class="line">    garp_master_delay 1</span><br><span class="line">                            </span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass password</span><br><span class="line">    &#125;</span><br><span class="line">    track_interface &#123;</span><br><span class="line">    eth0  </span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        172.16.100.70/16 dev eth0 label eth0:0</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_haproxy</span><br><span class="line">        chk_mantaince_down</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_2 &#123;</span><br><span class="line">    interface eth0</span><br><span class="line">    state BACKUP  <span class="comment"># BACKUP for slave routers</span></span><br><span class="line">    priority 100  <span class="comment"># 100 for BACKUP</span></span><br><span class="line">    virtual_router_id 79</span><br><span class="line">    garp_master_delay 1</span><br><span class="line">                            </span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass password</span><br><span class="line">    &#125;</span><br><span class="line">    track_interface &#123;</span><br><span class="line">    eth0  </span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        172.16.100.79/16 dev eth0 label eth0:1</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_haproxy</span><br><span class="line">        chk_mantaince_down</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## 比对两服务器的keepalived配置文件</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">diff keepalived.conf keepalived.conf.ha2</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">vi /etc/keepalived/check_haproxy.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line">killall -0 haproxy</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## if [ $(ps -C haproxy --no-header | wc -l) -eq 0 ]; then</span></span><br><span class="line">    systemctl restart haproxy</span><br><span class="line">    <span class="comment">## /usr/local/haproxy/sbin/haproxy -f /usr/local/haproxy/conf/haproxy.cfg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## fi</span></span><br><span class="line"></span><br><span class="line">    sleep 2</span><br><span class="line"></span><br><span class="line">    killall -0 haproxy</span><br><span class="line"></span><br><span class="line">    <span class="comment">## if [ $(ps -C haproxy --no-header | wc -l) -eq 0 ]; then</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">        killall keepalived</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">killall -0 haproxy</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HAProxy/" rel="tag"><i class="fa fa-tag"></i> HAProxy</a>
+          
+            <a href="/tags/SSL/" rel="tag"><i class="fa fa-tag"></i> SSL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/mssql/Install Microsoft SQL Server On CentOS/" rel="next" title="Install Microsoft SQL Server On CentOS Linux">
+                <i class="fa fa-chevron-left"></i> Install Microsoft SQL Server On CentOS Linux
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/linux/command/97条 Linux 常用命令总结/" rel="prev" title="97条 Linux 常用命令总结">
+                97条 Linux 常用命令总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成haproxy-终结证书"><span class="nav-number">1.</span> <span class="nav-text">生成haproxy 终结证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Haproxy日志记录"><span class="nav-number">2.</span> <span class="nav-text">Haproxy日志记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-Haproxy"><span class="nav-number">3.</span> <span class="nav-text">配置 Haproxy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keepalvied-高可用"><span class="nav-number">4.</span> <span class="nav-text">keepalvied 高可用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Rsync是linux/Unix文件同步和传送工具。用于替代rcp的一个工具，rsync可以通过rsh或ssh使用，也能以daemon模式去运行，在以daemon方式运行时rsync server会开一个873端口，等待客户端去连接。连接时rsync server会检查口令是否相符，若通过口令查核，则可以通过进行文件传输，第一次连通完成时，会把整份文件传输一次，以后则就只需进行增量备份。">
+<meta name="keywords" content="sync,Rsync">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rsync 同步文件">
+<meta property="og:url" content="http://dolphincn.github.io/sync/Rsync/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="Rsync是linux/Unix文件同步和传送工具。用于替代rcp的一个工具，rsync可以通过rsh或ssh使用，也能以daemon模式去运行，在以daemon方式运行时rsync server会开一个873端口，等待客户端去连接。连接时rsync server会检查口令是否相符，若通过口令查核，则可以通过进行文件传输，第一次连通完成时，会把整份文件传输一次，以后则就只需进行增量备份。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-19T06:24:26.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rsync 同步文件">
+<meta name="twitter:description" content="Rsync是linux/Unix文件同步和传送工具。用于替代rcp的一个工具，rsync可以通过rsh或ssh使用，也能以daemon模式去运行，在以daemon方式运行时rsync server会开一个873端口，等待客户端去连接。连接时rsync server会检查口令是否相符，若通过口令查核，则可以通过进行文件传输，第一次连通完成时，会把整份文件传输一次，以后则就只需进行增量备份。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/sync/Rsync/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Rsync 同步文件 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/Rsync/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rsync 同步文件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-25 10:05:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-19 14:24:26" itemprop="dateModified" datetime="2018-07-19T14:24:26+08:00">2018-07-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sync/" itemprop="url" rel="index"><span itemprop="name">sync</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Rsync是linux/Unix文件同步和传送工具。用于替代rcp的一个工具，rsync可以通过rsh或ssh使用，也能以daemon模式去运行，在以daemon方式运行时rsync server会开一个873端口，等待客户端去连接。连接时rsync server会检查口令是否相符，若通过口令查核，则可以通过进行文件传输，第一次连通完成时，会把整份文件传输一次，以后则就只需进行增量备份。</p>
+<a id="more"></a>
+<h2 id="yum-安装"><a href="#yum-安装" class="headerlink" title="yum 安装"></a>yum 安装</h2><h3 id="epel源安装"><a href="#epel源安装" class="headerlink" title="epel源安装"></a>epel源安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">[epel]</span><br><span class="line">name=Extra Packages <span class="keyword">for</span> Enterprise Linux 7 - \<span class="variable">$basearch</span></span><br><span class="line">baseurl=http://dl.fedoraproject.org/pub/epel/7Server/x86_64/</span><br><span class="line">failovermethod=priority</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>## centos 7.5 已经安装了3.1.2 版本
+yum install rsync
+
+## 查看当前rsync版本
+rsync --version
+</code></pre><h2 id="编译安装："><a href="#编译安装：" class="headerlink" title="编译安装："></a>编译安装：</h2><pre><code>下载rsync源码
+# wget https://download.samba.org/pub/rsync/rsync-3.1.3.tar.gz
+
+解压
+# tar -zxvf rsync-3.1.3.tar.gz
+
+进入目录
+# cd rsync-3.1.3
+
+查看编译配置参数
+# ./configure --help
+
+编译安装, 安装时同步保存日志，这种编译
+# ./configure --prefix=/usr
+
+编译好二进制rsync程序会放在/usr/bin目录下,即/usr/bin/rsync
+
+编译可以带如下参数
+--with-rsyncd-conf=/etc/rsyncd.conf   # 默认/etc/rsyncd.conf
+--without-included-zlib               # 此开关使用系统安装的zlib库进行编译。
+# make
+# make install | tee make_install.log
+
+
+出于安全原因，鼓励将rsync服务器作为非特权用户和组运行。 
+如果您打算将rsync作为后台进程运行，请使用root用户颁发的以下命令创建rsyncd用户和组：
+
+# groupadd -g 80 rsyncd
+# useradd -c &quot;rsyncd Daemon&quot; -d /home/rsync -g rsyncd -s /sbin/nologin -u 80 rsyncd
+
+最后需要手动添加配置文件:
+</code></pre><h2 id="rsyncd服务器配置"><a href="#rsyncd服务器配置" class="headerlink" title="rsyncd服务器配置"></a>rsyncd服务器配置</h2><h3 id="rsyncd-systemd配置文件"><a href="#rsyncd-systemd配置文件" class="headerlink" title="rsyncd systemd配置文件"></a>rsyncd systemd配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt; /usr/lib/systemd/system/rsyncd.service &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=fast remote file copy program daemon</span><br><span class="line">ConditionPathExists=/etc/rsyncd.conf</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">EnvironmentFile=/etc/sysconfig/rsyncd</span><br><span class="line">ExecStart=/usr/bin/rsync --port=555873 --daemon --no-detach <span class="string">"\$OPTIONS"</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat /etc/sysconfig/rsyncd</span><br><span class="line">OPTIONS=<span class="string">""</span></span><br></pre></td></tr></table></figure>
+<h3 id="rsyncd-启动配置文件"><a href="#rsyncd-启动配置文件" class="headerlink" title="rsyncd 启动配置文件"></a>rsyncd 启动配置文件</h3><figure class="highlight bash"><figcaption><span>rsyncd 启动配置文件</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/rsyncd.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line"><span class="comment">## 如果要修改文件的权限就用root用户，否则最好创建一个普通用户来运行rsync</span></span><br><span class="line">port = 55873                    <span class="comment"># 默认端口号为873,防火墙需要同时开启tcp/udp对应的端口号</span></span><br><span class="line">uid = root                      <span class="comment"># rsyncd 启动运行的用户,必须有对同步目录有读写权限</span></span><br><span class="line">gid = root                      <span class="comment"># rsyncd 启动运行的用户组</span></span><br><span class="line">use chroot = no                 <span class="comment"># 是否启用chroot监狱</span></span><br><span class="line">max connections = 200           <span class="comment"># 最大连接数</span></span><br><span class="line">timeout 600                     <span class="comment"># 连接超时</span></span><br><span class="line"></span><br><span class="line">pid file=/var/run/rsyncd.pid    <span class="comment"># 指定PID文件</span></span><br><span class="line">lock file=/var/run/rsyncd.lock  <span class="comment"># 指定支持max connection的锁文件，默认为/var/run/rsyncd.lock</span></span><br><span class="line"><span class="built_in">log</span> file=/var/<span class="built_in">log</span>/rsyncd.log    <span class="comment"># rsyncd 服务器的日志</span></span><br><span class="line">transfer logging = yes          <span class="comment"># 记录所有文件传输日志</span></span><br><span class="line"><span class="built_in">log</span> format = %t %a %m %f %b</span><br><span class="line">motd file = /etc/rsyncd.d/rsync.motd    <span class="comment"># 定义服务器信息的，自己写 rsyncd.motd 文件内容</span></span><br><span class="line"></span><br><span class="line">strict modes=yes                <span class="comment"># 指定是否检查口令文件的权限</span></span><br><span class="line">auth users = rsync_backup       <span class="comment"># 连接用户名，和linux系统用户名无关系</span></span><br><span class="line">secrets file = /etc/rsyncd.d/rsync.auth     <span class="comment"># 验证密码文件，文本格式 用户名:密码，一行一个账户</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多个用逗号隔开</span></span><br><span class="line"><span class="comment">#允许网段或ip地址</span></span><br><span class="line">hosts allow=200.200.200.0/24</span><br><span class="line"><span class="comment">#拒绝其他网段</span></span><br><span class="line">hosts deny=*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置no 或 false，客户端可以上传文件，yes 或 true是只读</span></span><br><span class="line"><span class="comment"># 允许上传</span></span><br><span class="line"><span class="built_in">read</span> only = <span class="literal">false</span></span><br><span class="line"><span class="comment"># 设置no 或 false，客户端可以下载文件，yes 或 true是不能下载</span></span><br><span class="line"><span class="comment">#不允许下载</span></span><br><span class="line"><span class="comment">#write only = true</span></span><br><span class="line"><span class="comment">#不显示rsync服务端资源列表</span></span><br><span class="line">list = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore nonreadable = yes</span></span><br><span class="line">dont compress = *.gz *.tgz *.zip *.z *.Z *.rpm *.deb *.iso *.bz2 *.tbz</span><br><span class="line"><span class="comment">#可以忽略一些IO错误</span></span><br><span class="line">ignore errors = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># MODULE OPTIONS</span></span><br><span class="line">[wwwroot]</span><br><span class="line">path = /data/wwwroot/</span><br><span class="line"></span><br><span class="line">[sweet]</span><br><span class="line">path = /data/wwwroot/sweet.com.cn</span><br><span class="line"></span><br><span class="line">[module_test]</span><br><span class="line">path = /data/rsync_bak2</span><br><span class="line">comment = rsync <span class="built_in">test</span> logs</span><br><span class="line"><span class="comment">## 该用户系统中存在且对后面指定的备份目录拥有权限</span></span><br><span class="line">auth users = sean</span><br><span class="line">uid = sean</span><br><span class="line">gid = sean</span><br><span class="line">secrets file = /etc/rsyncd.d/rsyncd.secrets</span><br><span class="line"><span class="built_in">read</span> only = <span class="literal">false</span></span><br><span class="line">list = <span class="literal">false</span></span><br><span class="line">hosts allow=172.29.88.204</span><br><span class="line">hosts deny=0.0.0.0/32</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<pre><code>[conf]                                   #自定义模块
+path = /usr/local/nginx/conf             #用来指定要备份的目录
+comment = Nginx conf
+ignore errors                            #可以忽略一些IO错误
+read only = no                           #设置no，客户端可以上传文件，yes是只读
+write only = no                          #no为客户端可以下载，yes不能下载
+hosts allow = 192.168.2.0/24             #可以连接的IP
+hosts deny = *                           #禁止连接的IP
+list = false                             #客户请求时，使用模块列表
+uid = root
+gid = root
+auth users = backup                      #连接用户名，和linux系统用户名无关系
+secrets file = /etc/rsyncd.pass          #验证密码文件
+</code></pre><h3 id="rsyncd-密匙文件和提示文件"><a href="#rsyncd-密匙文件和提示文件" class="headerlink" title="rsyncd 密匙文件和提示文件"></a>rsyncd 密匙文件和提示文件</h3><figure class="highlight bash"><figcaption><span>rsyncd 密匙文件和启动用户</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 创建认证用户密码文件并进行授权600</span></span><br><span class="line"></span><br><span class="line">mkdir /etc/rsyncd.d</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"rsync_backup:rsync_9391"</span> &gt;&gt;/etc/rsyncd.d/rsync.auth</span><br><span class="line">chmod 600 /etc/rsyncd.d/rsync.auth</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Waring, this is private server."</span> &gt; /etc/rsyncd.d/rsync.motd</span><br></pre></td></tr></table></figure>
+<h3 id="rsyncd-启动用户"><a href="#rsyncd-启动用户" class="headerlink" title="rsyncd 启动用户"></a>rsyncd 启动用户</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 创建rsync管理用户，如果不用root启动rsyncd</span></span><br><span class="line"></span><br><span class="line">groupadd -g 80 rsyncd</span><br><span class="line">useradd -c <span class="string">"rsyncd Daemon"</span> -M -g rsyncd -s /sbin/nologin -u 80 rsyncd</span><br><span class="line"></span><br><span class="line"><span class="comment">## useradd -s /sbin/nologin -M rsyncd</span></span><br></pre></td></tr></table></figure>
+<h3 id="rsyncd-文件目录"><a href="#rsyncd-文件目录" class="headerlink" title="rsyncd 文件目录"></a>rsyncd 文件目录</h3><figure class="highlight bash"><figcaption><span>rsyncd 存放同步文件目录</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 创建数据备份储存目录,目录修改属主</span></span><br><span class="line"></span><br><span class="line">mkdir /data/wwwroot/</span><br><span class="line">chown -R rsyncd:rsyncd /data/wwwroot/</span><br></pre></td></tr></table></figure>
+<h2 id="客户端部署"><a href="#客户端部署" class="headerlink" title="客户端部署"></a>客户端部署</h2><pre><code>## 确认rsync 安装
+rpm -qa |grep rsync
+
+yum install rsync
+</code></pre><h3 id="添加密码文件，不需要用户名"><a href="#添加密码文件，不需要用户名" class="headerlink" title="添加密码文件，不需要用户名"></a>添加密码文件，不需要用户名</h3><pre><code>mkdir /etc/rsyncd.d
+echo &quot;rsync_9391&quot; &gt;&gt;/etc/rsyncd.d/rsync.password
+chmod 600 /etc/rsyncd.d/rsync.password
+</code></pre><h3 id="测试数据传输"><a href="#测试数据传输" class="headerlink" title="测试数据传输"></a>测试数据传输</h3><pre><code>rsync -azHAX --port=55873 /data/test  rsync_backup@200.200.200.222::wwwroot  --password-file=/etc/rsyncd.d/rsync.password
+
+rsync -azHAX --delete --port=55873  --bwlimit=10240 /data/test  rsync_backup@200.200.200.222::wwwroot  --password-file=/etc/rsyncd.d/rsync.password
+
+
+## 注意同步目录(/data/test/),
+
+    后面加/表示同步目录下的文件及子文件夹, 与目标服务器的目录下的所有文件和文件夹一致，多余的会被删除。
+
+    不加/表示同步/data/test目录，目标服务器的目录下会创建对应的test目录。而且只有test目录下的文件和文件夹一致，不会理会test目录外的文件或文件夹
+</code></pre><h3 id="客户端直接通过ssh同步两个目录-不经服务端"><a href="#客户端直接通过ssh同步两个目录-不经服务端" class="headerlink" title="客户端直接通过ssh同步两个目录,不经服务端"></a>客户端直接通过ssh同步两个目录,不经服务端</h3><pre><code>## 注意源目录后面加了/, 下面/data/test和/data/wwwroot 目录下的内容将会保持一致，/data/wwwroot下面多余内容将删除
+sudo rsync -azHAX --delete -e &quot;ssh &quot;  /data/test/ root@200.200.200.222:/data/wwwroot
+</code></pre><h2 id="rsync-选项"><a href="#rsync-选项" class="headerlink" title="rsync 选项"></a>rsync 选项</h2><pre><code>-V : --verbose 传输时显示详细信息和进度.
+-z : --compress 传输进行压缩以提高传输效率, --compress-leve=NUM 可按级别压缩
+-n : 执行空运行，模拟执行，显示更改。执行rsync操作前先执行空运行，以确保重要的文件不会被覆盖或删除.
+-a : --archive 代表存档模式，相当于使用了-rlptgoD这一坨选项,默认已同步符号连接，但硬连接除外。同时不会同步高级文件全限(ACL 和 SELinux上下文),同步ACL需要启用-A 选项，同步SElinux上下文启用-X(大写)选项. 
+
+-r : --recursive 递归同步整个目录树
+-l : --links 同步符号连接
+-p : --perms 保留权限
+-t :  --time,保留时间信息
+-g : --group 保留组所有权
+-o : --owner 保留文件所有者
+-D : --devices 同步设备文件, 保留设备文件信息
+
+-P : --progress 大写的P,显示同步的过程以及传输时的进度等信息
+
+-H : 保留硬连接。
+-A, --acls    preserve ACLs (implies --perms)
+-X, --xattrs  preserve extended attributes,保留selinux特性
+
+-S : 对稀疏文件进行特殊处理以节省DST的空间
+
+-e : --rsh=COMMAND 使用ssh信道协议
+
+--bwlimit=KBPS : 限制传输速度,用于传输大文件时,单位kb/s
+</code></pre><h2 id="rsync六种不同的工作模式："><a href="#rsync六种不同的工作模式：" class="headerlink" title="rsync六种不同的工作模式："></a>rsync六种不同的工作模式：</h2><pre><code>1.拷贝本地文件，将/home/coremail目录下的文件拷贝到/cmbak目录下。
+
+    rsync -avSH /home/coremail/ /cmbak/
+
+2.拷贝本地机器的内容到远程机器。
+
+    rsync -av /home/coremail/ 192.168.11.12:/home/coremail/
+
+3.拷贝远程机器的内容到本地机器。
+
+    rsync -av 192.168.11.11:/home/coremail/ /home/coremail/
+
+4.拷贝远程rsync服务器(daemon形式运行rsync)的文件到本地机。
+
+    rsync -av root@172.16.78.192::www /databack
+
+5.拷贝本地机器文件到远程rsync服务器(daemon形式运行rsync)中。当DST路径信息包含”::”分隔符时启动该模式。
+
+    rsync -av /databack root@172.16.78.192::www
+
+6.显示远程机的文件列表。这类似于rsync传输，不过只要在命令中省略掉本地机信息即可。
+
+    rsync -v rsync://192.168.11.11/data
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sync/" rel="tag"><i class="fa fa-tag"></i> sync</a>
+          
+            <a href="/tags/Rsync/" rel="tag"><i class="fa fa-tag"></i> Rsync</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/sync/lsyncd 安装配置/" rel="next" title="lsyncd 同步文件">
+                <i class="fa fa-chevron-left"></i> lsyncd 同步文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/sync/syncthing 安装配置/" rel="prev" title="syncthing 同步文件">
+                syncthing 同步文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yum-安装"><span class="nav-number">1.</span> <span class="nav-text">yum 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#epel源安装"><span class="nav-number">1.1.</span> <span class="nav-text">epel源安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.2.</span> <span class="nav-text">安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装："><span class="nav-number">2.</span> <span class="nav-text">编译安装：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rsyncd服务器配置"><span class="nav-number">3.</span> <span class="nav-text">rsyncd服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rsyncd-systemd配置文件"><span class="nav-number">3.1.</span> <span class="nav-text">rsyncd systemd配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsyncd-启动配置文件"><span class="nav-number">3.2.</span> <span class="nav-text">rsyncd 启动配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsyncd-密匙文件和提示文件"><span class="nav-number">3.3.</span> <span class="nav-text">rsyncd 密匙文件和提示文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsyncd-启动用户"><span class="nav-number">3.4.</span> <span class="nav-text">rsyncd 启动用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsyncd-文件目录"><span class="nav-number">3.5.</span> <span class="nav-text">rsyncd 文件目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端部署"><span class="nav-number">4.</span> <span class="nav-text">客户端部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加密码文件，不需要用户名"><span class="nav-number">4.1.</span> <span class="nav-text">添加密码文件，不需要用户名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试数据传输"><span class="nav-number">4.2.</span> <span class="nav-text">测试数据传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端直接通过ssh同步两个目录-不经服务端"><span class="nav-number">4.3.</span> <span class="nav-text">客户端直接通过ssh同步两个目录,不经服务端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rsync-选项"><span class="nav-number">5.</span> <span class="nav-text">rsync 选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rsync六种不同的工作模式："><span class="nav-number">6.</span> <span class="nav-text">rsync六种不同的工作模式：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

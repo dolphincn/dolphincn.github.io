@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="如何用Nginx搬运整个世界 https://dream.ren/proxy_the_whole_world_by_nginx.html 基于http协议的各种反代方法太多太简单了，网上肯定一大把，这里就无需多言了，今天博主来介绍一种更为通用、隐蔽、安全和高效的反代方法，此方法并非完全工作在第七层，通过工作在第四层的代理支持https等多种应用层协议，同时支持TCP、UDP代理，是真的几乎代天代地">
+<meta name="keywords" content="install,nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用Nginx搬运整个世界">
+<meta property="og:url" content="http://dolphincn.github.io/nginx/config/如何用Nginx搬运整个世界/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="如何用Nginx搬运整个世界 https://dream.ren/proxy_the_whole_world_by_nginx.html 基于http协议的各种反代方法太多太简单了，网上肯定一大把，这里就无需多言了，今天博主来介绍一种更为通用、隐蔽、安全和高效的反代方法，此方法并非完全工作在第七层，通过工作在第四层的代理支持https等多种应用层协议，同时支持TCP、UDP代理，是真的几乎代天代地">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-04T08:23:32.581Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何用Nginx搬运整个世界">
+<meta name="twitter:description" content="如何用Nginx搬运整个世界 https://dream.ren/proxy_the_whole_world_by_nginx.html 基于http协议的各种反代方法太多太简单了，网上肯定一大把，这里就无需多言了，今天博主来介绍一种更为通用、隐蔽、安全和高效的反代方法，此方法并非完全工作在第七层，通过工作在第四层的代理支持https等多种应用层协议，同时支持TCP、UDP代理，是真的几乎代天代地">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/nginx/config/如何用Nginx搬运整个世界/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>如何用Nginx搬运整个世界 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/如何用Nginx搬运整个世界/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何用Nginx搬运整个世界
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-29 10:10:00" itemprop="dateCreated datePublished" datetime="2018-06-29T10:10:00+08:00">2018-06-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-04 16:23:32" itemprop="dateModified" datetime="2018-07-04T16:23:32+08:00">2018-07-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>如何用Nginx搬运整个世界</p>
+<p><a href="https://dream.ren/proxy_the_whole_world_by_nginx.html" target="_blank" rel="noopener">https://dream.ren/proxy_the_whole_world_by_nginx.html</a></p>
+<p>基于http协议的各种反代方法太多太简单了，网上肯定一大把，这里就无需多言了，今天博主来介绍一种更为通用、隐蔽、安全和高效的反代方法，此方法并非完全工作在第七层，通过工作在第四层的代理支持https等多种应用层协议，同时支持TCP、UDP代理，是真的几乎代天代地代空气，反代整个世界。涨姿势的时候到了，请大家撸起。。袖子，准备干他娘的一炮！</p>
+<p>由于在国内使用https协议访问谷歌学术时会受到域名字段检测，导致在国内无法正常使用谷歌学术，即使使用sni代理，依然无法规避这种检测机制导致的连接失败，所以，国内的上网设备，在不使用代理客户端的情况下，使用谷歌学术去检索资料几乎不可能。然而Pure DNS却能支持谷歌学术的访问并且有长期支持的打算，其实现正是得益于Nginx强大到炸裂的代理功能。下面将对四层Nginx反代配置、当前追梦人博客和谷歌学术反代服务器的Nginx配置进行介绍，说到Nginx，真的得夸一夸，在兼顾性能的情况下各种负载均衡、热更新、各种反代、各种骚操作都能搞定，还能有lua加持，点个赞👍。</p>
+<p>上面也提到了，通常情况下国内上网设备需要安装代理客户端才能访问谷歌学术，Pure DNS也不能算例外，只不过Pure DNS把客户端也放到了服务器上运行，才实现了用户免装客户端。为了实现谷歌学术的免客户端访问，需要防火墙内、外各一台服务器进行多层代理，防火墙外Nginx服务器反代谷歌学术并同时作为服务端运行，防火墙内服务器Nginx作为客户端与防火墙外服务端加密通信，同时，防火墙内Nginx又作为服务端为用户提供服务，Pure DNS友情劫持谷歌学术的解析结果，使谷歌学术指向防火墙内自建Nginx反代服务器。这时，用户与谷歌学术服务器间的连接路径为：用户→https协议→防火墙内Nginx→ssl加密→防火墙外Nginx→sni反代→谷歌学术服务器，用户端效果就像普通https方式一样即可访问谷歌学术。注意，此处单箭头并不合适，但是我懒得画图了。。。</p>
+<p>Nginx过早的版本并不支持下面的配置，可以阅读我的另一篇博文Nginx之stream模块初体验，查看对Nginx的要求，下面的配置仅供参考，实际操作前请备份Nginx配置文件。</p>
+<p>下面首先是防火墙外Nginx配置：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>user  nginx;</p>
+<p>#机器几个核就写几，更通用的方法是auto，Nginx会自动应用合适的值<br>worker_processes  auto;<br>error_log  /var/log/nginx/error.log error;<br>pid        /var/run/nginx.pid;</p>
+<p>#Nginx允许使用的最大文件描述符数量限制，适当调大可避免”too many open files”错误<br>worker_rlimit_nofile 1048576;<br>events<br>    {</p>
+<pre><code>    #设置轮询方法
+    use epoll;
+    #单个工作进程可以允许同时建立外部连接的数量，低配机器慎加
+    worker_connections 262144;
+    #尽可能多地接收连接
+    multi_accept on;
+}
+</code></pre><p>stream {</p>
+<pre><code>#这里定义一个后端的map，防止直接通过https方式访问IP造成的循环反代
+map $ssl_preread_server_name $backend {
+    ~*[0-9]$              unix:/dev/shm/null.sock;
+    default               $ssl_preread_server_name:443;
+}
+#下面这段就是sni代理+ssl加密服务端的实现
+server {
+    listen              4333 ssl;
+    #与防火墙内Nginx服务器使用ssl加密方式进行连接，效果和stunnel等隧道代理类似，
+    #这里主要为了加密流量实现防火墙穿透
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         AES128-SHA:AES256-SHA:RC4-SHA:DES-CBC3-SHA:RC4-MD5;
+    #服务端加密方式优先
+    #ssl_prefer_server_ciphers on;
+    #证书文件，可以是自签证书，这里的证书配置主要是服务端验证客户端时要用到，
+    #表示博主随手签了一个丢root目录了，这里也暂时懒得改了，可以用这两条命令自签（记得去掉#号）：
+    #openssl genrsa -out key.pem 2048
+    #openssl req -new -x509 -key key.pem -out cert.pem -days 3650
+    ssl_certificate     /root/cert.pem;
+    ssl_certificate_key /root/key.pem;
+    #下面三条配置是用来验证客户端的，防止非授权客户端连接，没错，这里博主懒得再签一个了
+    ssl_client_certificate /root/cert.pem;
+    ssl_trusted_certificate /root/cert.pem;
+    ssl_verify_client on;
+    ssl_session_cache   shared:SSL:20m;
+    ssl_session_timeout 10m;
+    #下面是sni代理转发设置
+    ssl_preread on;
+    #DNS服务器设置，用来解析$ssl_preread_server_name（也就是https中的域名）
+    #注意，下面一定要替换成可用的dns！
+    #我在此处用来限制被代理域名，不能啥网站都代啊对不，当然你也可以用map去限制域名，一样的效果
+    #如果允许代理任何https站点，可以设置为resolver 8.8.8.8;
+    resolver 127.0.0.1:5353;
+    #resolver 8.8.8.8;
+    proxy_pass $backend;
+}
+</code></pre><p>}<br>下面是防火墙内Nginx配置，因为此服务器上跑着现在这个博客以及Pure DNS官网，需要与谷歌学术共用443端口，而且博客又要能够知道到访客的真实IP，因此配置多了点，在这里，并没有开放http80端口谷歌学术的访问，因为会被未备案提示拦截…然后刚好省下了80端口的反代，只使用443端口进行反代。</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70<br>71<br>72<br>73<br>74<br>75<br>76<br>77<br>78<br>79<br>80<br>81<br>82<br>83<br>84<br>85<br>86<br>87<br>88<br>89<br>90<br>91<br>92<br>93<br>94<br>95<br>96<br>97<br>98<br>99<br>100<br>101<br>102<br>103<br>104<br>105<br>106<br>107<br>108<br>109<br>user  nginx;<br>worker_processes  auto;<br>error_log  /var/log/nginx/error.log error;<br>pid        /var/run/nginx.pid;<br>worker_rlimit_nofile 1048576;<br>events {<br>    worker_connections  262144;<br>    multi_accept on;<br>    use epoll;<br>}</p>
+<p>stream {</p>
+<pre><code>#代理缓冲区大小
+proxy_buffer_size 128k;
+#代理超时时间
+#proxy_connect_timeout 5s;
+#会话状态存储区域，限制单IP最大连接数的时候会用到
+#limit_conn_zone $binary_remote_addr zone=addr:10m;
+
+#SNI日志格式，SNI代理并未拆解证书，常规的变量在这里是用不了的
+#时间|用户IP|域名|接收字节数|发送字节数|会话用毫秒数
+log_format  main  &apos;$time_iso8601|$remote_addr|$ssl_preread_server_name&apos;
+&apos;|$bytes_received|$bytes_sent|$session_time&apos;;
+
+#后端转发策略
+map $ssl_preread_server_name $backend {
+    ~*[0-9]$              unix:/dev/shm/localweb.sock;
+    ~*dream.ren$          unix:/dev/shm/localweb.sock;
+    ~*puredns.cn$         unix:/dev/shm/localweb.sock;
+    default               unix:/dev/shm/nginx-sni.sock;
+}
+#Nginx加密转发上游配置，也就是防火墙外Nginx，由于经费不足，其中只包含了一台备份机，防止单点故障导致的服务中断
+upstream sni_stunnel {
+    zone upstream_sni_stunnel 64k;
+    server  **.**.**.**:4333 fail_timeout=120s;
+    server  **.**.**.**:4333 backup;
+}
+#Nginx加密转发
+server {
+    #在内存中监听域套接字（域套接字相比sock套接字具有更好的性能），
+    #并声明使用proxy_protocol代理协议，这个协议是用来传递客户端真实IP的
+    listen unix:/dev/shm/nginx-sni.sock proxy_protocol;
+    #并不需要和sni_stunnel配置中的远程服务器使用proxy_protocol协议，要关闭，否则连接会被中断
+    proxy_protocol off;
+    #与sni_stunnel服务器使用ssl加密方式进行连接
+    proxy_ssl on;
+    #证书文件，可以是自签证书，为了能与防火墙外服务器连接时通过验证，
+    #若防火墙外Nginx未开启客户端验证可以不用配置证书
+    proxy_ssl_certificate /root/cert.pem;
+    #证书秘钥文件
+    proxy_ssl_certificate_key /root/key.pem;
+    #下面2行是用来验证服务端的，好像还有些问题
+    #proxy_ssl_trusted_certificate /root/cert.pem;
+    #proxy_ssl_verify on;
+    #proxy_ssl_ciphers AES128-SHA:AES256-SHA:RC4-SHA:DES-CBC3-SHA:RC4-MD5;
+    #proxy_connect_timeout 5s;
+    #转发到sni_stunnel中的服务器
+    proxy_pass sni_stunnel;
+    #开启ssl_preread，用来检测域名的
+    ssl_preread on;
+}
+#监听服务端口
+server {
+    listen      443;
+    #声明使用proxy_protocol代理协议，和上面那个server配套使用的
+    proxy_protocol on;
+    #限制单IP最大连接数
+    #limit_conn addr 10;
+    #单连接限速
+    #proxy_download_rate 400k;
+    #proxy_upload_rate 400k;
+    #配置sni使用日志，并给日志加缓冲，
+    #if=$ssl_preread_server_name表示只有当sni域名不为空的时候进行记录
+    access_log  /var/log/nginx/sniproxy.log main buffer=8k flush=5s if=$ssl_preread_server_name;
+    #使用上面的那个转发策略
+    proxy_pass  $backend;
+    #开启ssl_preread，用来检测域名的
+    ssl_preread on;
+}
+</code></pre><p>}</p>
+<p>#下面是托管在本机上网站的相关配置，网上应该有很多详细介绍，这里就不多做介绍了;</p>
+<p>#相信聪明的你配置出一个SSL LAB评分A+的站点应该不是什么难事儿~~<br>http {<br>    include       /etc/nginx/mime.types;<br>    default_type  application/octet-stream;<br>    charset utf-8;<br>    log_format  main  ‘$time_iso8601|$remote_addr|$host|$request|$request_time|$status’<br>                      ‘|$body_bytes_sent|$upstream_addr|$upstream_response_time|$upstream_status’<br>                      ‘|”$http_referer”|”$http_user_agent”|”$http_x_forwarded_for”‘;<br>    access_log  /var/log/nginx/access.log  main;<br>    sendfile        on;</p>
+<pre><code>#tcp_nopush     on;
+client_max_body_size 50m;
+keepalive_timeout  65;
+
+gzip  on;
+gzip_min_length  1k;
+gzip_buffers     16 16k;
+#gzip_http_version 1.1;
+gzip_comp_level 5;
+gzip_types     text/plain application/javascript application/x-javascript
+text/javascript text/css application/xml application/xml+rss application/json
+application/vnd.ms-fontobject font/ttf font/otf image/svg+xml;
+#gzip_vary on;
+#gzip_proxied   expired no-cache no-store private auth;
+gzip_proxied any;
+gzip_disable   &quot;MSIE [1-6]\.&quot;;
+include /etc/nginx/vhost/*.conf;
+</code></pre><p>}<br>另外，在写本文的时候，发现了另一个好玩的东西：Go Proxy，看起来可玩性很高，感兴趣的童鞋可以去看看：<br><a href="https://github.com/snail007/goproxy/blob/master/README_ZH.md" target="_blank" rel="noopener">https://github.com/snail007/goproxy/blob/master/README_ZH.md</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/install/" rel="tag"><i class="fa fa-tag"></i> install</a>
+          
+            <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/nginx/config/Nginx 模块编译安装配置/" rel="next" title="Nginx 模块编译安装配置">
+                <i class="fa fa-chevron-left"></i> Nginx 模块编译安装配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Oracle的高级复制、流复制、备库的区别/" rel="prev" title="Oracle的高级复制、流复制、备库的区别">
+                Oracle的高级复制、流复制、备库的区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

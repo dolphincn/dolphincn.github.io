@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="https://blog.csdn.net/for_tech/article/details/77247665 https://blog.csdn.net/for_tech/article/details/77188121 https://blog.csdn.net/signmem/article/details/78565488 所有 Ceph 集群都需要至少一个监视器、且 OSD 数量不小于副">
+<meta name="keywords" content="install,ceph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph 手动部署">
+<meta property="og:url" content="http://dolphincn.github.io/ceph/手动部署Ceph mon osd/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="https://blog.csdn.net/for_tech/article/details/77247665 https://blog.csdn.net/for_tech/article/details/77188121 https://blog.csdn.net/signmem/article/details/78565488 所有 Ceph 集群都需要至少一个监视器、且 OSD 数量不小于副">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-07T06:00:18.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph 手动部署">
+<meta name="twitter:description" content="https://blog.csdn.net/for_tech/article/details/77247665 https://blog.csdn.net/for_tech/article/details/77188121 https://blog.csdn.net/signmem/article/details/78565488 所有 Ceph 集群都需要至少一个监视器、且 OSD 数量不小于副">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/ceph/手动部署Ceph mon osd/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ceph 手动部署 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/ceph/手动部署Ceph mon osd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ceph 手动部署
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-06 09:10:00" itemprop="dateCreated datePublished" datetime="2018-07-06T09:10:00+08:00">2018-07-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-07 14:00:18" itemprop="dateModified" datetime="2018-07-07T14:00:18+08:00">2018-07-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ceph/" itemprop="url" rel="index"><span itemprop="name">ceph</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ceph/install/" itemprop="url" rel="index"><span itemprop="name">install</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://blog.csdn.net/for_tech/article/details/77247665" target="_blank" rel="noopener">https://blog.csdn.net/for_tech/article/details/77247665</a></p>
+<p><a href="https://blog.csdn.net/for_tech/article/details/77188121" target="_blank" rel="noopener">https://blog.csdn.net/for_tech/article/details/77188121</a></p>
+<p><a href="https://blog.csdn.net/signmem/article/details/78565488" target="_blank" rel="noopener">https://blog.csdn.net/signmem/article/details/78565488</a></p>
+<p>所有 Ceph 集群都需要至少一个监视器、且 OSD 数量不小于副本数。自举引导初始监视器是部署 Ceph 存储集群的第一步，监视器的部署也为整个集群奠定了重要框架，如存储池副本数、每个 OSD 拥有的归置组数量、心跳周期、是否需认证等，其中大多数选项都有默认值，但是建设生产集群时仍需要您熟知它们。</p>
+<p>按照安装（快速）里的相同配置，我们能配置起监视器为 vm01（后面可以追加监视器vm02,vm03） ， OSD 节点为 vm02 、 vm03 的集群。</p>
+<p>监视器的自举引导</p>
+<p>自举引导监视器（理论上是 Ceph 存储集群）需要以下几个条件：</p>
+<pre><code>惟一标识符： fsid 是集群的惟一标识，它是 Ceph 作为文件系统时的文件系统标识符。现在， Ceph 还支持原生接口、块设备、和对象存储网关接口，所以 fsid 有点名不符实了。
+
+集群名称： 每个 Ceph 集群都有自己的名字，它是个不含空格的字符串。默认名字是 ceph 、但你可以更改；尤其是运营着多个集群时，需要用名字来区分要操作哪一个。
+
+比如，当你以联盟架构运营多个集群时，集群名字（如 us-west 、 us-east ）将作为标识符出现在 CLI 界面上。注意：要在命令行下指定某个集群，可以指定以集群名为前缀的配置文件（如 ceph.conf 、 us-west.conf 、 us-east.conf 等）；也可以参考 CLI 用法（ ceph --cluster {cluster-name} ）。
+
+监视器名字： 同一集群内的各监视器例程都有惟一的名字，通常都用主机名作为监视器名字（我们建议每台主机只运行一个监视器、并且不要与 OSD 主机复用。短主机名可以用 hostname -s 获取。
+
+监视器图： 自举引导初始监视器需要生成监视器图，为此，需要有 fsid 、集群名（或用默认）、至少一个主机名及其 IP 。
+
+监视器密钥环： 监视器之间通过密钥通讯，所以你必须把监视器密钥加入密钥环，并在自举引导时提供。
+
+管理密钥环： 要使用 ceph 这个命令行工具，你必须有 client.admin 用户，所以你要创建此用户及其密钥，并把他们加入密钥环。
+</code></pre><p>前述必要条件并未提及 Ceph 配置文件的创建，然而，实践中最好创建个配置文件，并写好 fsid 、 mon initial members 和 mon host 配置。</p>
+<p>你也可以查看或设置运行时配置。 Ceph 配置文件可以只包含非默认配置， Ceph 配置文件的配置将覆盖默认值，把这些配置保存在配置文件里可简化维护。</p>
+<a id="more"></a>
+<p>具体过程如下：</p>
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><figure class="highlight bash"><figcaption><span>1) 配置主机名和IP</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hostnamectl <span class="built_in">set</span>-hostname vm01;nmcli connection modify ens33 ipv4.address <span class="string">"200.200.200.221/24"</span> ipv4.dns <span class="string">"1.1.1.1 8.8.8.8"</span> ipv4.gateway <span class="string">"200.200.200.1"</span> ipv4.method manual &amp;&amp; systemctl restart network</span><br><span class="line"></span><br><span class="line">hostnamectl <span class="built_in">set</span>-hostname vm02; nmcli connection modify ens33 ipv4.address <span class="string">"200.200.200.222/24"</span> ipv4.dns <span class="string">"1.1.1.1 8.8.8.8"</span> ipv4.gateway <span class="string">"200.200.200.1"</span> ipv4.method manual &amp;&amp; systemctl restart network</span><br><span class="line"></span><br><span class="line">hostnamectl <span class="built_in">set</span>-hostname vm03; nmcli connection modify ens33 ipv4.address <span class="string">"200.200.200.223/24"</span> ipv4.dns <span class="string">"1.1.1.1 8.8.8.8"</span> ipv4.gateway <span class="string">"200.200.200.1"</span> ipv4.method manual &amp;&amp; systemctl restart network</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>2) 配置安装源，方式一：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">rpm=<span class="string">'rpm-luminous'</span></span><br><span class="line">os=<span class="string">'el7'</span></span><br><span class="line"><span class="comment">#url=http://mirrors.aliyun.com/ceph</span></span><br><span class="line">url=https://download.ceph.com</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/yum.repos.d/ceph.repo &lt;&lt;EOF</span><br><span class="line">[ceph]</span><br><span class="line">name=Ceph packages <span class="keyword">for</span> <span class="variable">$basearch</span></span><br><span class="line">baseurl=<span class="variable">$&#123;url&#125;</span>/<span class="variable">$&#123;rpm&#125;</span>/<span class="variable">$&#123;os&#125;</span>/\<span class="variable">$basearch</span></span><br><span class="line">enabled=1</span><br><span class="line">priority=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=<span class="variable">$&#123;url&#125;</span>/keys/release.asc</span><br><span class="line"></span><br><span class="line">[ceph-noarch]</span><br><span class="line">name=Ceph noarch packages</span><br><span class="line">baseurl=<span class="variable">$&#123;url&#125;</span>/<span class="variable">$&#123;rpm&#125;</span>/<span class="variable">$&#123;os&#125;</span>/noarch</span><br><span class="line">enabled=1</span><br><span class="line">priority=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=<span class="variable">$&#123;url&#125;</span>/keys/release.asc</span><br><span class="line"></span><br><span class="line">[ceph-source]</span><br><span class="line">name=Ceph <span class="built_in">source</span> packages</span><br><span class="line">baseurl=<span class="variable">$&#123;url&#125;</span>/<span class="variable">$&#123;rpm&#125;</span>/<span class="variable">$&#123;os&#125;</span>/SRPMS</span><br><span class="line">enabled=0</span><br><span class="line">priority=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=<span class="variable">$&#123;url&#125;</span>/keys/release.asc</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>2) 配置安装源，方式二：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; /etc/yum.repos.d/ceph.repo &lt;&lt;EOF</span><br><span class="line">[ceph-noarch]</span><br><span class="line">name=Ceph noarch packages</span><br><span class="line">baseurl=https://download.ceph.com/rpm/el7/x86_64</span><br><span class="line"><span class="comment">#baseurl=https://download.ceph.com/rpm-luminous/el7/x86_64/</span></span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line"><span class="built_in">type</span>=rpm-md</span><br><span class="line">gpgkey=https://download.ceph.com/keys/release.asc</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>3) 软件安装</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum install ceph -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 系统时钟同步</span></span><br><span class="line">yum install chrony -y</span><br><span class="line">systemctl <span class="built_in">enable</span> chronyd</span><br><span class="line">systemctl start chronyd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>4） 防火墙，selinux，权限</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## ceph Monitors 之间默认使用 6789 3300 端口通信， OSD 之间默认用 6800:7300 这个范围内的端口通信</span></span><br><span class="line"></span><br><span class="line">firewall-cmd --add-service=&#123;ceph,ceph-mon&#125; --permanent &amp;&amp; firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<pre><code>selinux 安全相关：
+
+    日志文件上下文为 ceph_log_t，默认路径:/data/ceph/log
+
+    日志文件上下文为 ceph_var_lib_t，默认路径:/data/ceph/log
+
+    ceph 默认用户为ceph, 如果更改其它用户，那么/data/ceph/log /data/ceph/log 目录所有者必须改为ceph，/data/ceph/log权限默认为0750
+</code></pre><figure class="highlight bash"><figcaption><span>4）创建ceph用户,在每节点ceph的用户uid gid 和用户名都要一致</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">groupadd ceph.admin --gid 2000</span><br><span class="line"></span><br><span class="line">useradd ceph.admin --uid 2000 --gid 2000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为ceph.admin设置一个256位的密码,至少包含20个(数字,小写/大写字母,特殊字符)</span></span><br><span class="line">yum -y install expect</span><br><span class="line">mkpasswd -l 256 -d 20 -c 20 -C 20 -s 20 -v ceph.admin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里用一个32位的密码方便操作</span></span><br><span class="line">mkpasswd -l 32 -d 4 -c 4 -C 4 -s 4 -v ceph.admin</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'i53pwDKquIVwsf^npbzxkt4z&#125;5mit%o!'</span> | passwd --stdin ceph.admin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 同时需要修改service 文件，更改启动用户名</span></span><br><span class="line"></span><br><span class="line">vi /usr/lib/systemd/system/ceph-mon@.service</span><br><span class="line">ExecStart=/usr/bin/ceph-mon -f --cluster <span class="variable">$&#123;CLUSTER&#125;</span> --id %i --setuser ceph.admin --setgroup ceph.admin</span><br><span class="line"></span><br><span class="line">vi /usr/lib/systemd/system/ceph-osd@.service</span><br><span class="line">ExecStart=/usr/bin/ceph-osd -f --cluster <span class="variable">$&#123;CLUSTER&#125;</span> --id %i --setuser ceph.admin --setgroup ceph.admin</span><br><span class="line"></span><br><span class="line">vi /usr/lib/systemd/system/ceph-mds@.service</span><br><span class="line">ExecStart=/usr/bin/ceph-mds -f --cluster <span class="variable">$&#123;CLUSTER&#125;</span> --id %i --setuser ceph --setgroup ceph</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment">## 使用sed修改启动用户</span></span><br><span class="line"></span><br><span class="line">sed -i <span class="string">"s/--setuser ceph --setgroup ceph/--setuser ceph.admin --setgroup ceph.admin/"</span> /usr/lib/systemd/system/ceph-&#123;mon,mds,osd,mgr&#125;@.service</span><br><span class="line"></span><br><span class="line"><span class="comment">## 使用sed 修改启动集群名</span></span><br><span class="line"></span><br><span class="line">sed -i <span class="string">"s/Environment=CLUSTER=ceph.*/Environment=CLUSTER=cephfs/"</span> /usr/lib/systemd/system/ceph-&#123;mon,mds,osd,mgr&#125;@.service</span><br><span class="line">       </span><br><span class="line"><span class="comment">## 修改osd存储所有者检查</span></span><br><span class="line"></span><br><span class="line">sed -i <span class="string">"s#if \[ \$owner != 'ceph' -a \$owner \!= 'root' \]; then#if [ \$owner \!= 'ceph' -a \$owner != 'ceph.admin' -a \$owner \!= 'root' ]; then#"</span> /usr/lib/ceph/ceph-osd-prestart.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">##sed -i "s#data=\"/var/lib/ceph/osd/\$\&#123;cluster\:-ceph\&#125;-\$id\"#data=\"/data/ceph/osd/\$\&#123;cluster\:-ceph\&#125;-\$id\"#" /usr/lib/ceph/ceph-osd-prestart.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##data=\"/data/ceph/osd/\$\&#123;cluster\:-ceph\&#125;-\$id\"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#修改目录权限</span></span><br><span class="line"></span><br><span class="line">mkdir -p /data/ceph/&#123;mon,<span class="built_in">log</span>,osd,mgr&#125;</span><br><span class="line"></span><br><span class="line">chown -R ceph.admin:ceph.admin /data/ceph</span><br><span class="line">chown -R ceph.admin:ceph.admin /data/ceph/<span class="built_in">log</span></span><br><span class="line">chown -R ceph.admin:ceph.admin /var/run/ceph</span><br><span class="line"></span><br><span class="line">yum -y install policycoreutils-python</span><br><span class="line"></span><br><span class="line">semanage fcontext -a -t ceph_var_lib_t <span class="string">"/data/ceph(/.*)?"</span></span><br><span class="line">restorecon -RFv /data/ceph</span><br><span class="line"></span><br><span class="line">semanage fcontext -a -t ceph_log_t <span class="string">"/data/ceph/log(/.*)?"</span></span><br><span class="line">restorecon -RFv /data/ceph/<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line">semanage fcontext -a -t ceph_var_run_t <span class="string">"/var/run/ceph(/.*)?"</span></span><br><span class="line">restorecon -RFv /var/run/ceph</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ceph 如果不采用默认用户，centos开机会自动创建/run/ceph目录及所有者，此时需要修改所有者权限,修改如下</span></span><br><span class="line"></span><br><span class="line">vi /usr/lib/tmpfiles.d/ceph-common.conf</span><br><span class="line">d /run/ceph 0770 ceph.admin ceph.admin -</span><br><span class="line"></span><br><span class="line">或</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'d /run/ceph 0770 ceph.admin ceph.admin -'</span> &gt; /usr/lib/tmpfiles.d/ceph-common.conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 说明下面仍然使用的是ceph默认创建的ceph用户，可以在配置好后启动正常，再修改成ceph.admin运行</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>5）授权root权限,且无须输入密码</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'ceph.admin ALL = (ALL) NOPASSWD: ALL'</span> | tee /etc/sudoers.d/ceph</span><br><span class="line">chmod 0440 /etc/sudoers.d/ceph</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">或者:</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'ceph.admin ALL = (ALL) NOPASSWD: ALL'</span> &gt;&gt; /etc/sudoers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">或者:这种方式 sudo -i 会提示输入密码, 所以不能用</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'ceph.admin ALL = (ALL) ALL'</span> &gt;&gt; /etc/sudoers</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'ceph.admin ALL = (root) NOPASSWD: ALL'</span> | tee /etc/sudoers.d/ceph</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>6) 配置无密钥登陆，切换至ceph.admin用户</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line"><span class="comment"># 分别更改计算机名</span></span><br><span class="line">sudo hostnamectl <span class="built_in">set</span>-hostname vm01</span><br><span class="line"></span><br><span class="line">cat &gt; ~/.ssh/config &lt;&lt;EOF</span><br><span class="line">    Host vm01</span><br><span class="line">    Hostname vm01</span><br><span class="line">    User ceph.admin</span><br><span class="line">    Host vm02</span><br><span class="line">    Hostname vm02</span><br><span class="line">    User ceph.admin</span><br><span class="line">    Host vm03</span><br><span class="line">    Hostname vm03</span><br><span class="line">    User ceph.admin</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">chmod 0600 ~/.ssh/config</span><br><span class="line"></span><br><span class="line">sudo cat  &gt; /etc/hosts &lt;&lt;EOF</span><br><span class="line">    200.200.200.221        vm01</span><br><span class="line">    200.200.200.222        vm02</span><br><span class="line">    200.200.200.223        vm03</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换至ceph.admin用户，生成公钥以及私钥于当前用户.ssh目录下，id_rs is_rsa.pub</span></span><br><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line">ssh-keygen -q -t rsa -b 2048 -C <span class="string">"ceph admin key"</span> -P <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将生成的密钥拷贝到各个Ceph节点的ceph.admin用户的 ~/.ssh/目录下</span></span><br><span class="line">sudo ssh-copy-id -i ~/.ssh/id_rsa.pub ceph.admin@vm01</span><br><span class="line">sudo ssh-copy-id -i ~/.ssh/id_rsa.pub ceph.admin@vm02</span><br><span class="line">sudo ssh-copy-id -i ~/.ssh/id_rsa.pub ceph.admin@vm03</span><br><span class="line"></span><br><span class="line"><span class="comment">## 或者直接复制现成的</span></span><br><span class="line">mkdir /home/ceph.admin/.ssh</span><br><span class="line"></span><br><span class="line">cat  &gt; /home/ceph.admin/.ssh/id_rsa &lt;&lt;EOF</span><br><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">MIIEpAIBAAKCAQEAtQop88+8WRyg5XrUBycsQ+hyOmEXUjKTbGbVVq8QUxeirXRT</span><br><span class="line">uVXgBi6yN+YBEIUmLc7mnaoHqJvgvBWbrzYOujNSqMSeFbbcgHjPpYXzouOCA+2X</span><br><span class="line">z4YbJ5BwmUrm/mF9M3XAqCOpBdvpfiMc97fYBtdL1uidtay1zw4lxNURme57nuKz</span><br><span class="line">okZxB+IgO98Dtnflonip3kYzJuO/clBUeTWdce8smXlCSXhZuVEKqaf/DCKpUB8b</span><br><span class="line">iAnIYoG3ipebte4vJMzMBkTmz3InRDhSzWDX8//2xv7BzVpDJNq74wz8WNZ5vp7H</span><br><span class="line">tgD7sDqtomtgTGgfaOB64bbDTCx4h0jVKl+srwIDAQABAoIBAFdrRwLCRvLIzjDB</span><br><span class="line">dOzXT5qi/bWO+JHqdiGcLlwjQMC+4wDa8SrHetvBZLF1UQJHKT5pcBal6fjS/FwW</span><br><span class="line">Gw0qD0Z+TeXMu4FEwYkPzUTiP9lh/oAjFHFTEn2yU4zSDGS9cpWMwLDwN0fq/v63</span><br><span class="line">ud8sWRZElAx8WttFQK1w6W/4av1myLWjiq12ZxZjHIvUBGF+7hkkHv/rDFicQLGc</span><br><span class="line">+JSqlOMt7RVrW0NW+mqYzupmctADwJ7LitESVieZ2wKPv7aGyYRP+Odu5UFPkv2i</span><br><span class="line">7fWvUYbGGg9Oj/XKFjKoFID2R8lulzrTowX0ROIB+5xm1J7ekWhI1IkLVRG41BEI</span><br><span class="line">2QXvGnECgYEA57kI6cqRrs8/9tfhVRj89mFeO7RyBxC72rEpn3P1CFa1/GvWVElW</span><br><span class="line">U1EaIhGBELhIh9SPaVBA7DulRuoFTQYALJ7KhIGjplYIn7vYl3mWqZFOfEng4CUc</span><br><span class="line">47jxp+1fjY7yfyjVr1jC8fkQDImnf1wG8+Y4h+qOYfWqU/mahFNd0CUCgYEAyAHG</span><br><span class="line">DCsVdLvTwkY7tepy/nZD/jRcZad0VCXaFPb9O6N1wppz5FHiIt6NxweEYxqKo2lf</span><br><span class="line">9IOv4ski3LMO1bLWgF7w2EKSntg23t+MBFJnesgrvHzSClQLQBfPU+xFaXv4Mnz5</span><br><span class="line">5GaRMO5cuPUm0i+pgQJnQkadIHfF7zZjTz99d0MCgYEA0CdIWXNtUIG9rMiaEu5i</span><br><span class="line">dhRbKPjcIXqntTjF8gWhDD+QNNLN8mL6l9dXyVi9/r378YBA31KHL24Y9s3Luzfz</span><br><span class="line">uiFePI+T6RyJnKuKUe+YJnRv83gN+Gt+OxXshnPWDPxm21FcOqpaXDDmeMzC2MZb</span><br><span class="line">PIcHKxjJlDexLMQgSFP3Br0CgYAG6ljIruys/pmRzA/geFzFg51SOsk/Eo0pI63o</span><br><span class="line">r6mN2FcIBYMgT9x7zComyZHAQ3irsccJk0wPkVjNPLu0k9xqz92P/K1JJLyw9BXJ</span><br><span class="line">SHgffLBWchJpHQLOkoQuqKq1vP2V8VBKn2lBwdwe4QsYlWFM/qJHXl2sc7e6T60b</span><br><span class="line">XlyeNQKBgQDhWxjRHZZkYmi3qNiGLDNSHrNUSdYZWFT5iyqtJBtnay5L3o1VYj3y</span><br><span class="line">JVrTKbjpa0YEiDY5mPWZVpzP9mkUCIjkJUUENcsy7w+I151z5y4oSQZl1Xbok5zr</span><br><span class="line">HxBzKfMQNJ53nlil9zLJkbHqUFj5U44sCrbfLImkH9SCQUQr+qKMWA==</span><br><span class="line">-----END RSA PRIVATE KEY-----</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat  &gt; /home/ceph.admin/.ssh/id_rsa.pub &lt;&lt;EOF</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Cinzz7xZHKDletQHJyxD6HI6YRdSMpNsZtVWrxBTF6KtdFO5VeAGLrI35gEQhSYtzuadqgeom+C8FZuvNg66M1KoxJ4VttyAeM+lhfOi44ID7ZfPhhsnkHCZSub+YX0zdcCoI6kF2+l+Ixz3t9gG10vW6J21rLXPDiXE1RGZ7nue4rOiRnEH4iA73wO2d+WieKneRjMm479yUFR5NZ1x7yyZeUJJeFm5UQqpp/8MIqlQHxuICchigbeKl5u17i8kzMwGRObPcidEOFLNYNfz//bG/sHNWkMk2rvjDPxY1nm+nse2APuwOq2ia2BMaB9o4HrhtsNMLHiHSNUqX6yv ceph admin key</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat  &gt; /home/ceph.admin/.ssh/authorized_keys &lt;&lt;EOF</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Cinzz7xZHKDletQHJyxD6HI6YRdSMpNsZtVWrxBTF6KtdFO5VeAGLrI35gEQhSYtzuadqgeom+C8FZuvNg66M1KoxJ4VttyAeM+lhfOi44ID7ZfPhhsnkHCZSub+YX0zdcCoI6kF2+l+Ixz3t9gG10vW6J21rLXPDiXE1RGZ7nue4rOiRnEH4iA73wO2d+WieKneRjMm479yUFR5NZ1x7yyZeUJJeFm5UQqpp/8MIqlQHxuICchigbeKl5u17i8kzMwGRObPcidEOFLNYNfz//bG/sHNWkMk2rvjDPxY1nm+nse2APuwOq2ia2BMaB9o4HrhtsNMLHiHSNUqX6yv ceph admin key</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># .ssh 目录权限0700, .ssh/authorized_keys 文件权限0440, 所有者和组权限都是ceph.admin</span></span><br><span class="line">sudo chmod 0700 /home/ceph.admin/.ssh</span><br><span class="line">sudo chmod 0600 /home/ceph.admin/.ssh/*</span><br><span class="line">sudo chown -R ceph.admin:ceph.admin /home/ceph.admin/.ssh</span><br></pre></td></tr></table></figure>
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><pre><code>1） 创建/etc/ceph/{cluster name}.conf，最小模板：
+
+    [global]
+    fsid = {fsid}
+    mon initial members = {hostname}[,{hostname}]
+    mon host = {ip}[,{ip}]
+
+    完整示例版：
+
+    # yum 安装的ceph 默认集群名就是ceph。如果集群名为其它，比如cephfs, 那么集群配置文件名必须是cephfs.conf
+</code></pre><figure class="highlight bash"><figcaption><span>## 如果集群名为其它(比如cephfs), 那么集群配置文件名必须是cephfs.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat  &gt; /etc/ceph/cephfs.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">[global]</span><br><span class="line">    cluster                     = cephfs</span><br><span class="line">    <span class="comment">## 用UUID生成</span></span><br><span class="line">    fsid                        = a7f64266-0894-4f1e-a635-d0aeaca0e993</span><br><span class="line"></span><br><span class="line">    public network              = 10.100.100.0/24</span><br><span class="line">    cluster network             = 10.100.100.0/24</span><br><span class="line"></span><br><span class="line">    auth cluster required       = cephx</span><br><span class="line">    auth service required       = cephx</span><br><span class="line">    auth client required        = cephx</span><br><span class="line"></span><br><span class="line">    osd pool default size       = 3</span><br><span class="line">    osd pool default min size   = 2</span><br><span class="line"></span><br><span class="line">    osd pool default pg num     = 128</span><br><span class="line">    osd pool default pgp num    = 128</span><br><span class="line"></span><br><span class="line">    <span class="comment">## osd pg 数量限制，pool最大pg数量=(osd数量*mon max pg per osd)/osd pool default size/pool count</span></span><br><span class="line">    mon allow pool delete       = <span class="literal">true</span></span><br><span class="line">    mon max pg per osd          = 1024</span><br><span class="line">    osd max pg per osd hard ratio = 8</span><br><span class="line"></span><br><span class="line">    osd journal size            = 1024</span><br><span class="line"></span><br><span class="line">    <span class="comment">#osd pool default crush rule = 0</span></span><br><span class="line">    osd crush chooseleaf <span class="built_in">type</span>   = 1</span><br><span class="line"></span><br><span class="line">    admin socket                = /var/run/ceph/\<span class="variable">$cluster</span>-\<span class="variable">$name</span>.asock</span><br><span class="line">    pid file                    = /var/run/ceph/\<span class="variable">$cluster</span>-\<span class="variable">$name</span>.pid</span><br><span class="line">    <span class="built_in">log</span> file                    = /data/ceph/<span class="built_in">log</span>/\<span class="variable">$cluster</span>-\<span class="variable">$name</span>.<span class="built_in">log</span></span><br><span class="line">    <span class="built_in">log</span> to syslog               = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">    max open files              = 131072</span><br><span class="line"></span><br><span class="line">    <span class="comment">## 网路地址如果使用ipv6 则改为true</span></span><br><span class="line">    ms <span class="built_in">bind</span> ipv6                = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[mon]</span><br><span class="line">    mon initial members = web01,web02,web03</span><br><span class="line">    <span class="comment"># 这里可以写IP[:port] 或者能解析的计算机名</span></span><br><span class="line">    mon host = 10.100.100.4:6789,10.100.100.5:6789,10.100.100.6:6789</span><br><span class="line"></span><br><span class="line">    mon data                     = /data/ceph/mon/\<span class="variable">$cluster</span>-\<span class="variable">$name</span></span><br><span class="line">    <span class="comment">#mon clock drift allowed      = 10</span></span><br><span class="line">    <span class="comment">#mon clock drift warn backoff = 30</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在被OSD进程使用之前一个硬盘的百分比​被认为是充分的。</span></span><br><span class="line">    mon osd full ratio           = .95</span><br><span class="line">    <span class="comment"># 在被OSD进程使用之前一个硬盘的百分比​被认为是近似充分的</span></span><br><span class="line">    mon osd nearfull ratio       = .85</span><br><span class="line"></span><br><span class="line">    <span class="comment">#mon osd down out interval    = 600</span></span><br><span class="line">    <span class="comment">#mon osd report timeout       = 300</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#debug ms                     = 20</span></span><br><span class="line">    <span class="comment">#debug mon                    = 20</span></span><br><span class="line">    <span class="comment">#debug paxos                  = 20</span></span><br><span class="line">    <span class="comment">#debug auth                   = 20</span></span><br><span class="line">    <span class="comment">#mon allow pool delete        = true</span></span><br><span class="line"></span><br><span class="line">[mon.web01]</span><br><span class="line">    host                         = web01</span><br><span class="line">    mon addr                     = 10.100.100.4:6789</span><br><span class="line">[mon.web02]</span><br><span class="line">    host                         = web02</span><br><span class="line">    mon addr                     = 10.100.100.5:6789</span><br><span class="line">[mon.web03]</span><br><span class="line">    host                         = web03</span><br><span class="line">    mon addr                     = 10.100.100.6:6789</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[mgr]</span><br><span class="line">    mgr data                     = /data/ceph/mgr/\<span class="variable">$cluster</span>-\<span class="variable">$name</span></span><br><span class="line">    mgr initial modules          = dashboard</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[mds]</span><br><span class="line">    mds data = /data/ceph/mds/\<span class="variable">$cluster</span>-\<span class="variable">$name</span></span><br><span class="line">    keyring = /data/ceph/mds/\<span class="variable">$cluster</span>-\<span class="variable">$name</span>/keyring</span><br><span class="line">[mds.web01]</span><br><span class="line">    host = web01</span><br><span class="line">    mds standby replay = <span class="literal">true</span></span><br><span class="line">    mds standby <span class="keyword">for</span> rank = 0</span><br><span class="line">[mds.web02]</span><br><span class="line">    host = web02</span><br><span class="line">    mds standby replay = <span class="literal">true</span></span><br><span class="line">    mds standby <span class="keyword">for</span> rank = 0</span><br><span class="line">[mds.web03]</span><br><span class="line">    host = web03</span><br><span class="line">    mds standby replay = <span class="literal">true</span></span><br><span class="line">    mds standby <span class="keyword">for</span> rank = 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[osd]</span><br><span class="line"></span><br><span class="line">    bluestore                       = <span class="literal">true</span></span><br><span class="line">    bluestore fsck on mount         = <span class="literal">true</span></span><br><span class="line">    osd objectstore                 = bluestore</span><br><span class="line">    osd data                        = /data/ceph/osd/\<span class="variable">$cluster</span>-\<span class="variable">$id</span></span><br><span class="line">    osd journal                     = /data/ceph/osd/\<span class="variable">$cluster</span>-\<span class="variable">$id</span>/journal</span><br><span class="line">    bluestore block path            = /dev/disk/by-partlabel/bluestore_block_\<span class="variable">$id</span></span><br><span class="line">    bluestore block db path         = /dev/disk/by-partlabel/bluestore_block_db_\<span class="variable">$id</span></span><br><span class="line">    bluestore block wal path        = /dev/disk/by-partlabel/bluestore_block_wal_\<span class="variable">$id</span></span><br><span class="line"></span><br><span class="line">[osd.1]</span><br><span class="line">    host                         = web01</span><br><span class="line">    addr                         = 10.100.100.4</span><br><span class="line">[osd.2]</span><br><span class="line">    host                         = web02</span><br><span class="line">    addr                         = 10.100.100.5</span><br><span class="line">[osd.3]</span><br><span class="line">    host                         = web03</span><br><span class="line">    addr                         = 10.100.100.6</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## osd 其它配置方式</span></span><br><span class="line"></span><br><span class="line">[osd]  </span><br><span class="line">    </span><br><span class="line">    <span class="comment">#run_dir                      = /data/ceph/osd/$cluster-$id</span></span><br><span class="line">    osd journal                  = /data/ceph/osd/<span class="variable">$cluster</span>-<span class="variable">$id</span>/journal</span><br><span class="line">    osd data                     = /data/ceph/osd/<span class="variable">$cluster</span>-<span class="variable">$id</span></span><br><span class="line">    osd recovery max active      = 3</span><br><span class="line">    osd max backfills            = 5</span><br><span class="line">    osd max scrubs               = 2</span><br><span class="line"></span><br><span class="line">    osd mkfs <span class="built_in">type</span> = xfs</span><br><span class="line">    osd mkfs options xfs = -f -i size=1024</span><br><span class="line">    osd mount options xfs = rw,noatime,inode64,logbsize=256k,delaylog</span><br><span class="line"></span><br><span class="line">    filestore max sync interval  = 5</span><br><span class="line">    osd op threads               = 2</span><br><span class="line"></span><br><span class="line">    <span class="comment">#debug ms                     = 10</span></span><br><span class="line">    <span class="comment">#debug osd                    = 100</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">## 如果osd存储磁盘的文件系统是ext4，不是xfs，启动会报错osd init failed (36) File name too long，则添加下面两行</span></span><br><span class="line">    <span class="comment">#osd max object name len     = 256</span></span><br><span class="line">    <span class="comment">#osd max object namespace len = 64</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">## ext4 系统文件格式必须添加，并且磁盘加载项需要添加user_xattr，如:defaults,user_xattr</span></span><br><span class="line">    <span class="comment">#filestore xattr use omap    = true</span></span><br><span class="line">    [osd.1]</span><br><span class="line">        host                         = vm01</span><br><span class="line">        addr                         = 200.200.200.221</span><br><span class="line">    [osd.2]</span><br><span class="line">        host                         = vm02</span><br><span class="line">        addr                         = 200.200.200.222</span><br><span class="line">    [osd.3]</span><br><span class="line">        host                         = vm03</span><br><span class="line">        addr                         = 200.200.200.223</span><br></pre></td></tr></table></figure>
+<pre><code># 客户端keyring配置
+
+    [client.admin]
+    keyring = /etc/ceph/ceph.client.admin.keyring
+
+    注意： 你也可以写 IPv6 地址，但是必须设置 ms bind ipv6 = true
+</code></pre><h2 id="添加第一个mon"><a href="#添加第一个mon" class="headerlink" title="添加第一个mon"></a>添加第一个mon</h2><figure class="highlight bash"><figcaption><span>## 创建mon所需的密钥和目录</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 注意: keyring和conf等文件名必须以&lt;集群名&gt;.开头, 创建的目录也需要以&lt;集群名&gt;.开头</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## mon 权限</span></span><br><span class="line">ceph-authtool --create-keyring /etc/ceph/ceph.mon.keyring --gen-key -n mon. --<span class="built_in">cap</span> mon <span class="string">'allow *'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## ceph集群管理员admin权限</span></span><br><span class="line">ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --<span class="built_in">set</span>-uid=0 --<span class="built_in">cap</span> mon <span class="string">'allow *'</span> --<span class="built_in">cap</span> osd <span class="string">'allow *'</span> --<span class="built_in">cap</span> mds <span class="string">'allow'</span> --<span class="built_in">cap</span> mgr <span class="string">'allow *'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ceph-authtool --create-keyring /data/ceph/bootstrap-osd/ceph.keyring --gen-key -n client.bootstrap-osd --cap mon 'profile bootstrap-osd'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 创建集群密匙文件, 没产生密匙，其实用touch创建也可以</span></span><br><span class="line">ceph-authtool --create-keyring /etc/ceph/ceph.keyring</span><br><span class="line"></span><br><span class="line"><span class="comment">## 将密匙导入集群密匙文件中</span></span><br><span class="line">ceph-authtool /etc/ceph/ceph.keyring --import-keyring /etc/ceph/ceph.mon.keyring</span><br><span class="line">ceph-authtool /etc/ceph/ceph.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring</span><br><span class="line"></span><br><span class="line"><span class="comment">#ceph-authtool /etc/ceph/ceph.keyring --import-keyring /data/ceph/bootstrap-osd/ceph.keyring</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 创建monmap文件</span></span><br><span class="line"><span class="comment"># 注意，如果这里了的IP地址后面加端口号，ceph.conf ip地址后面也必须加了端口号，否则报warning,导致服务器启动不了mon</span></span><br><span class="line">monmaptool --create --add vm01 200.200.200.221:6789 --fsid a7f64266-0894-4f1e-a635-d0aeaca0e993 /etc/ceph/monmap</span><br><span class="line">monmaptool --add vm02 200.200.200.222:6789 --fsid a7f64266-0894-4f1e-a635-d0aeaca0e993 /etc/ceph/monmap</span><br><span class="line">monmaptool --add vm03 200.200.200.223:6789 --fsid a7f64266-0894-4f1e-a635-d0aeaca0e993 /etc/ceph/monmap</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 初始化mon</span></span><br><span class="line"><span class="comment"># 在vm01(,vm02,vm03) 虚机上分别执行，注意第三行的权限修改，否则无法启动ceph， ceph默认是使用ceph用户启动</span></span><br><span class="line"><span class="comment"># 此步会自动根据配置文件，创建目录 /data/ceph/mon/ceph-mon.vm01 </span></span><br><span class="line"></span><br><span class="line">ceph-mon --cluster ceph --conf /etc/ceph/ceph.conf --mkfs -i vm01 --monmap /etc/ceph/monmap --keyring /etc/ceph/ceph.keyring</span><br><span class="line"></span><br><span class="line"><span class="comment">## done 表示mon准备好了，upstart表示系统启动时可以自动启动</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">touch /data/ceph/mon/ceph-mon.vm01/&#123;<span class="keyword">done</span>,upstart&#125;</span><br><span class="line"></span><br><span class="line">chown -R ceph.admin:ceph.admin /data/ceph/mon</span><br><span class="line"></span><br><span class="line">systemctl start ceph-mon@vm01</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看monmap</span></span><br><span class="line">monmaptool --<span class="built_in">print</span> /etc/ceph/monmap</span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看ceph 状态</span></span><br><span class="line"><span class="comment">## 如果集群名不是ceph, 需要添加--cluster &lt;其它集群名&gt;</span></span><br><span class="line">ceph -s</span><br><span class="line">ceph -s --cluster cephfs</span><br><span class="line"></span><br><span class="line">ceph health detail</span><br><span class="line">ceph health detail --cluster cephfs</span><br></pre></td></tr></table></figure>
+<pre><code># 以下是解释说明：
+2）创建 mon keyring：
+
+    ceph-authtool --create-keyring /etc/ceph/{cluster name}.mon.keyring --gen-key -n mon. --cap mon &apos;allow *&apos;
+
+3)创建administrator keyring：
+
+    ceph-authtool --create-keyring /etc/ceph/{cluster name}.client.admin.keyring --gen-key -n client.admin --set-uid=0 --cap mon &apos;allow *&apos; --cap osd &apos;allow *&apos; --cap mds &apos;allow&apos;
+
+4) 把client.admin的key加入mon.keyring：
+
+    ceph-authtool /etc/ceph/{cluster name}.keyring --import-keyring /etc/ceph/{cluster name}.client.admin.keyring
+
+5) 创建monmap：使用hostname、IP、FSID生成一个monitor map
+
+    monmaptool --create --add {hostname} {ip-address} --fsid {uuid} /etc/ceph/monmap
+
+6) 创建mon的数据路径：在monitor主机上创建默认的数据目录
+
+    mkdir /data/ceph/mon/{cluster-name}-{hostname}
+
+7) 初始化mon,提供monmap和keyring给monitor deamon：
+
+    ceph-mon [ --cluster {cluster-name} ] --mkfs -i {hostname} --monmap /etc/ceph/monmap --keyring /etc/ceph/{cluster name}.mon.keyring
+
+8) 配标记monitor配置好了，可以启动
+
+    touch /data/ceph/mon/{cluster-name}-{hostname}/done
+
+9） 修改权限
+
+    chown -R ceph.admin:ceph.admin /data/ceph/mon
+
+
+10） 启动monitor
+    systemctl start ceph-mon@vm01
+
+    如果启动出错，尝试运行下面命令，再重启程序
+    systemctl reset-failed ceph-mon@vm01.service
+
+11） 查看集群状态，ceph -s，因为此时还没有OSD，所以集群是HEALTH_ERR状态，pg都是creating状态
+</code></pre><h2 id="添加其他monitor节点"><a href="#添加其他monitor节点" class="headerlink" title="添加其他monitor节点"></a>添加其他monitor节点</h2><pre><code>## 从第一个mon节点复制文件到新mon节点
+
+    sudo chown -R ceph.admin /etc/ceph
+    scp /etc/ceph/{ceph*,monmap} ceph.admin@web01:/etc/ceph/
+
+需要从第一个节点拷贝4个文件,keyring的文件权限0600：
+
+    /etc/ceph/{cluster-name}.keyring
+    /etc/ceph/monmap
+    /etc/ceph/{cluster-name}.client.admin.keyring
+    /etc/ceph/{cluster-name}.conf 
+
+
+
+
+接下来只需要几步，具体命令参考第一个节点：
+
+
+    创建mon的数据路径,后面一条命令会自动创建，此命令可以不用执行
+        mkdir /data/ceph/mon/ceph-mon.vm02
+    提供monmap和keyring给monitor deamon
+</code></pre><figure class="highlight bash"><figcaption><span>## 添加mon节点</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">host_name=vm02</span><br><span class="line"></span><br><span class="line">ceph-mon --cluster ceph --conf /etc/ceph/ceph.conf --mkfs -i <span class="variable">$host_name</span> --monmap /etc/ceph/monmap --keyring /etc/ceph/ceph.mon.keyring</span><br><span class="line"></span><br><span class="line">touch /data/ceph/mon/ceph-mon.<span class="variable">$host_name</span>/&#123;<span class="keyword">done</span>,upstart&#125;</span><br><span class="line"></span><br><span class="line">chown -R ceph.admin:ceph.admin /data/ceph/mon</span><br><span class="line"></span><br><span class="line">systemctl start ceph-mon@<span class="variable">$host_name</span></span><br></pre></td></tr></table></figure>
+<h2 id="手动部署osd"><a href="#手动部署osd" class="headerlink" title="手动部署osd"></a>手动部署osd</h2><pre><code>## 需要确保 osd 数据盘有读写权限
+chown -R ceph.admin:disk /dev/sdc{2,3,4}
+</code></pre><figure class="highlight bash"><figcaption><span>## bash 命令</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">osd_uuid=$(uuidgen)</span><br><span class="line">osd_num=1</span><br><span class="line">cluser_name=cephfs</span><br><span class="line">host_name=web01</span><br><span class="line"></span><br><span class="line">ceph osd create --cluster <span class="variable">$cluser_name</span> <span class="variable">$osd_uuid</span> <span class="variable">$osd_num</span></span><br><span class="line"></span><br><span class="line">mkdir /data/ceph/osd/<span class="variable">$cluser_name</span>-<span class="variable">$osd_num</span></span><br><span class="line">mkdir /data/ceph/osd/<span class="variable">$cluser_name</span>-<span class="variable">$osd_num</span>/journal</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"bluestore"</span> &gt; /data/ceph/osd/<span class="variable">$cluser_name</span>-<span class="variable">$osd_num</span>/<span class="built_in">type</span></span><br><span class="line"></span><br><span class="line">ceph-osd --cluster <span class="variable">$cluser_name</span> -i <span class="variable">$osd_num</span> --mkfs --mkjournal --mkkey --osd-uuid <span class="variable">$osd_uuid</span>       </span><br><span class="line"></span><br><span class="line">ceph auth add --cluster <span class="variable">$cluser_name</span> osd.<span class="variable">$osd_num</span> osd <span class="string">'allow *'</span> mon <span class="string">'allow profile osd'</span> -i /data/ceph/osd/<span class="variable">$cluser_name</span>-<span class="variable">$osd_num</span>/keyring</span><br><span class="line"></span><br><span class="line">ceph --cluster <span class="variable">$cluser_name</span></span><br><span class="line">&gt; osd crush add-bucket <span class="variable">$host_name</span> host </span><br><span class="line"></span><br><span class="line">&gt; osd crush move <span class="variable">$host_name</span> root=default</span><br><span class="line"></span><br><span class="line">&gt; osd crush add osd.<span class="variable">$osd_num</span> 1.0 host=<span class="variable">$host_name</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ceph osd tree --cluster <span class="variable">$cluser_name</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">touch /data/ceph/osd/<span class="variable">$cluser_name</span>-<span class="variable">$osd_num</span>/&#123;<span class="keyword">done</span>,upstart&#125;</span><br><span class="line"></span><br><span class="line">sudo chown -R ceph.admin:ceph.admin /data/ceph/osd</span><br><span class="line"></span><br><span class="line">sudo systemctl start ceph-osd@<span class="variable">$osd_num</span></span><br></pre></td></tr></table></figure>
+<pre><code>1）产生用于osd 的 uuid， 每个osd都需要一个唯一的uuid
+    uuidgen
+    270cac2a-359d-4ebd-9713-612f81fb4bb2
+
+2） 调用 ceph osd create 分配OSD编号：ceph osd create {uuid} {osd数字编号}
+    ## ceph osd create [{uuid} [{id}]]
+    ceph osd create 270cac2a-359d-4ebd-9713-612f81fb4bb2 1 --cluster ceph
+
+3） 调用 ceph-osd -i {osd数字编号} --mkfs --mkkey --osd-uuid {uuid} 初始化OSD目录：
+
+    # 必须先创建对应的目录ceph-osd.1 为{集群名}-{osd.数字编号},这里osd 的id只能用数字不能用字符
+    mkdir /data/ceph/osd/ceph-1
+    mkdir /data/ceph/osd/ceph-1/journal
+
+    ceph-osd -i 1 --mkfs --mkjournal --mkkey --osd-uuid 270cac2a-359d-4ebd-9713-612f81fb4bb2        
+
+    # 上面的命令会初始化目录，并产生一个授权文件/data/ceph/osd/ceph-osd.1/keyring
+
+4） 添加osd授权
+
+    ceph auth add osd.1 osd &apos;allow *&apos; mon &apos;allow profile osd&apos; -i /data/ceph/osd/ceph-1/keyring
+
+    到这里，OSD的准备工作就已经做好了，可以启动OSD了，在启动之前，也可以先初始化一下crush map。
+
+    osd.1 这是虚拟节点，1是{osd数字编号}
+
+
+5) 添加一个host节点vm01
+
+    #添加一个host节点vm01
+    ceph osd crush add-bucket vm01 host  
+
+    # 将vm01移到default下
+    ceph osd crush move vm01 root=default
+
+    # 将osd.1以1.0的权重加到vm01中
+    ceph osd crush add osd.1 1.0 host=vm01
+
+    # 查看当前OSD Tree
+    ceph osd tree
+
+    osd.1添加到vm01，osd.2添加到vm02，osd.3添加到vm03。这么做目的是因为Ceph默认分配的策略是至少有一份数据在其他机器上.
+
+6）修改权限
+
+    #用systemctl启动必须添加空文件sysvinit,否则只能手工启动
+    touch /data/ceph/osd/ceph-1/{done,upstart}
+    ##touch /data/ceph/osd/ceph-1/sysvinit
+
+    chown -R ceph.admin:ceph.admin /data/ceph/osd
+
+
+7) 启动osd
+
+    # 启动osd
+    ceph-osd -i 1
+
+    #或者如下方式启动
+
+    systemctl start ceph-osd@1
+
+    或手工启动 
+    /usr/bin/ceph-osd -i 1 --pid-file /var/run/ceph/osd.1.pid -c /etc/ceph/ceph.conf --cluster ceph --osd-data=/data/ceph/osd/ceph-1 --osd-journal=/data/ceph/osd/ceph-1/journal
+
+    # 查看当前OSD Tree
+    ceph osd tree
+
+    # 查看集群状态
+    ceph -s
+
+
+    ## 用systemctl 启动不了osd, 需要修改ceph-osd-prestart.sh，此文件在启动文件里有运行
+
+    ## 查看
+    # vi /usr/lib/systemd/system/ceph-osd@.service
+    ExecStartPre=/usr/lib/ceph/ceph-osd-prestart.sh --cluster ${CLUSTER} --id %i
+
+    ## 修改，自定义的目录路径和运行用户名
+    vi /usr/lib/ceph/ceph-osd-prestart.sh
+    ......
+    #data=&quot;/var/lib/ceph/osd/${cluster:-ceph}-$id&quot;
+    data=&quot;/data/ceph/osd/${cluster:-ceph}-$id&quot;
+
+    ......
+    if [ $owner != &apos;ceph.admin&apos; -a $owner != &apos;ceph&apos; -a $owner != &apos;root&apos; ]; then
+
+
+
+6) 分别在vm02 vm03， 执行上述命令，{osd数字编号}要修改
+</code></pre><h2 id="OSD使用ceph-disk初始化"><a href="#OSD使用ceph-disk初始化" class="headerlink" title="OSD使用ceph-disk初始化"></a>OSD使用ceph-disk初始化</h2><pre><code>初始化完mon之后，添加OSD只需要几个简单的命令。
+
+使用ceph-disk 初始化硬盘或分区或文件夹：
+
+ceph-disk prepare --cluster {cluster-name} --cluster-uuid {uuid} --fs-type {ext4|xfs|btrfs} {data-path} [{journal-path}]
+如:
+sudo ceph-disk prepare --cluster ceph --cluster-uuid a7f64266-0894-4f1e-a635-d0aeaca0e993 --fs-type ext4 /dev/sdb
+
+需要注意的是，这里所说的journal-path，实践中发现其实应该填写的是一个block device或者一个文件名，而不是一个文件夹。如果data-path是文件夹，fs-type选项可以忽略。
+
+激活OSD：
+
+ceph-disk activate {data-path} [--activate-key {path}]
+
+其中的参数activate-key是可选的，用来指定/data/ceph/bootstrap-osd/{cluster}.keyring的位置。这个keyring是在ceph-mon mkfs时生成的，所以需要从刚才初始化的mon节点里拷贝过来。
+</code></pre><h2 id="OSD-使用bluestore"><a href="#OSD-使用bluestore" class="headerlink" title="OSD 使用bluestore"></a>OSD 使用bluestore</h2><pre><code>## 下面的 osd_data_1/bluestore_block_db_1等，表示 osd 1 的分区，确保label系统中唯一  
+## 要想使用识别某类盘，需要使用 --typecode= 参数  
+
+## 清除所有的分区信息
+# sgdisk --zap-all /dev/sdb  
+
+## 创建osd data 分区，用于存放keyring等信息文件
+# sgdisk --new=1:0:+1GB --change-name=1:osd_data_1 --partition-guid=1:$(uuidgen) --mbrtogpt -- /dev/sdb  
+
+## 创建block db wal
+# sgdisk --new=2:0:+1GB --change-name=2:bluestore_block_db_1 --partition-guid=2:$(uuidgen) --mbrtogpt -- /dev/sdb  
+
+# sgdisk --new=3:0:+1GB --change-name=3:bluestore_block_wal_1 --partition-guid=3:$(uuidgen) --mbrtogpt -- /dev/sdb  
+
+# sgdisk --new=4:0:+15GB --change-name=4:bluestore_block_1 --partition-guid=4:$(uuidgen) --mbrtogpt -- /dev/sdb  
+
+## 记得更改磁盘的权限，系统重启会导致权限恢复到默认值，导致无法启动osd
+
+chown -R root:ceph.admin /dev/sdb{1,2,3,4}
+或者
+chown -R ceph.admin:disk /dev/sdb{1,2,3,4}
+
+
+为防止系统重启权限恢复默认值：
+添加udev规则设置分区权限
+
+# vi /etc/udev/rules.d/20-ceph-osd.rules
+KERNEL==&quot;sdb*&quot;, SUBSYSTEM==&quot;block&quot;, ENV{DEVTYPE}==&quot;partition&quot;, OWNER=&quot;ceph.admin&quot;, GROUP=&quot;ceph.admin&quot;, MODE=&quot;0660&quot;
+
+或者,下面这一条重启不能生效， 必须手动触发udev命令，其中bluestore就是gpt自定义的label
+KERNEL==&quot;sd*&quot;, SUBSYSTEM==&quot;block&quot;, ENV{DEVTYPE}==&quot;partition&quot;,PROGRAM==&quot;/usr/bin/udevadm info $devnode | grep ID_PART_ENTRY_NAME&quot;, RESULT==&quot;*bluestore*&quot;, OWNER=&quot;ceph.admin&quot;, GROUP=&quot;ceph.admin&quot;, MODE=&quot;0660&quot;
+
+# partx /dev/sdb  
+NR   START      END  SECTORS SIZE NAME                  UUID  
+1    2048  2099199  2097152   1G osd_data_1            2f568a34-d89c-4c74-a444-602553e35fbf  
+2 2099200  4196351  2097152   1G bluestore_block_db_1  5023371f-29e6-4d28-ae4d-f84107c1d368  
+3 4196352  6293503  2097152   1G bluestore_block_wal_1 cc6995ae-77fa-4a05-88a3-88389bb31a07  
+4 6293504 41943006 35649503  17G bluestore_block_1     ecd23004-d31f-4603-a8dd-b931902c125d  
+
+# ls -l /dev/disk/by-partlabel/ | grep _1  
+lrwxrwxrwx. 1 root root 10 Oct 11 08:27 bluestore_block_1 -&gt; ../../sdb4  
+lrwxrwxrwx. 1 root root 10 Oct 11 08:27 bluestore_block_db_1 -&gt; ../../sdb2  
+lrwxrwxrwx. 1 root root 10 Oct 11 08:27 bluestore_block_wal_1 -&gt; ../../sdb3  
+lrwxrwxrwx. 1 root root 10 Oct 11 08:27 osd_data_1 -&gt; ../../sdb1  
+
+# mkfs.xfs /dev/sdb1
+# mount /dev/sdb1 /data/ceph/osd/ceph-1
+
+## 注意初始化osd目录前一定要加入此文件，表示初始时使用bluestore
+# echo &quot;bluestore&quot; &gt; /data/ceph/osd/ceph-1/type
+
+后面的操作和上面osd设置一样
+
+挂载方式有两种：
+
+1） 配置文件指定：
+
+[osd]
+
+    bluestore                       = true
+    osd data                        = /data/ceph/osd/$clust-$id
+    bluestore block path            = /dev/disk/by-partlabel/bluestore_block_$id
+    bluestore block db path         = /dev/disk/by-partlabel/bluestore_block_db_$id
+    bluestore block wal path        = /dev/disk/by-partlabel/bluestore_block_wal_$id
+
+2） osd data 目录下指定软连接  
+
+    # cd /data/ceph/osd/ceph-1
+    # ln -sf /dev/disk/by-partlabel/bluestore_block_1 block
+    # ln -sf /dev/disk/by-partlabel/bluestore_block_db_1 block.db
+    # ln -sf /dev/disk/by-partlabel/bluestore_block_wal_1 block.wal
+
+[osd]
+
+    bluestore                       = true
+    osd data                        = /data/ceph/osd/$clust-$id
+</code></pre><h2 id="MDS手动安装"><a href="#MDS手动安装" class="headerlink" title="MDS手动安装"></a>MDS手动安装</h2><figure class="highlight bash"><figcaption><span>## 添加MDS配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/ceph.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">    [mds]</span><br><span class="line">    mds data = /data/ceph/mds/<span class="variable">$cluster</span>-<span class="variable">$name</span></span><br><span class="line">    keyring = /data/ceph/mds/<span class="variable">$cluster</span>-<span class="variable">$name</span>/keyring</span><br><span class="line"></span><br><span class="line">    [mds.vm01]</span><br><span class="line">    host = vm01</span><br><span class="line">    [mds.vm02]</span><br><span class="line">    host = vm02</span><br><span class="line">    [mds.vm03]</span><br><span class="line">    host = vm03</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## 添加MDS节点</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cluser_name=cephfs</span><br><span class="line"></span><br><span class="line">host_name=web01</span><br><span class="line"></span><br><span class="line">mkdir -p /data/ceph/mds/<span class="variable">$cluser_name</span>-mds.<span class="variable">$host_name</span>/</span><br><span class="line"></span><br><span class="line">ceph auth get-or-create --cluster <span class="variable">$cluser_name</span> mds.<span class="variable">$host_name</span> osd <span class="string">'allow rwx'</span> mds <span class="string">'allow'</span> mon <span class="string">'allow profile mds'</span> -o /data/ceph/mds/<span class="variable">$cluser_name</span>-mds.<span class="variable">$host_name</span>/keyring</span><br><span class="line"></span><br><span class="line">ceph auth list --cluster <span class="variable">$cluser_name</span></span><br><span class="line"></span><br><span class="line">chown -R ceph.admin:ceph.admin /data/ceph/mds</span><br><span class="line"></span><br><span class="line">systemctl restart ceph-mds@<span class="variable">$host_name</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## 创建cephfs文件系统</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cluser_name=cephfs</span><br><span class="line">ceph mds <span class="built_in">stat</span> --cluster <span class="variable">$cluser_name</span></span><br><span class="line">ceph osd lspools --cluster <span class="variable">$cluser_name</span></span><br><span class="line"></span><br><span class="line">ceph osd pool create metadata 128 128 --cluster <span class="variable">$cluser_name</span></span><br><span class="line">ceph osd pool create data 128 128 --cluster <span class="variable">$cluser_name</span></span><br><span class="line"></span><br><span class="line">ceph fs new webfs metadata data --cluster <span class="variable">$cluser_name</span></span><br></pre></td></tr></table></figure>
+<pre><code>若有使用cephfs，则MDS节点是必要的。
+
+首先从mon节点拷贝/etc/ceph/{cluster-name}.conf 配置文件。
+
+# 实例模板，其中$cluster 为集群名(这里是ceph)，$name 为&lt;节点名&gt;.&lt;mds编号&gt;，比如mds.vm01为$name 则 $id 为vm01
+[mds]
+mds data = /data/ceph/mds/$cluster-$name
+keyring = /data/ceph/mds/$cluster-$name/keyring
+
+[mds.vm01]
+host = vm01
+[mds.vm02]
+host = vm02
+[mds.vm03]
+host = vm03
+
+创建目录
+mkdir -p /data/ceph/mds/ceph-mds.vm01/
+
+创建keyring：ceph auth get-or-create mds.{mds-number} mds &apos;allow &apos; osd &apos;allow *&apos; mon &apos;allow rwx&apos; &gt; /data/ceph/mds/{cluster}-{mds-number}/keyring。
+
+ceph auth get-or-create mds.vm01 osd &apos;allow rwx&apos; mds &apos;allow&apos; mon &apos;allow profile mds&apos; -o /data/ceph/mds/ceph-mds.vm01/keyring
+
+更改权限
+chown -R ceph.admin:ceph.admin /data/ceph/mds
+
+开启MDS
+systemctl start ceph-mds@vm01
+
+查看状态
+ceph mds stat
+
+# 列出集群池 
+ceph osd lspools
+
+需要注意的是，此时通过ceph -s是看不到mds相关信息的，ceph mds stat可以看到MDS不是active的状态。需要先创建一个fs，MDS就会被激活。
+
+使用以下命令创建两个pool，一个用来存储fs的文件数据，一个用来存放fs的元数据：ceph osd pool create {pool-name} {pg-number}。   
+
+创建fs：ceph fs new {fs-name} {metadata-pool_name} {data-pool_name}。
+
+此时再看ceph mds stat和ceph -s，就能看到mds为active and up的状态了。
+
+
+
+# 先创建一个metadata pool，存放元数据，必须多副本，否则元数据丢了，就无法恢复数据
+ceph osd pool create metadata 64 64
+
+# 再创建一个data pool，存放实际数据，最好使用低延时的ssd盘
+ceph osd pool create data 64 64
+
+格式：
+ceph osd pool create {pool-name} {pg-num} [{pgp-num}] [replicated]  [crush-rule-name] [expected-num-objects]
+ceph osd pool create {pool-name} {pg-num}  {pgp-num}  erasure [erasure-code-profile] [crush-rule-name] [expected_num_objects]
+
+# 需要ceph命令创建文件系统testfs，后两参数是metadata和 data的pool
+ceph fs new testfs metadata data
+
+
+# 获取pool 副本数
+# ceph osd pool get metadata min_size
+# ceph osd pool get metadata size
+
+# 获取PG 在osd上的分布
+# ceph pg dump | grep ^1 | awk &apos;{print $1,$2,$15}&apos;
+    1.7c 496 [1,3]
+    1.7d 517 [3,2]
+    1.7e 496 [2,1]
+    1.7f 466 [1,2]
+</code></pre><h2 id="mgr-手动安装"><a href="#mgr-手动安装" class="headerlink" title="mgr 手动安装"></a>mgr 手动安装</h2><figure class="highlight bash"><figcaption><span>## 添加mgr配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/ceph.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">    [mgr]</span><br><span class="line">        mgr data                     = /data/ceph/mgr/<span class="variable">$cluster</span>-<span class="variable">$name</span></span><br><span class="line">        mgr initial modules          = dashboard</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## 添加mgr节点</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cluser_name=cephfs</span><br><span class="line"></span><br><span class="line">host_name=web01</span><br><span class="line"></span><br><span class="line">mkdir /data/ceph/mgr/<span class="variable">$cluser_name</span>-mgr.<span class="variable">$host_name</span>/ -p</span><br><span class="line"></span><br><span class="line">ceph auth get-or-create --cluster <span class="variable">$cluser_name</span> mgr.<span class="variable">$host_name</span> mon <span class="string">'allow profile mgr'</span> osd <span class="string">'allow *'</span> mds <span class="string">'allow *'</span> -o /data/ceph/mgr/<span class="variable">$cluser_name</span>-mgr.<span class="variable">$host_name</span>/keyring</span><br><span class="line"></span><br><span class="line">chown -R ceph.admin:ceph.admin /data/ceph/mgr</span><br><span class="line"></span><br><span class="line">systemctl restart ceph-mgr@<span class="variable">$host_name</span></span><br><span class="line"></span><br><span class="line">ceph mgr module <span class="built_in">enable</span> dashboard  --cluster <span class="variable">$cluser_name</span> --force</span><br><span class="line"></span><br><span class="line">ceph mgr services --cluster <span class="variable">$cluser_name</span></span><br></pre></td></tr></table></figure>
+<pre><code>1) 配置文件添加：
+
+    [mgr]
+        mgr data                     = /data/ceph/mgr/$cluster-$name
+        mgr initial modules          = dashboard
+
+2) 创建mgr用户,这里权限可能需要修改一下
+
+    # ceph auth get-or-create mgr.vm01 mon &apos;allow profile mgr&apos; osd &apos;allow *&apos; mds &apos;allow *&apos; -o /data/ceph/mgr/ceph-mgr.vm01/keyring
+
+    如果已创建好了的密匙，则可以直接导入密匙
+    # ceph-authtool --create-keyring /data/ceph/mgr/ceph-mgr.vm01/keyring --gen-key -n mgr.vm01 --cap mon &apos;allow profile mgr&apos; --cap osd &apos;allow *&apos; --cap mds &apos;allow *&apos;
+    # ceph auth import -i /data/ceph/mgr/ceph-mgr.vm01/keyring
+
+
+# 已有的用户修改权限
+    # ceph auth caps mgr.vm01 mon &apos;allow profile mgr&apos; osd &apos;allow *&apos; mds &apos;allow *&apos;
+
+# 删除用户
+    # ceph auth del mgr.vm01
+
+3) 导出用户密钥
+
+    # mkdir /data/ceph/mgr/ceph-mgr.vm01
+    # ceph auth get mgr.vm01 -o /data/ceph/mgr/ceph-mgr.vm01/keyring
+
+    # chown -R ceph.admin:ceph.admin /data/ceph/mgr
+
+4) 服务器地址和可选端口必须配置为 config-key
+
+
+
+    ## 服务器地址新版不需要设置，会自动选定一台mgr地址,多余的当备用机，port 默认端口7000,需要可以修改
+    # ceph config-key put mgr/dashboard/server_addr 200.200.200.221
+
+    # ceph config-key put mgr/dashboard/server_port 8888
+
+    ## 启用mgr dashboard模块，先要启动mgr服务,再启用dashboard
+    # systemctl start ceph-mgr@vm01
+    # ceph mgr module enable dashboard
+
+5) 重启ceph-mgr
+
+    # systemctl restart ceph-mgr@vm01
+
+    需要修改默认启动用户
+
+    # vi /usr/lib/systemd/system/ceph-mgr@.service
+    ......
+    ExecStart=/usr/bin/ceph-mgr -f --cluster ${CLUSTER} --id %i --setuser ceph.admin --setgroup ceph.admin
+    ......
+
+6) 查看模块
+
+    # ceph mgr module ls
+    {
+        &quot;enabled_modules&quot;: [
+            &quot;balancer&quot;,
+            &quot;dashboard&quot;,
+            &quot;restful&quot;,
+            &quot;status&quot;
+        ],
+        &quot;disabled_modules&quot;: [
+            &quot;influx&quot;,
+            &quot;localpool&quot;,
+            &quot;prometheus&quot;,
+            &quot;selftest&quot;,
+            &quot;zabbix&quot;
+        ]
+    }
+
+7） 查看访问地址
+
+
+    # ceph mgr services
+    {
+        &quot;dashboard&quot;: &quot;http://vm01:7000/&quot;
+    }
+
+8) 帮助
+    # ceph mgr help
+    # ceph tell mgr help
+</code></pre><h2 id="客户端挂载cephfs"><a href="#客户端挂载cephfs" class="headerlink" title="客户端挂载cephfs"></a>客户端挂载cephfs</h2><pre><code># 客户端安装ceph-common
+yum install ceph-common
+
+# 使用其他用户挂载
+
+添加一个用户, osd 后面不能加 pool=testfs，否则没写入权限
+如果后面用户权限更改了，需要重新加载
+
+# ceph auth add client.john mon &apos;allow r&apos; osd &apos;allow rwx&apos; mds &apos;allow&apos;
+
+在服务器上，列出授权用户
+
+# ceph auth list
+client.john
+key: AQBie8NZNjGQOBAAagXYD3fSrTwX+sTc+aVjYQ==
+caps: [mds] allow
+caps: [mon] allow r
+caps: [osd] allow rwx
+</code></pre><p>   把密钥存入文档</p>
+<pre><code># vi /etc/ceph/john.key
+AQBie8NZNjGQOBAAagXYD3fSrTwX+sTc+aVjYQ==
+
+chmod 0600 /etc/ceph/john.key
+mkdir -p /mnt/cephfs
+# 强制卸载挂载
+# umount -fl /mnt/cephfs
+
+
+
+# fstab 加载格式：
+{ipaddress}:{port}:/ {mount}/{mountpoint} {filesystem-name}     [name=username,secret=secretkey|secretfile=/path/to/secretfile],[{mount.options}]
+
+10.100.100.4:6789,10.100.100.5:6789,10.100.100.6:6789:/     /mnt/cephfs    ceph    name=john,secretfile=/etc/ceph/john.key,noatime,_netdev    0       0
+
+
+# 语法：mount -t ceph mds_node1:6789,mds_node2:6789,mds_node3:6789:/ client_mount_path -o name=admin,secret=Key_value　
+</code></pre><h2 id="删除osd"><a href="#删除osd" class="headerlink" title="删除osd"></a>删除osd</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">osd_num=1</span><br><span class="line">cluser_name=cephfs</span><br><span class="line">host_name=web01</span><br><span class="line"></span><br><span class="line">ceph osd out osd.<span class="variable">$osd_num</span> --cluster <span class="variable">$cluser_name</span></span><br><span class="line"></span><br><span class="line">ceph -w  --cluster <span class="variable">$cluser_name</span></span><br><span class="line"></span><br><span class="line">systemctl stop ceph-osd@<span class="variable">$osd_num</span></span><br><span class="line"></span><br><span class="line">ceph osd crush remove osd.<span class="variable">$osd_num</span> --cluster <span class="variable">$cluser_name</span></span><br><span class="line">ceph osd crush remove <span class="variable">$host_name</span> --cluster <span class="variable">$cluser_name</span></span><br><span class="line">ceph auth del osd.<span class="variable">$osd_num</span> --cluster <span class="variable">$cluser_name</span></span><br><span class="line">ceph osd rm <span class="variable">$osd_num</span> --cluster <span class="variable">$cluser_name</span></span><br></pre></td></tr></table></figure>
+<p>多MDS变成单MDS的方法<br>设置最大mds</p>
+<p>多活的mds的max_mds会超过1，这里需要先将max_mds设置为1</p>
+<p>ceph mds set max_mds 1</p>
+<p>deactive mds</p>
+<p>ceph mds deactivate 1</p>
+<p>重设ceph fs, 先要停止左右的ceph-mds实例</p>
+<h1 id="ceph-mds-fail-vm01"><a href="#ceph-mds-fail-vm01" class="headerlink" title="ceph mds fail vm01"></a>ceph mds fail vm01</h1><h1 id="systemctl-stop-ceph-mds-vm01"><a href="#systemctl-stop-ceph-mds-vm01" class="headerlink" title="systemctl stop ceph-mds@vm01"></a>systemctl stop ceph-mds@vm01</h1><h1 id="ceph-fs-reset-datafs-–yes-i-really-mean-it"><a href="#ceph-fs-reset-datafs-–yes-i-really-mean-it" class="headerlink" title="ceph fs reset datafs –yes-i-really-mean-it"></a>ceph fs reset datafs –yes-i-really-mean-it</h1><h1 id="ceph-fs-status-datafs"><a href="#ceph-fs-status-datafs" class="headerlink" title="ceph fs status datafs"></a>ceph fs status datafs</h1><p>设置mds期望待机备用数量</p>
+<p>ceph fs set datafs standby_count_wanted 1</p>
+<p>故障切换的管理¶</p>
+<p>如果一个 MDS 守护进程不再与监视器通讯，监视器把它标记为 laggy （滞后）状态前会等待 mds_beacon_grace 秒（默认是 15 秒）。</p>
+<p>为安全起见，每个文件系统都要指定一些灾备守护进程，灾备数量包括处于灾备重放状态、等着接替失效 rank 的（记着，灾备重放守护进程不会被重分配去接管另一个 rank 、或者另一个 CephFS 文件系统内的失效守护进程）。不在重放状态的灾备守护进程会被任意文件系统当作自己的灾备。每个文件系统都可以单独配置期望的灾备守护进程数量，用这个：</p>
+<p>ceph fs set <fs name=""> standby_count_wanted <count></count></fs></p>
+<p>count 设置为 0 表示禁用健康检查。</p>
+<p>术语¶</p>
+<p>一个 Ceph 集群内可以没有、或者有多个 CephFS 文件系统。 CephFS 文件系统有一个人类可读的名字（用 fs new 设置）、和一个整数 ID ，这个 ID 称为文件系统集群 ID 或 FSCID 。</p>
+<p>每个 CephFS 都有几个 rank ，默认是一个，从 0 起。一个 rank 可看作是一个元数据分片。文件系统 rank 数量的控制在 多活 MDS 守护进程的配置 里详述。</p>
+<p>CephFS 的每个 ceph-mds 进程（一个守护进程）刚启动时都没有 rank ，它由监视器集群分配。一个守护进程一次只能占据一个 rank ，只有在 ceph-mds 守护进程停止的时候才会释放 rank 。</p>
+<p>如果某个 rank 没有依附一个守护进程，那这个 rank 就失效了（ failed ）。分配给守护进程的 rank 才被当作正常的（ up ）。</p>
+<p>首次配置守护进程时，管理员需分配静态的名字，一般配置都会用守护进程所在的主机名作为其守护进程名字。</p>
+<p>守护进程每次启动时，还会被分配一个 GID ，对于这个守护进程的特定进程的生命周期来说它是唯一的。 GID 是整数。</p>
+<p>Todo</p>
+<p>译者注： rank 翻译为“席位”、“座席”？它们共同处理元数据，且动态分配，类似客服中心的座席。<br>MDS 守护进程的引用¶</p>
+<p>针对 MDS 守护进程的大多数管理命令都接受一个灵活的参数格式，它可以包含 rank 、 GID 或名字。</p>
+<p>使用 rank 时，它前面可以加文件系统的名字或 ID ，也可以不加。如果某个守护进程是灾备的（即当前还没给它分配 rank ），那就只能通过 GID 或名字引用。</p>
+<p>例如，假设我们有一个 MDS 守护进程，名为 myhost ，其 GID 为 5446 ，分配的 rank 是 0 ，它位于名为 myfs 的文件系统内，文件系统的 FSCID 是 3 ，那么，下面的几种形式都适用于 fail 命令：</p>
+<p>ceph mds fail 5446     # GID<br>ceph mds fail myhost   # Daemon name<br>ceph mds fail 0        # Unqualified rank<br>ceph mds fail 3:0      # FSCID and rank<br>ceph mds fail myfs:0   # Filesystem name and rank</p>
+<p>故障切换的管理¶</p>
+<p>如果一个 MDS 守护进程不再与监视器通讯，监视器把它标记为 laggy （滞后）状态前会等待 mds_beacon_grace 秒（默认是 15 秒）。</p>
+<p>为安全起见，每个文件系统都要指定一些灾备守护进程，灾备数量包括处于灾备重放状态、等着接替失效 rank 的（记着，灾备重放守护进程不会被重分配去接管另一个 rank 、或者另一个 CephFS 文件系统内的失效守护进程）。不在重放状态的灾备守护进程会被任意文件系统当作自己的灾备。每个文件系统都可以单独配置期望的灾备守护进程数量，用这个：</p>
+<p>ceph fs set <fs name=""> standby_count_wanted <count></count></fs></p>
+<p>count 设置为 0 表示禁用健康检查。<br>灾备守护进程的配置¶</p>
+<p>共有四个选项，用于控制守护进程处于灾备状态时如何工作：</p>
+<p>mds_standby_for_name<br>mds_standby_for_rank<br>mds_standby_for_fscid<br>mds_standby_replay</p>
+<p>这些配置可写入 MDS 守护进程所在主机（而非监视器上）的 ceph.conf 配置文件。守护进程会在启动时加载这些配置，并发送给监视器。</p>
+<p>默认情况下，如果这些选项一个也没配置，那么没领到 rank 的所有 MDS 守护进程都会作为任意 rank 的灾备。</p>
+<p>这些配置虽说可以把灾备守护进程关联到特定的名字或 rank ，然而并不能保证这个守护进程只用于那个 rank 。也就是说，有好几个灾备可用时，会用关联的守护进程。假如一个 rank 失效了，而且有一个可用的灾备，那么即使此灾备已关联了另外的 rank 或守护进程名，它仍然会被用掉。<br>mds_standby_replay¶</p>
+<p>如果此选项设置为 true ，灾备守护进程就会持续读取某个处于 up 状态的 rank 的元数据日志。这样它就有元数据的热缓存，在负责这个 rank 的守护进程失效时，可加速故障切换。</p>
+<p>一个正常运行的 rank 只能有一个灾备重放守护进程（ standby replay daemon ），如果两个守护进程都设置成了灾备重放状态，那么其中任意一个会取胜，另一个会变为普通的、非重放灾备状态。</p>
+<p>一旦某个守护进程进入灾备重放状态，它就只能为它那个 rank 提供灾备。如果有另外一个 rank 失效了，即使没有灾备可用，这个灾备重放守护进程也不会去顶替那个失效的。</p>
+<p>历史问题：在 v10.2.1 版之前的 Ceph 中，只要设置了 mds_standby_for_* ，这个选项（设置为 false 时）就始终为 true 。<br>mds_standby_for_name¶</p>
+<p>设置此选项可使灾备守护进程只接替与此名字相同的 rank 。<br>mds_standby_for_rank¶</p>
+<p>设置此选项可使灾备守护进程只接替指定的 rank ，如果有其它 rank 失效了，此守护进程不会去顶替它。</p>
+<p>你有多个文件系统时，可联合使用 mds_standby_for_fscid 选项来指定想为哪个文件系统的 rank 提供灾备。<br>mds_standby_for_fscid¶</p>
+<p>如果设置了 mds_standby_for_rank ，那么这里可把它限定为是哪个文件系统的 rank 。</p>
+<p>如果没设置 mds_standby_for_rank ，那么设置 FSCID 后，这个守护进程可用于此 FSCID 所相关的任意 rank 。当你想让某一守护进程可作任意 rank 的灾备、但仅限于某个特定文件系统时，可用此选项实现。<br>mon_force_standby_active¶</p>
+<p>这些选项用于监视器主机，默认值为 true 。</p>
+<p>如果设置为 false ，那么配置为 standby_replay=true 的灾备守护进程只会顶替它们负责的 rank 或指定名字。反之，如果这里设置为 true ，那么配置为 standby_replay=true 的灾备守护进程有可能被分配其它 rank 。<br>实例¶</p>
+<p>这些是 ceph.conf 配置实例。实践中，你可以让所有服务器上的所有守护进程都使用相同的配置文件，也可以让各服务器上的配置文件各不相同，其中只包含它的其守护进程相关的配置。<br>简单的一对¶</p>
+<p>两个 MDS 守护进程 a 和 b 作为一对，其中任意一个没分到 rank 的将作为另一个的灾备重放追随者。</p>
+<p>[mds.a]<br>mds standby replay = true<br>mds standby for rank = 0</p>
+<p>[mds.b]<br>mds standby replay = true<br>mds standby for rank = 0</p>
+<p>浮动灾备¶</p>
+<p>某一文件系统有三个 MDS 守护进程： a 、 b 、 c ，其 max_mds 为 2 。</p>
+<h1 id="无须过多配置，没有分到-rank-的守护进程会成为灾备，它会顶"><a href="#无须过多配置，没有分到-rank-的守护进程会成为灾备，它会顶" class="headerlink" title="无须过多配置，没有分到 rank 的守护进程会成为灾备，它会顶"></a>无须过多配置，没有分到 rank 的守护进程会成为灾备，它会顶</h1><h1 id="替任何一个失效的守护进程。"><a href="#替任何一个失效的守护进程。" class="headerlink" title="替任何一个失效的守护进程。"></a>替任何一个失效的守护进程。</h1><p>两个 MDS 集群¶</p>
+<p>有两个文件系统、四个 MDS 守护进程，我想让其中两个作为一对服务于一个文件系统，另外两个作为一对服务于另一个文件系统。</p>
+<p>[mds.a]<br>mds standby for fscid = 1</p>
+<p>[mds.b]<br>mds standby for fscid = 1</p>
+<p>[mds.c]<br>mds standby for fscid = 2</p>
+<p>[mds.d]<br>mds standby for fscid = 2</p>
+<p>客户端配置参考¶</p>
+<p>client acl type<br>描述:    设置 ACL 类型。现在还只能设置为 “posix_acl” 表示启用 POSIX ACL ，或者可设置为空字符串。此选项只有在 fuse_default_permissions 被设置为 false 时有效。<br>类型:    String<br>默认值:    “” (no ACL enforcement)</p>
+<p>client cache mid<br>描述:    设置客户端缓存中点。此中点把最近用过的列表分割为热列表和暖列表。<br>类型:    Float<br>默认值:    0.75</p>
+<p>client_cache_size<br>描述:    设置客户端可保留在元数据缓存中的索引节点数量。<br>类型:    Integer<br>默认值:    16384</p>
+<p>client_caps_release_delay<br>描述:    设置释放能力的延时，单位为秒。这个延时控制着客户端不再需要能力时，再等多少秒就释放，以便其它需要这些能力的用户使用。<br>类型:    Integer<br>默认值:    5 (seconds)</p>
+<p>client_debug_force_sync_read<br>描述:    设置为 true 时，客户端会跳过本地页缓存、直接从 OSD 读取数据。<br>类型:    Boolean<br>默认值:    false</p>
+<p>client_dirsize_rbytes<br>描述:    设置为 true 时，就采用目录的递归尺寸（也就是其内所有文件尺寸之和）。<br>类型:    Boolean<br>默认值:    true</p>
+<p>client_max_inline_size<br>描述:    控制内联数据的最大尺寸，小于此尺寸就存储到文件的索引节点内，超过则存到单独的 RADOS 对象内。本选项只有设置了 MDS 图的 inline_data 标志时有效。<br>类型:    Integer<br>默认值:    4096</p>
+<p>client_metadata<br>描述:    客户端向各 MDS 发送元数据时，除了自动生成的版本号、主机名等信息，还可以附加逗号分隔的字符串作为附加元数据。<br>类型:    String<br>默认值:    “” （没有附加元数据）</p>
+<p>client_mount_gid<br>描述:    设置 CephFS 挂载后的组 ID 。<br>类型:    Integer<br>默认值:    -1</p>
+<p>client_mount_timeout<br>描述:    设置挂载 CephFS 时的超时时间，单位为秒。<br>类型:    Float<br>默认值:    300.0</p>
+<p>client_mount_uid<br>描述:    设置 CephFS 挂载后的用户 ID 。<br>类型:    Integer<br>默认值:    -1</p>
+<p>client_mountpoint<br>描述:    指定要挂载的 CephFS 文件系统目录。此选项的作用类似 ceph-fuse 命令的 -r 选项。<br>类型:    String<br>默认值:    “/“</p>
+<p>client_oc<br>描述:    Enable object caching.<br>类型:    Boolean<br>默认值:    true</p>
+<p>client_oc_max_dirty<br>描述:    设置对象缓存的脏数据上限，单位为字节。<br>类型:    Integer<br>默认值:    104857600 (100MB)</p>
+<p>client_oc_max_dirty_age<br>描述:    设置脏数据在对象缓存中的最大存留时间，单位为秒。<br>类型:    Float<br>默认值:    5.0 （秒）</p>
+<p>client_oc_max_objects<br>描述:    设置对象缓存允许的最大对象数。<br>类型:    Integer<br>默认值:    1000</p>
+<p>client_oc_size<br>描述:    设置客户端可缓存的数据上限，单位为字节。<br>类型:    Integer<br>默认值:    209715200 (200 MB)</p>
+<p>client_oc_target_dirty<br>描述:    设置认定为脏数据的目标尺寸。我们建议这个数字尽量小些。<br>类型:    Integer<br>默认值:    8388608 (8MB)</p>
+<p>client_permissions<br>描述:    检查所有 I/O 操作的客户端权限。<br>类型:    Boolean<br>默认值:    true</p>
+<p>client_quota<br>描述:    设置为 true 表示启用客户端配额。<br>类型:    Boolean<br>默认值:    true</p>
+<p>client_quota_df<br>描述:    让 statfs 操作报告根目录的配额。<br>类型:    Boolean<br>默认值:    true</p>
+<p>client_readahead_max_bytes<br>描述:    设置内核预读数据的最大尺寸，单位为字节。本选项可被 client_readahead_max_periods 覆盖。<br>类型:    Integer<br>默认值:    0 (unlimited)</p>
+<p>client_readahead_max_periods<br>描述:    设置内核预读的文件布局分片最大数量（对象尺寸 * 条带数量）。本选项会覆盖 client_readahead_max_bytes 选项。<br>类型:    Integer<br>默认值:    4</p>
+<p>client_readahead_min<br>描述:    设置内核预读的最小尺寸，单位为字节。<br>类型:    Integer<br>默认值:    131072 (128KB)</p>
+<p>client_reconnect_stale<br>描述:    是否自动重连过期的会话。<br>类型:    Boolean<br>默认值:    false</p>
+<p>client_snapdir<br>描述:    设置快照目录名。<br>类型:    String<br>默认值:    “.snap”</p>
+<p>client_tick_interval<br>描述:    设置更新能力及维持其它信息的间隔时长，单位为秒。<br>类型:    Float<br>默认值:    1.0 （秒）</p>
+<p>client_use_random_mds<br>描述:    为各个请求随机选取 MDS 。<br>类型:    Boolean<br>默认值:    false</p>
+<p>fuse_default_permissions<br>描述:    设置为 false 时， ceph-fuse 工具会用自己的权限验证机制，而非依靠 FUSE 的强制权限。启用 POSIX ACL 需把此选项设置为 false 、同时设置 client acl type=posix_acl 。<br>类型:    Boolean<br>默认值:    true<br>开发者选项¶</p>
+<p>Important</p>
+<p>以下选项仅供内部测试，只是为了保持文档完整才罗列在这里。</p>
+<p>client_debug_getattr_caps<br>描述:    检查 MDS 的响应是否有必要的能力。<br>类型:    Boolean<br>默认值:    false</p>
+<p>client_debug_inject_tick_delay<br>描述:    在客户端动作之间人为地加入延时。<br>类型:    Integer<br>默认值:    0</p>
+<p>client_inject_fixed_oldest_tid<br>描述:<br>类型:    Boolean<br>默认值:    false</p>
+<p>client_inject_release_failure<br>描述:<br>类型:    Boolean<br>默认值:    false</p>
+<p>client_trace<br>描述:    所有文件操作的追踪文件的路径。其输出可用于 Ceph 的人造客户端。<br>类型:    String<br>默认值:    “” (disabled)</p>
+<p><a href="https://drunkard.github.io/cephfs/client-config-ref/" target="_blank" rel="noopener">https://drunkard.github.io/cephfs/client-config-ref/</a></p>
+<p>参考：</p>
+<p><a href="http://caitianxiong.com/2017/02/25/deploy-ceph-cluster-manually/#more" target="_blank" rel="noopener">http://caitianxiong.com/2017/02/25/deploy-ceph-cluster-manually/#more</a></p>
+<p><a href="https://lotuslab.org/2017/03/11/Ceph_manual_deploy_guide.html" target="_blank" rel="noopener">https://lotuslab.org/2017/03/11/Ceph_manual_deploy_guide.html</a></p>
+<p><a href="http://docs.ceph.org.cn/install/manual-deployment/" target="_blank" rel="noopener">http://docs.ceph.org.cn/install/manual-deployment/</a></p>
+<p><a href="http://www.cnblogs.com/boshen-hzb/p/6927407.html" target="_blank" rel="noopener">http://www.cnblogs.com/boshen-hzb/p/6927407.html</a></p>
+<p> 手动添加ceph的mds</p>
+<p>1、在需要安装的目标机器上创建mds目录</p>
+<p>mkdir -p /data/ceph/mds/ceph-0</p>
+<p>2、生成mds的keyring，并将其写入/data/ceph/mds/ceph-0/keyring文件中</p>
+<p>ceph auth get-or-create mds.0 mon ‘allow rwx’ osd ‘allow *’ mds ‘allow’ -o /data/ceph/mds/ceph-0/keyring</p>
+<p>上面红色部分不能写成allow *，要不然会报错。</p>
+<p>3、</p>
+<p>apt-get install ceph-mds<br>ceph-mds  –cluster ceph -i 0 -m 10.111.131.125:6789</p>
+<p>4、创建文件系统</p>
+<p>ceph osd pool create cephfs_data 100<br>ceph osd pool create cephfs_metadata 100<br>ceph fs new cephfs cephfs_metadata cephfs_data </p>
+<p>How-to quickly deploy a MDS server.</p>
+<p>Assuming that /data/ceph/mds/mds is the mds data point.</p>
+<p>Edit ceph.conf and add a MDS section like so:</p>
+<p>[mds]<br>  mds data = /data/ceph/mds/mds.$id<br>  keyring = /data/ceph/mds/mds.$id/mds.$id.keyring</p>
+<p>[mds.0]<br>  host = {hostname}</p>
+<p>Create the authentication key (only if you use cephX):</p>
+<p>$ sudo mkdir /data/ceph/mds/mds.0<br>$ sudo ceph auth get-or-create mds.0 mds ‘allow ‘ osd ‘allow *’ mon ‘allow rwx’ &gt; /data/ceph/mds/mds.0/mds.0.keyring</p>
+<p><a href="https://my.oschina.net/itfanr/blog/397044" target="_blank" rel="noopener">https://my.oschina.net/itfanr/blog/397044</a><br>修改/etc/ceph/ceph.conf文件：</p>
+<p>[global]<br>    auth supported = none<br>    osd pool default size = 2<br>    osd crush chooseleaf type = 0<br>    objecter_inflight_op_bytes=4294967296<br>    objecter_inflight_ops=1024</p>
+<pre><code>#debug filestore = 100
+#debug osd = 10
+debug journal = 1
+filestore blackhole=false
+filestore queue max ops=1024
+filestore queue max bytes=1073741824
+filestore max sync interval=5
+
+
+#osd op num threads per shard=1
+#osd op num shards=1
+filestore wbthrottle enable=false
+filestore merge threshold=50
+filestore split multiple=10
+#osd objectstore=satafilestore
+</code></pre><p>[mon]<br>[mon.0]<br>    host = itfanr-host1<br>    mon addr = 192.168.100.14:6789</p>
+<p>[mds]<br>[mds.0]<br>    host = itfanr-host1</p>
+<p>[osd]<br>    osd mkfs type = xfs<br>    osd mkfs options xfs = -f -i size=2048<br>    osd mount options xfs = inode64,noatime</p>
+<pre><code>osd crush update on start = 0
+</code></pre><p>[osd.0]<br>    host = itfanr-host1<br>    devs = /dev/sdb1<br>    osd journal = /dev/sdb2</p>
+<p>[osd.1]<br>    host = itfanr-host1<br>    devs = /dev/sdc1<br>    osd journal = /dev/sdc2</p>
+<p>[osd.2]<br>    host = itfanr-host1<br>    devs = /dev/sdd1<br>    osd journal = /dev/sdd2</p>
+<p>[osd.3]<br>    host = itfanr-host1<br>    devs = /dev/sde1<br>    osd journal = /dev/sde2</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/install/" rel="tag"><i class="fa fa-tag"></i> install</a>
+          
+            <a href="/tags/ceph/" rel="tag"><i class="fa fa-tag"></i> ceph</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/nginx/config/Nginx AB测试/" rel="next" title="Nginx AB测试">
+                <i class="fa fa-chevron-left"></i> Nginx AB测试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/azure/azure_cli/Azure cli 扩展执行bash命令/" rel="prev" title="Azure cli 扩展执行bash命令">
+                Azure cli 扩展执行bash命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前期准备"><span class="nav-number">1.</span> <span class="nav-text">前期准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改配置文件"><span class="nav-number">2.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加第一个mon"><span class="nav-number">3.</span> <span class="nav-text">添加第一个mon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加其他monitor节点"><span class="nav-number">4.</span> <span class="nav-text">添加其他monitor节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动部署osd"><span class="nav-number">5.</span> <span class="nav-text">手动部署osd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OSD使用ceph-disk初始化"><span class="nav-number">6.</span> <span class="nav-text">OSD使用ceph-disk初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OSD-使用bluestore"><span class="nav-number">7.</span> <span class="nav-text">OSD 使用bluestore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDS手动安装"><span class="nav-number">8.</span> <span class="nav-text">MDS手动安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mgr-手动安装"><span class="nav-number">9.</span> <span class="nav-text">mgr 手动安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端挂载cephfs"><span class="nav-number">10.</span> <span class="nav-text">客户端挂载cephfs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除osd"><span class="nav-number">11.</span> <span class="nav-text">删除osd</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ceph-mds-fail-vm01"><span class="nav-number"></span> <span class="nav-text">ceph mds fail vm01</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#systemctl-stop-ceph-mds-vm01"><span class="nav-number"></span> <span class="nav-text">systemctl stop ceph-mds@vm01</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ceph-fs-reset-datafs-–yes-i-really-mean-it"><span class="nav-number"></span> <span class="nav-text">ceph fs reset datafs –yes-i-really-mean-it</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ceph-fs-status-datafs"><span class="nav-number"></span> <span class="nav-text">ceph fs status datafs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#无须过多配置，没有分到-rank-的守护进程会成为灾备，它会顶"><span class="nav-number"></span> <span class="nav-text">无须过多配置，没有分到 rank 的守护进程会成为灾备，它会顶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#替任何一个失效的守护进程。"><span class="nav-number"></span> <span class="nav-text">替任何一个失效的守护进程。</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
