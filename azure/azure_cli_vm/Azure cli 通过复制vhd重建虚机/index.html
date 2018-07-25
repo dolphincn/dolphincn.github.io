@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="说明本文适合跨账户迁移虚机。  原理通过公开的sas url 复制磁盘镜像到存储账户里，然后再从存储账户的vhd文件创建托管磁盘，再利用托管磁盘创建虚机  需要注意的是：虚机加载的额外磁盘需要卸掉，或者在fstab 磁盘加载项添加 nofail, 如 centos配置：  UUID=1037feaf-5034-446c-bbdc-e1958be6b35a /data  xfs     defaul">
+<meta name="keywords" content="azurecli,vm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azure cli 通过复制的vhd重建虚机">
+<meta property="og:url" content="http://dolphincn.github.io/azure/azure_cli_vm/Azure cli 通过复制vhd重建虚机/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="说明本文适合跨账户迁移虚机。  原理通过公开的sas url 复制磁盘镜像到存储账户里，然后再从存储账户的vhd文件创建托管磁盘，再利用托管磁盘创建虚机  需要注意的是：虚机加载的额外磁盘需要卸掉，或者在fstab 磁盘加载项添加 nofail, 如 centos配置：  UUID=1037feaf-5034-446c-bbdc-e1958be6b35a /data  xfs     defaul">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-20T09:49:06.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Azure cli 通过复制的vhd重建虚机">
+<meta name="twitter:description" content="说明本文适合跨账户迁移虚机。  原理通过公开的sas url 复制磁盘镜像到存储账户里，然后再从存储账户的vhd文件创建托管磁盘，再利用托管磁盘创建虚机  需要注意的是：虚机加载的额外磁盘需要卸掉，或者在fstab 磁盘加载项添加 nofail, 如 centos配置：  UUID=1037feaf-5034-446c-bbdc-e1958be6b35a /data  xfs     defaul">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/azure/azure_cli_vm/Azure cli 通过复制vhd重建虚机/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Azure cli 通过复制的vhd重建虚机 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/azure/azure_cli_vm/Azure cli 通过复制vhd重建虚机/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Azure cli 通过复制的vhd重建虚机
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-06 09:20:00" itemprop="dateCreated datePublished" datetime="2018-07-06T09:20:00+08:00">2018-07-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-20 17:49:06" itemprop="dateModified" datetime="2018-07-20T17:49:06+08:00">2018-07-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/azurecli/" itemprop="url" rel="index"><span itemprop="name">azurecli</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/azurecli/vm/" itemprop="url" rel="index"><span itemprop="name">vm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><pre><code>本文适合跨账户迁移虚机。
+
+原理通过公开的sas url 复制磁盘镜像到存储账户里，然后再从存储账户的vhd文件创建托管磁盘，再利用托管磁盘创建虚机
+
+需要注意的是：虚机加载的额外磁盘需要卸掉，或者在fstab 磁盘加载项添加 nofail, 如 centos配置：
+
+UUID=1037feaf-5034-446c-bbdc-e1958be6b35a /data  xfs     defaults,nofail,nodev,nouser,noexec,nosuid,noatime,nodiratime 0 0
+
+如果没修改，可以在已启动的虚机里加载 vhd文件 或 托管磁盘，修改fstab后在创建虚机
+
+参考：
+https://docs.microsoft.com/zh-cn/cli/azure/reference-index?view=azure-cli-latest
+</code></pre><h2 id="Azure-登陆"><a href="#Azure-登陆" class="headerlink" title="Azure 登陆"></a>Azure 登陆</h2><pre><code>## 切换到中国云
+az cloud set -n AzureChinaCloud
+
+## 登陆
+az login
+
+## 浏览器打开，先用账户登陆Azure portal，然后在新tab page里打开
+## https://microsoft.com/deviceloginchina
+
+## 如果需要设置订阅
+az account set --subscription $s_SubscriptionId
+</code></pre><h2 id="用到的变量"><a href="#用到的变量" class="headerlink" title="用到的变量"></a>用到的变量</h2><pre><code>## t_ 表示target_, 代表目标资源
+## s_ 表示source_, 代表源资源
+
+
+
+##--源资源变量------------------------------------------------------
+
+## 源订阅
+s_SubscriptionId=ddrt394e-0463-4eta5-8d04-c94wetfd879dc
+
+## 源区域
+s_Location=&quot;chinaeast&quot;
+
+## 源资源组
+s_ResourceGroupName=&quot;server_rg&quot;
+
+
+## 源托管磁盘镜像名
+s_SnapshotName=&quot;server01_OsDisk-hdd201801&quot;
+
+
+
+##--目标资源变量------------------------------------------------------
+
+## 目标订阅
+t_SubscriptionId=653gfb1f7-f219-4sgfeb-eret-31wrtwe1efb0
+
+## 目标区域, chinanorth chinaeast
+t_Location=&quot;chinaeast&quot;
+
+## 目标资源组
+t_ResourceGroupName=&quot;test_rg&quot;
+
+
+
+##--目标存储账户变量------------------------------------------------------
+
+## 目标存储账户名
+t_StorageAccountName=&quot;serverstg01&quot;
+
+## 目标存储账户容器名
+t_StorageContainerName=&quot;data&quot;
+
+## 存储账户访问密匙，这里随便几个字符表示一下
+t_StorageAccountKey=&quot;aA8bfS4CnG0t7tW+QudkMYYt+IBbp6ha7iPzo9mNFDGp7M4u2UBw==&quot;
+
+
+##--目标网络资源变量------------------------------------------------------
+
+## 高可用集名
+t_HASetName=&quot;HASet&quot;
+
+## 安全组名
+t_NSGName=&quot;test_ng&quot;
+
+
+## 公网IP
+t_PIPName1=&quot;test01_IP1&quot;
+t_PIPName2=&quot;test02_IP1&quot;
+
+## 虚拟网卡名
+t_NICName1=&quot;test01_nic1&quot;
+t_NICName2=&quot;test02_nic1&quot;
+
+
+
+## 虚拟网络名
+t_VnetName=&quot;test01-vnet-101e&quot;
+
+## 虚拟网络地址空间
+t_VnetAddressPrefix=&quot;10.10.10.0/24 10.10.11.0/24 10.10.12.0/24&quot;
+
+
+
+## 子网1名
+t_SubnetName1=&quot;test01-snet-101e&quot;
+## 子网1地址
+t_SubnetNamePrefix1=&quot;10.10.10.0/24&quot;
+
+## 子网2名和子网2地址
+t_SubnetName2=&quot;test_app_gatewy&quot;
+t_SubnetNamePrefix2=&quot;10.10.11.0/24&quot;
+
+
+##--新建资源变量------------------------------------------------------
+
+## 导出时间限制，过期时间，3600 秒 = 1 小时
+## 创建的sas url 连接时，设置能够访问的时间，就是说从创建开始到不能从这个sas url下载磁盘镜像的时间长度
+sasExpiryDuration=3600
+
+## 目标 VHD 文件保存名
+t_VHDFileName=&quot;osdisk.vhd&quot;
+
+
+##--新建托管磁盘变量------------------------------------------------------
+
+## 新建的托管磁盘名
+t_ManagedDiskName=&quot;test01_OsDisk_1&quot;
+
+## 新建虚机存放格式，这里用ssd, Premium_LRS or Standard_LRS
+t_Sku=&quot;Premium_LRS&quot;
+
+## 新建磁盘大小，单位GB
+t_DiskSize=32
+
+
+##--新建虚机变量------------------------------------------------------
+
+## 新建虚机名
+t_VMName1=&quot;test01&quot;
+
+## 新建虚机类型
+t_OS_Type=linux
+
+## 新建虚机大小
+t_Size=&quot;Standard_DS2_v2&quot;
+</code></pre><h2 id="创建资源组"><a href="#创建资源组" class="headerlink" title="创建资源组"></a>创建资源组</h2><pre><code>## 查询资源组里的资源，不带--resource-group查询订阅的所有资源
+az resource list --resource-group $t_ResourceGroupName --output table
+
+## 创建资源组
+
+az group create \
+--name $t_ResourceGroupName \
+--location $t_Location
+</code></pre><h2 id="创建安全组"><a href="#创建安全组" class="headerlink" title="创建安全组"></a>创建安全组</h2><pre><code>az network nsg create \
+--location $t_Location \
+--resource-group $t_ResourceGroupName \
+--name $t_NSGName
+</code></pre><h3 id="开启端口3890"><a href="#开启端口3890" class="headerlink" title="开启端口3890"></a>开启端口3890</h3><pre><code>az network nsg rule create \
+--location $t_Location \
+--resource-group $t_ResourceGroupName \
+--nsg-name $t_NSGName \
+--name RDP \
+--protocol tcp \
+--direction inbound \
+--source-address-prefix &apos;*&apos; \
+--source-port-range &apos;*&apos;  \
+--destination-address-prefix &apos;*&apos; \
+--destination-port-range 3890 \
+--access allow \
+--priority 1100
+</code></pre><h3 id="开启端口22"><a href="#开启端口22" class="headerlink" title="开启端口22"></a>开启端口22</h3><pre><code>az network nsg rule create \
+--location $t_Location \
+--resource-group $t_ResourceGroupName \
+--nsg-name $t_NSGName \
+--name SSH \
+--protocol tcp \
+--direction inbound \
+--source-address-prefix &apos;*&apos; \
+--source-port-range &apos;*&apos;  \
+--destination-address-prefix &apos;*&apos; \
+--destination-port-range 22 \
+--access allow \
+--priority 1100
+</code></pre><h3 id="开启80端口"><a href="#开启80端口" class="headerlink" title="开启80端口"></a>开启80端口</h3><pre><code>az network nsg rule create \
+--location $t_Location \
+--resource-group $t_ResourceGroupName \
+--nsg-name $t_NSGName \
+--name HTTP \
+--protocol tcp \
+--direction inbound \
+--source-address-prefix &apos;*&apos; \
+--source-port-range &apos;*&apos;  \
+--destination-address-prefix &apos;*&apos; \
+--destination-port-range 80 \
+--access allow \
+--priority 1200
+</code></pre><h2 id="创建可用集"><a href="#创建可用集" class="headerlink" title="创建可用集"></a>创建可用集</h2><pre><code>az vm availability-set create \
+--name $t_HASetName \
+--resource-group $t_ResourceGroupName \
+--platform-fault-domain-count 2 \
+--platform-update-domain-count 5
+</code></pre><h3 id="创建虚拟网络和子网"><a href="#创建虚拟网络和子网" class="headerlink" title="创建虚拟网络和子网"></a>创建虚拟网络和子网</h3><pre><code>az network vnet create \
+--resource-group $t_ResourceGroupName \
+--name $t_VnetName \
+--address-prefix $t_VnetAddressPrefix \
+--subnet-name $t_SubnetName1 \
+--subnet-prefix $t_SubnetNamePrefix1
+
+## 其它参数：DDOS防护，启用的是标准防护，需要收费，默认基础防护不需要设置。
+[--ddos-protection {false, true}]
+[--ddos-protection-plan]
+[--vm-protection {false, true}]
+</code></pre><h3 id="创建子网"><a href="#创建子网" class="headerlink" title="创建子网"></a>创建子网</h3><pre><code>az network vnet subnet create \
+--resource-group $t_ResourceGroupName \
+--vnet-name $t_VnetName \
+--name  t_SubnetName2 \
+--address-prefix t_SubnetNamePrefix2 \
+--network-security-group $t_NSGName
+
+## 其它参数：
+--route-table MyRouteTable
+[--service-endpoints]
+</code></pre><h2 id="创建存储帐户"><a href="#创建存储帐户" class="headerlink" title="创建存储帐户"></a>创建存储帐户</h2><pre><code>az storage account create \
+--resource-group $t_ResourceGroupName \
+--location $t_Location \
+--name $t_StorageAccountName \
+--kind Storage \
+--sku Standard_LRS
+</code></pre><h3 id="创建存储容器"><a href="#创建存储容器" class="headerlink" title="创建存储容器"></a>创建存储容器</h3><pre><code>az storage container create \
+--account-name $t_StorageAccountName \
+--name $t_StorageContainerName
+</code></pre><h3 id="查询存储第一个access-key"><a href="#查询存储第一个access-key" class="headerlink" title="查询存储第一个access key"></a>查询存储第一个access key</h3><pre><code>storageAccountKey=$(az storage account keys list \
+--account-name $t_StorageAccountName \
+--resource-group $t_ResourceGroupName \
+--query [0].value --output tsv)
+</code></pre><h2 id="托管磁盘转vhd"><a href="#托管磁盘转vhd" class="headerlink" title="托管磁盘转vhd"></a>托管磁盘转vhd</h2><pre><code>## 登陆到源订阅上操作
+
+## 从托管磁盘镜像创建sas url，通过此连接可用于外网用户直接访问下载镜像
+## 也可以直接从portal界面创建
+s_SAS=$(az snapshot grant-access --resource-group $s_ResourceGroupName --name $s_SnapshotName --duration-in-seconds $sasExpiryDuration --query [accessSas] -o tsv)
+
+## 此连接将会是这样一个url
+## echo $s_SAS
+## https://md-jzj4xh1pwpkc.blob.core.chinacloudapi.cn/d1dcd5z4mb2g/abcd?sv=2017-04-17&amp;sr=b&amp;si=4484c9bb-e110-424c-aae8-169cca49c4af&amp;sig=ARBeP4FNuhlphRB03a97c71HXQ9P8Xd1IRu9Eb0x8zU%3D
+
+
+
+## 登陆到目标订阅上操作
+
+## 将sar url 复制下来，并复制给变量
+
+s_SAS=&quot;https://md-jzj4xh1pwpkc.blob.core.chinacloudapi.cn/d1dcd5z4mb2g/abcd?sv=2017-04-17&amp;sr=b&amp;si=4484c9bb-e110-424c-aae8-169cca49c4af&amp;sig=ARBeP4FNuhlphRB03a97c71HXQ9P8Xd1IRu9Eb0x8zU%3D&quot;
+
+## 通过异步复制，将$s_SAS 的磁盘镜像复制到存储账户里，存为一个vhd文件
+az account set --subscription $t_SubscriptionId
+
+az storage blob copy start \
+--destination-blob $t_VHDFileName \
+--destination-container $t_StorageContainerName \
+--account-name $t_StorageAccountName \
+--account-key $t_StorageAccountKey \
+--source-uri $s_SAS
+</code></pre><h2 id="vhd转托管磁盘"><a href="#vhd转托管磁盘" class="headerlink" title="vhd转托管磁盘"></a>vhd转托管磁盘</h2><pre><code>## 存储帐户中从 VHD 文件创建托管磁盘,如果未设置大小，默认和源镜像一样大
+az account set --subscription $t_SubscriptionId
+
+## 获取存储账户密匙
+storageAccountKey=$(az storage account keys list \
+--account-name $t_StorageAccountName \
+--resource-group $t_ResourceGroupName \
+--query [0].value --output tsv)
+
+## 获取blob url
+vhd_url=$(az storage blob url  \
+--name $t_VHDFileName \
+--account-key $storageAccountKey \
+--account-name $t_StorageAccountName \
+--container-name $t_StorageContainerName)
+
+## 查看vhd_url内容
+## echo $vhd_url
+## https://testserverdiag01.blob.core.chinacloudapi.cn/data/vm_os.vhd
+
+
+az disk create \
+--resource-group $t_ResourceGroupName \
+--name $t_ManagedDiskName \
+--location $t_Location \
+--sku $t_Sku \
+--size-gb $t_DiskSize \
+--source $vhd_url
+</code></pre><h2 id="从托管磁盘镜像创建托管磁盘"><a href="#从托管磁盘镜像创建托管磁盘" class="headerlink" title="从托管磁盘镜像创建托管磁盘"></a>从托管磁盘镜像创建托管磁盘</h2><pre><code>az account set --subscription $t_SubscriptionId
+
+## 获取托管磁盘镜像ID
+snapshotId=$(az snapshot show --name $s_SnapshotName --resource-group $s_ResourceGroupName --query [id] -o tsv)
+
+#通过镜像ID创建托管磁盘,如果未设置大小，默认和源镜像一样大
+az disk create \
+--resource-group $t_ResourceGroupName \
+--name $t_ManagedDiskName \
+--sku $t_Sku \
+--size-gb $t_DiskSize \
+--source $snapshotId
+</code></pre><h2 id="使用现有托管-OS-磁盘创建虚拟机"><a href="#使用现有托管-OS-磁盘创建虚拟机" class="headerlink" title="使用现有托管 OS 磁盘创建虚拟机"></a>使用现有托管 OS 磁盘创建虚拟机</h2><h3 id="创建对外IP"><a href="#创建对外IP" class="headerlink" title="创建对外IP"></a>创建对外IP</h3><pre><code>az network public-ip create \
+--name $t_PIPName1 \
+--resource-group $t_ResourceGroupName \
+--location $t_Location \
+--allocation-method Static
+
+## 其它参数：
+[--dns-name]                ：--dns-name Mydnsname
+[--idle-timeout]
+[--ip-tags]
+[--reverse-fqdn]
+[--sku {Basic, Standard}]
+[--tags]
+[--version {IPv4, IPv6}]
+[--zone {1, 2, 3}]          : --zone 2
+</code></pre><h3 id="创建网卡-虚拟-NIC"><a href="#创建网卡-虚拟-NIC" class="headerlink" title="创建网卡(虚拟 NIC)"></a>创建网卡(虚拟 NIC)</h3><pre><code>az network nic create \
+--name $t_NICName1 \
+--location $t_Location \
+--resource-group $t_ResourceGroupName \
+--vnet-name $t_VnetName \
+--subnet $t_SubnetName \
+--network-security-group $t_NSGName \
+--public-ip-address $t_PIPName1
+
+## 如果虚拟网络不再同一个资源组里，必须指定子网id，而不是子网名和虚拟网络名
+## --subnet &quot;/subscriptions/91913983-c6cc-4aea-a712-87dd97b5c85b/resourceGroups/tada-web-rg01e/providers/Microsoft.Network/virtualNetworks/tada-web-vnet-101e/subnets/tada-web-snet-102e&quot;
+</code></pre><h3 id="获取托管磁盘ID"><a href="#获取托管磁盘ID" class="headerlink" title="获取托管磁盘ID"></a>获取托管磁盘ID</h3><pre><code>managedDiskId=$(az disk show --name $t_ManagedDiskName --resource-group $t_ResourceGroupName --query [id] -o tsv)
+</code></pre><h3 id="从托管磁盘中创建vm"><a href="#从托管磁盘中创建vm" class="headerlink" title="从托管磁盘中创建vm"></a>从托管磁盘中创建vm</h3><pre><code>az vm create --name $t_VMName1 \
+--resource-group $t_ResourceGroupName \
+--nics $t_NICName1 \
+--attach-os-disk $managedDiskId \
+--os-type $t_OS_Type \
+--size $t_Size \
+--availability-set $t_HASetName \
+--os-disk-caching ReadOnly
+
+## 多块网卡只需空格隔开，如：--nics $t_NICName11 $t_NICName11
+</code></pre><h2 id="上传本地vhd创建虚机"><a href="#上传本地vhd创建虚机" class="headerlink" title="上传本地vhd创建虚机"></a>上传本地vhd创建虚机</h2><pre><code>## 获取存储账户密匙
+storageAccountKey=$(az storage account keys list \
+--account-name $t_StorageAccountName \
+--resource-group $t_ResourceGroupName \
+--query [0].value --output tsv)
+
+
+az storage blob upload 
+--account-name $t_StorageAccountName \
+--container-name $t_StorageContainerName \
+--account-key $storageAccountKey \
+--type page \
+--file /path/to/disk/mydisk.vhd \
+--name $t_VHDFileName
+
+
+az disk create \
+    --resource-group $t_ResourceGroupName \
+    --name $t_ManagedDiskName \
+    --sku $t_Sku \
+    --size-gb $t_DiskSize \
+    --source https://mystorageaccount.blob.core.chinacloudapi.cn/mydisks/myDisk.vhd
+</code></pre><h2 id="从自定义映像创建虚机"><a href="#从自定义映像创建虚机" class="headerlink" title="从自定义映像创建虚机"></a>从自定义映像创建虚机</h2><pre><code>## 用vhd或托管磁盘创建虚机映像
+
+az image create  --os-type Windows -g $t_ResourceGroupName -n image1 --source myManagedDisk
+
+az image create  --os-type Windows -g $t_ResourceGroupName -n image1 --source https://mystorageaccount.blob.core.chinacloudapi.cn/mydisks/myDisk.vhd
+
+az image list --resource-group $t_ResourceGroupName
+
+az image show --name
+            --resource-group
+            [--expand]
+
+
+
+## 查看可用虚机大小
+az vm list-sizes --location $t_Location --output table
+az vm list-skus --location $t_Location --output table
+
+## 查看IP地址
+az vm list-ip-addresses [--name] --resource-group $t_ResourceGroupName --output table
+
+## 查看自定义虚机映像
+az image list --resource-group $t_ResourceGroupName
+
+
+az vm create \
+--name $t_VMName1 \
+--resource-group $t_ResourceGroupName \
+--location $t_Location \
+--image mycustomimage \
+--vnet-name $t_VnetName \
+--subnet $t_SubnetName1 \
+--nics t_NICName1\
+--availability-set $t_HASetName \
+--os-type windows \
+--os-disk-caching ReadOnly \
+--storage-sku Premium_LRS \
+--size Standard_DS2_v2 \
+--os-disk-name $t_VMName1&quot;_os&quot; \
+--private-ip-address 10.10.0.4/24 \
+
+
+## 利用模板创建
+https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-specialized-vhd
+</code></pre><h2 id="托管磁盘复制"><a href="#托管磁盘复制" class="headerlink" title="托管磁盘复制"></a>托管磁盘复制</h2><pre><code>## 最好先停止虚机或卸载托管磁盘，否则，如果磁盘正在写入数据，无法保证数据一致性，导致某些文件破坏或程序用不了。
+
+## 获取托管磁盘ID
+
+    managedDiskId=$(az disk show --name $t_ManagedDiskName --resource-group $s_ResourceGroupName --query [id] -o tsv)
+
+##  使用托管磁盘ID复制托管磁盘到不同的订阅或组
+
+az account set --subscription $t_SubscriptionId
+az disk create --resource-group $t_ResourceGroupName --name $t_ManagedDiskName --source $managedDiskId
+</code></pre><h2 id="托管磁盘直接导出"><a href="#托管磁盘直接导出" class="headerlink" title="托管磁盘直接导出"></a>托管磁盘直接导出</h2><pre><code>## 参考：https://docs.azure.cn/zh-cn/articles/azure-operations-guide/virtual-machines/aog-virtual-machines-howto-export-managed-disks
+
+## 创建导出http url连接,相当于图像界面的export导出磁盘连接
+## 如果是镜像，只需把az disk 换成 az snapshot
+
+sas=$(az disk grant-access \
+        --duration-in-seconds 3600 \
+        --name $t_ManagedDiskName \
+        --resource-group $s_ResourceGroupName \
+        --query [accessSas] -o tsv)
+
+## 复制
+
+az storage blob copy start \
+        --destination-blob $t_VHDFileName \
+        --destination-container $t_StorageContainerName \
+        --account-name $t_StorageAccountName \
+        --account-key $storageAccountKey \
+        --source-uri $sas
+</code></pre><h2 id="导出blob"><a href="#导出blob" class="headerlink" title="导出blob"></a>导出blob</h2><pre><code>## 可以外网直接下载访问
+
+存储参考：
+
+https://azurecitadel.github.io/guides/cli/cli-4-bash/
+blob=azuredeploy.json
+container=templates
+expiry=$(date &apos;+%Y-%m-%dT%H:%MZ&apos; --date &quot;+30 minutes&quot;)
+
+export accountName=$(az storage account list --resource-group ExampleResourceGroup --query [0].name --output tsv)
+storageAccountKey=$(az storage account keys list --account-name $accountName --resource-group ExampleResourceGroup --query [0].value --output tsv)
+sasToken=$(az storage blob generate-sas --account-name $accountName --account-key $storageAccountKey --container-name templates --name azuredeploy.json --permissions r --expiry $expiry --output tsv)
+shortURL=$(az storage blob url --container-name $container --name $blob) 
+fullURL=$shortURL?$sasToken
+echo $fullURL
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/azurecli/" rel="tag"><i class="fa fa-tag"></i> azurecli</a>
+          
+            <a href="/tags/vm/" rel="tag"><i class="fa fa-tag"></i> vm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/azure/azure_cli/Azure cli 扩展执行bash命令/" rel="next" title="Azure cli 扩展执行bash命令">
+                <i class="fa fa-chevron-left"></i> Azure cli 扩展执行bash命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/keepalived/Keepalived和LVS-NAT/" rel="prev" title="Keepalived和LVS-NAT">
+                Keepalived和LVS-NAT <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Azure-登陆"><span class="nav-number">2.</span> <span class="nav-text">Azure 登陆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用到的变量"><span class="nav-number">3.</span> <span class="nav-text">用到的变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建资源组"><span class="nav-number">4.</span> <span class="nav-text">创建资源组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建安全组"><span class="nav-number">5.</span> <span class="nav-text">创建安全组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开启端口3890"><span class="nav-number">5.1.</span> <span class="nav-text">开启端口3890</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启端口22"><span class="nav-number">5.2.</span> <span class="nav-text">开启端口22</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启80端口"><span class="nav-number">5.3.</span> <span class="nav-text">开启80端口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建可用集"><span class="nav-number">6.</span> <span class="nav-text">创建可用集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建虚拟网络和子网"><span class="nav-number">6.1.</span> <span class="nav-text">创建虚拟网络和子网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建子网"><span class="nav-number">6.2.</span> <span class="nav-text">创建子网</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建存储帐户"><span class="nav-number">7.</span> <span class="nav-text">创建存储帐户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建存储容器"><span class="nav-number">7.1.</span> <span class="nav-text">创建存储容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询存储第一个access-key"><span class="nav-number">7.2.</span> <span class="nav-text">查询存储第一个access key</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#托管磁盘转vhd"><span class="nav-number">8.</span> <span class="nav-text">托管磁盘转vhd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vhd转托管磁盘"><span class="nav-number">9.</span> <span class="nav-text">vhd转托管磁盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从托管磁盘镜像创建托管磁盘"><span class="nav-number">10.</span> <span class="nav-text">从托管磁盘镜像创建托管磁盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用现有托管-OS-磁盘创建虚拟机"><span class="nav-number">11.</span> <span class="nav-text">使用现有托管 OS 磁盘创建虚拟机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建对外IP"><span class="nav-number">11.1.</span> <span class="nav-text">创建对外IP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建网卡-虚拟-NIC"><span class="nav-number">11.2.</span> <span class="nav-text">创建网卡(虚拟 NIC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取托管磁盘ID"><span class="nav-number">11.3.</span> <span class="nav-text">获取托管磁盘ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从托管磁盘中创建vm"><span class="nav-number">11.4.</span> <span class="nav-text">从托管磁盘中创建vm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上传本地vhd创建虚机"><span class="nav-number">12.</span> <span class="nav-text">上传本地vhd创建虚机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从自定义映像创建虚机"><span class="nav-number">13.</span> <span class="nav-text">从自定义映像创建虚机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#托管磁盘复制"><span class="nav-number">14.</span> <span class="nav-text">托管磁盘复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#托管磁盘直接导出"><span class="nav-number">15.</span> <span class="nav-text">托管磁盘直接导出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导出blob"><span class="nav-number">16.</span> <span class="nav-text">导出blob</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

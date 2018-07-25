@@ -112,18 +112,18 @@
 
 
 
-  <meta name="description" content="前提：  lsyncd基于rsync，且要求rsync &amp;gt;= 3.1，可输入rsync –version查看当前版本  CentOS自带的软件或yum安装的软件太古老    epel源安装  cat &amp;gt; /etc/yum.repos.d/epel.repo &amp;lt;&amp;lt; EOF [epel]name=Extra Packages for Enterprise Linux 7 -">
+  <meta name="description" content="前言lsyncd基于rsync，且要求rsync &amp;gt;= 3.1，可输入rsync --version查看当前版本  CentOS自带的软件或yum安装的软件太古老  官方网址：http://axkibe.github.io/lsyncd/  服务器端需要安装配置好rsyncd yum 安装 lsyncdyum --enablerepo=epel -y install lsyncd  ## 查">
 <meta name="keywords" content="sync,lsyncd">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lsyncd 同步文件">
 <meta property="og:url" content="http://dolphincn.github.io/sync/lsyncd 安装配置/index.html">
 <meta property="og:site_name" content="克隆人战争">
-<meta property="og:description" content="前提：  lsyncd基于rsync，且要求rsync &amp;gt;= 3.1，可输入rsync –version查看当前版本  CentOS自带的软件或yum安装的软件太古老    epel源安装  cat &amp;gt; /etc/yum.repos.d/epel.repo &amp;lt;&amp;lt; EOF [epel]name=Extra Packages for Enterprise Linux 7 -">
+<meta property="og:description" content="前言lsyncd基于rsync，且要求rsync &amp;gt;= 3.1，可输入rsync --version查看当前版本  CentOS自带的软件或yum安装的软件太古老  官方网址：http://axkibe.github.io/lsyncd/  服务器端需要安装配置好rsyncd yum 安装 lsyncdyum --enablerepo=epel -y install lsyncd  ## 查">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-19T04:26:29.853Z">
+<meta property="og:updated_time" content="2018-07-19T08:19:51.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lsyncd 同步文件">
-<meta name="twitter:description" content="前提：  lsyncd基于rsync，且要求rsync &amp;gt;= 3.1，可输入rsync –version查看当前版本  CentOS自带的软件或yum安装的软件太古老    epel源安装  cat &amp;gt; /etc/yum.repos.d/epel.repo &amp;lt;&amp;lt; EOF [epel]name=Extra Packages for Enterprise Linux 7 -">
+<meta name="twitter:description" content="前言lsyncd基于rsync，且要求rsync &amp;gt;= 3.1，可输入rsync --version查看当前版本  CentOS自带的软件或yum安装的软件太古老  官方网址：http://axkibe.github.io/lsyncd/  服务器端需要安装配置好rsyncd yum 安装 lsyncdyum --enablerepo=epel -y install lsyncd  ## 查">
 
 
 
@@ -379,7 +379,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-19 12:26:29" itemprop="dateModified" datetime="2018-07-19T12:26:29+08:00">2018-07-19</time>
+                <time title="修改时间：2018-07-19 16:19:51" itemprop="dateModified" datetime="2018-07-19T16:19:51+08:00">2018-07-19</time>
               
             
           </span>
@@ -430,136 +430,156 @@
       
 
       
-        <ol>
-<li><p>前提：</p>
-<p> lsyncd基于rsync，且要求rsync &gt;= 3.1，可输入rsync –version查看当前版本</p>
-<p> CentOS自带的软件或yum安装的软件太古老</p>
-</li>
-</ol>
-<ol start="2">
-<li>epel源安装</li>
-</ol>
-<pre><code>cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt; EOF
-</code></pre><p>[epel]<br>name=Extra Packages for Enterprise Linux 7 - \$basearch<br>baseurl=<a href="http://dl.fedoraproject.org/pub/epel/7Server/x86_64/" target="_blank" rel="noopener">http://dl.fedoraproject.org/pub/epel/7Server/x86_64/</a><br>failovermethod=priority<br>enabled=1<br>gpgcheck=1<br>gpgkey=<a href="http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server" target="_blank" rel="noopener">http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server</a></p>
-<p>EOF</p>
-<ol start="3">
-<li>升级rsync</li>
-</ol>
-<pre><code>查看当前rsync版本
-# rsync -v
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><pre><code>lsyncd基于rsync，且要求rsync &gt;= 3.1，可输入rsync --version查看当前版本
 
-如果版本太低，直接卸载,最好不要卸载，应为systemd 的配置也会相应的卸载掉，可以变更旧程序名，新程序直接替换掉旧的位置。
-# yum -y remove rsync
+CentOS自带的软件或yum安装的软件太古老
 
-1） 使用第三方package安装
+官方网址：http://axkibe.github.io/lsyncd/
 
-    # yum localinstall http://mirror.hmc.edu/rpmforge/redhat/el7/en/x86_64/extras/RPMS/rsync-3.1.1-1.el7.rfx.x86_64.rpm
+服务器端需要安装配置好rsyncd
+</code></pre><h2 id="yum-安装-lsyncd"><a href="#yum-安装-lsyncd" class="headerlink" title="yum 安装 lsyncd"></a>yum 安装 lsyncd</h2><pre><code>yum --enablerepo=epel -y install lsyncd
 
-2） 编译安装：
+## 查看lsyncd版本
 
-下载rsync源码
-# wget https://download.samba.org/pub/rsync/rsync-3.1.3.tar.gz
-
-解压
-# tar -zxvf rsync-3.1.3.tar.gz
-
-进入目录
-# cd rsync-3.1.3
-
-查看编译配置参数
-# ./configure --help
-
-编译安装, 安装时同步保存日志，这种编译
-# ./configure --prefix=/usr
-
-编译好二进制rsync程序会放在/usr/bin目录下,即/usr/bin/rsync
-
-编译可以带如下参数
---with-rsyncd-conf=/etc/rsyncd.conf   # 默认/etc/rsyncd.conf
---without-included-zlib               # 此开关使用系统安装的zlib库进行编译。
-# make
-# make install | tee make_install.log
+lsyncd --version
+</code></pre><h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><pre><code>settings {
+    logfile =&quot;/usr/local/lsyncd-2.1.5/var/lsyncd.log&quot;,
+    statusFile =&quot;/usr/local/lsyncd-2.1.5/var/lsyncd.status&quot;,
+    inotifyMode = &quot;CloseWrite&quot;,
+    maxProcesses = 8,
+    }
 
 
-出于安全原因，鼓励将rsync服务器作为非特权用户和组运行。 
-如果您打算将rsync作为后台进程运行，请使用root用户颁发的以下命令创建rsyncd用户和组：
+-- I. 本地目录同步，direct：cp/rm/mv。 适用：500+万文件，变动不大
+sync {
+    default.direct,
+    source    = &quot;/tmp/src&quot;,
+    target    = &quot;/tmp/dest&quot;,
+    delay = 1
+    maxProcesses = 1
+    }
 
-# groupadd -g 80 rsyncd
-# useradd -c &quot;rsyncd Daemon&quot; -d /home/rsync -g rsyncd -s /sbin/nologin -u 80 rsyncd
+-- II. 本地目录同步，rsync模式：rsync
+sync {
+    default.rsync,
+    source    = &quot;/tmp/src&quot;,
+    target    = &quot;/tmp/dest1&quot;,
+    excludeFrom = &quot;/etc/rsyncd.d/rsync_exclude.lst&quot;,
+    rsync     = {
+        binary = &quot;/usr/bin/rsync&quot;,
+        archive = true,
+        compress = true,
+        bwlimit   = 2000
+        } 
+    }
 
-最后需要手动添加配置文件:
+-- III. 远程目录同步，rsync模式 + rsyncd daemon
+sync {
+    default.rsync,
+    source    = &quot;/tmp/src&quot;,
+    target    = &quot;syncuser@172.29.88.223::module1&quot;,
+    delete=&quot;running&quot;,
+    exclude = { &quot;.*&quot;, &quot;.tmp&quot; },
+    delay = 30,
+    init = false,
+    rsync     = {
+        binary = &quot;/usr/bin/rsync&quot;,
+        archive = true,
+        compress = true,
+        verbose   = true,
+        password_file = &quot;/etc/rsyncd.d/rsync.pwd&quot;,
+        _extra    = {&quot;--bwlimit=200&quot;}
+        }
+    }
 
-作为服务端的配置，客户端不需要配置文件
+-- IV. 远程目录同步，rsync模式 + ssh shell
+sync {
+    default.rsync,
+    source    = &quot;/tmp/src&quot;,
+    target    = &quot;172.29.88.223:/tmp/dest&quot;,
+    -- target    = &quot;root@172.29.88.223:/remote/dest&quot;,
+    -- 上面target，注意如果是普通用户，必须拥有写权限
+    maxDelays = 5,
+    delay = 30,
+    -- init = true,
+    rsync     = {
+        binary = &quot;/usr/bin/rsync&quot;,
+        archive = true,
+        compress = true,
+        bwlimit   = 2000
+        -- rsh = &quot;/usr/bin/ssh -p 22 -o StrictHostKeyChecking=no&quot;
+        -- 如果要指定其它端口，请用上面的rsh
+        }
+    }
 
-# vi /etc/rsyncd.conf
-    pid file = /var/run/rsyncd.pid
-    lock file = /var/run/rsyncd.lock  
+-- V. 远程目录同步，rsync模式 + rsyncssh，效果与上面相同
+sync {
+    default.rsyncssh,
+    source    = &quot;/tmp/src2&quot;,
+    host      = &quot;172.29.88.223&quot;,
+    targetdir = &quot;/remote/dir&quot;,
+    excludeFrom = &quot;/etc/rsyncd.d/rsync_exclude.lst&quot;,
+    -- maxDelays = 5,
+    delay = 0,
+    -- init = false,
+    rsync    = {
+        binary = &quot;/usr/bin/rsync&quot;,
+        archive = true,
+        compress = true,
+        verbose   = true,
+        _extra = {&quot;--bwlimit=2000&quot;},
+        },
+    ssh      = {
+        port  =  1234
+        }
+    }
+</code></pre><h2 id="lsyncd-conf配置选项说明"><a href="#lsyncd-conf配置选项说明" class="headerlink" title="lsyncd.conf配置选项说明"></a>lsyncd.conf配置选项说明</h2><pre><code>settings
 
-    port = 873                      # 默认端口号为873,防火墙需要同时开启tcp/udp对应的端口号
-    uid = root                      # rsyncd 启动运行的用户,必须有对同步目录有读写权限
-    gid = root                      # rsyncd 启动运行的用户组
-    use chroot = no                 # 是否启用chroot监狱
-    max connections = 200           # 最大连接数
-    timeout 600                     # 连接超时
+里面是全局设置，--开头表示注释，下面是几个常用选项说明：
+•    logfile 定义日志文件
+•    stausFile 定义状态文件
+•    nodaemon=true 表示不启用守护模式，默认
+•    statusInterval 将lsyncd的状态写入上面的statusFile的间隔，默认10秒
+•    inotifyMode 指定inotify监控的事件，默认是CloseWrite，还可以是Modify或CloseWrite or Modify
+•    maxProcesses 同步进程的最大个数。假如同时有20个文件需要同步，而maxProcesses = 8，则最大能看到有8个rysnc进程
+•    maxDelays 累计到多少所监控的事件激活一次同步，即使后面的delay延迟时间还未到
 
-    #允许上传
-    read only = false
-    #不允许下载
-    #write only = true
+sync
 
-    # 日志
-    log file = /var/log/rsync/rsyncd.log
-    log format = %t %a %m %f %b
+里面是定义同步参数，可以继续使用maxDelays来重写settings的全局变量。一般第一个参数指定lsyncd以什么模式运行：rsync、rsyncssh、direct三种模式：
+•    default.rsync ：本地目录间同步，使用rsync，也可以达到使用ssh形式的远程rsync效果，或daemon方式连接远程rsyncd进程；
+default.direct ：本地目录间同步，使用cp、rm等命令完成差异文件备份；
+default.rsyncssh ：同步到远程主机目录，rsync的ssh模式，需要使用key来认证
+•    source 同步的源目录，使用绝对路径。
+•    target 定义目的地址.对应不同的模式有几种写法：
+/tmp/dest ：本地目录同步，可用于direct和rsync模式
+172.29.88.223:/tmp/dest ：同步到远程服务器目录，可用于rsync和rsyncssh模式，拼接的命令类似于/usr/bin/rsync -ltsd --delete --include-from=- --exclude=* SOURCE TARGET，剩下的就是rsync的内容了，比如指定username，免密码同步
+172.29.88.223::module ：同步到远程服务器目录，用于rsync模式
 
-    # 使用系统日志，需要在/etc/rsyslog.conf，添加一行(echo &quot;local3.*       /var/log/rsync/rsyncd.log&quot;&gt; /etc/rsyslog.d/rsyncd.local3.conf)
-    # syslog facility = local3        
+三种模式的示例会在后面给出。
+•    init 这是一个优化选项，当init = false，只同步进程启动以后发生改动事件的文件，原有的目录即使有差异也不会同步。默认是true
+•    delay 累计事件，等待rsync同步延时时间，默认15秒（最大累计到1000个不可合并的事件）。也就是15s内监控目录下发生的改动，会累积到一次rsync同步，避免过于频繁的同步。（可合并的意思是，15s内两次修改了同一文件，最后只同步最新的文件）
+•    excludeFrom 排除选项，后面指定排除的列表文件，如excludeFrom = &quot;/etc/lsyncd.exclude&quot;，如果是简单的排除，可以使用exclude = LIST。
 
-    #This will log every file transferred - up to 85,000+ per user, per sync
-    # transfer logging = yes
-    # ignore nonreadable = yes
-    # dont compress   = *.gz *.tgz *.zip *.z *.Z *.rpm *.deb *.bz2
+这里的排除规则写法与原生rsync有点不同，更为简单：
+o    监控路径里的任何部分匹配到一个文本，都会被排除，例如/bin/foo/bar可以匹配规则foo
+o    如果规则以斜线/开头，则从头开始要匹配全部
+o    如果规则以/结尾，则要匹配监控路径的末尾
+o    ?匹配任何字符，但不包括/
+o    *匹配0或多个字符，但不包括/
+o    **匹配0或多个字符，可以是/
+•    delete 为了保持target与souce完全同步，Lsyncd默认会delete = true来允许同步删除。它除了false，还有startup、running值，请参考 Lsyncd 2.1.x ‖ Layer 4 Config ‖ Default Behavior。
 
-    # rsync客户端接入的登陆密码,每行一个账户，格式为 用户名:密码
-    # 注意的是用户不是是系统里的用户。
-    # 下面的auth users里面验证授权的用户名就是这里添加的用户
-    secrets file = /etc/rsyncd/rsyncd.secrets
+rsync
 
-    # 客户端接入时，在终端显示的打招呼的文字，最好用警示语，警示未授权登陆
-    motd file = /etc/rsyncd/rsyncd.motd
-
-    # exclude = lost+found/
-
-    # 限制连接客户端
-    #hosts allow=192.168.1.0/255.255.255.0 10.0.1.0/255.255.255.0
-    hosts allow=10.132.103.64 10.132.103.63
-    #hosts deny=*
-
-
-    [test]  
-    path = /test/  
-    ignore errors  
-    read only = true  
-    list = false  
-    hosts allow = *  
-    #hosts deny = 0.0.0.0/32  
-    auth users root  #该用户系统中存在且对后面指定的备份目录拥有权限  
-    comment = ocpyang  test
-</code></pre><ol start="4">
-<li><p>yum 安装 lsyncd</p>
-<h1 id="yum-–enablerepo-epel-y-install-lsyncd"><a href="#yum-–enablerepo-epel-y-install-lsyncd" class="headerlink" title="yum –enablerepo=epel -y install lsyncd"></a>yum –enablerepo=epel -y install lsyncd</h1><p> 查看lsyncd版本</p>
-<h1 id="lsyncd-–version"><a href="#lsyncd-–version" class="headerlink" title="lsyncd –version"></a>lsyncd –version</h1></li>
-<li><p>配置 /etc/lsyncd.conf</p>
-<p> 官方网址：<a href="http://axkibe.github.io/lsyncd/" target="_blank" rel="noopener">http://axkibe.github.io/lsyncd/</a></p>
-</li>
-</ol>
-<p>2.2.2 lsyncd.conf配置选项说明<br>settings<br>里面是全局设置，–开头表示注释，下面是几个常用选项说明：<br>•    logfile 定义日志文件<br>•    stausFile 定义状态文件<br>•    nodaemon=true 表示不启用守护模式，默认<br>•    statusInterval 将lsyncd的状态写入上面的statusFile的间隔，默认10秒<br>•    inotifyMode 指定inotify监控的事件，默认是CloseWrite，还可以是Modify或CloseWrite or Modify<br>•    maxProcesses 同步进程的最大个数。假如同时有20个文件需要同步，而maxProcesses = 8，则最大能看到有8个rysnc进程<br>•    maxDelays 累计到多少所监控的事件激活一次同步，即使后面的delay延迟时间还未到<br>sync<br>里面是定义同步参数，可以继续使用maxDelays来重写settings的全局变量。一般第一个参数指定lsyncd以什么模式运行：rsync、rsyncssh、direct三种模式：<br>•    default.rsync ：本地目录间同步，使用rsync，也可以达到使用ssh形式的远程rsync效果，或daemon方式连接远程rsyncd进程；<br>default.direct ：本地目录间同步，使用cp、rm等命令完成差异文件备份；<br>default.rsyncssh ：同步到远程主机目录，rsync的ssh模式，需要使用key来认证<br>•    source 同步的源目录，使用绝对路径。<br>•    target 定义目的地址.对应不同的模式有几种写法：<br>/tmp/dest ：本地目录同步，可用于direct和rsync模式<br>172.29.88.223:/tmp/dest ：同步到远程服务器目录，可用于rsync和rsyncssh模式，拼接的命令类似于/usr/bin/rsync -ltsd –delete –include-from=- –exclude=<em> SOURCE TARGET，剩下的就是rsync的内容了，比如指定username，免密码同步<br>172.29.88.223::module ：同步到远程服务器目录，用于rsync模式<br>三种模式的示例会在后面给出。<br>•    init 这是一个优化选项，当init = false，只同步进程启动以后发生改动事件的文件，原有的目录即使有差异也不会同步。默认是true<br>•    delay 累计事件，等待rsync同步延时时间，默认15秒（最大累计到1000个不可合并的事件）。也就是15s内监控目录下发生的改动，会累积到一次rsync同步，避免过于频繁的同步。（可合并的意思是，15s内两次修改了同一文件，最后只同步最新的文件）<br>•    excludeFrom 排除选项，后面指定排除的列表文件，如excludeFrom = “/etc/lsyncd.exclude”，如果是简单的排除，可以使用exclude = LIST。<br>这里的排除规则写法与原生rsync有点不同，更为简单：<br>o    监控路径里的任何部分匹配到一个文本，都会被排除，例如/bin/foo/bar可以匹配规则foo<br>o    如果规则以斜线/开头，则从头开始要匹配全部<br>o    如果规则以/结尾，则要匹配监控路径的末尾<br>o    ?匹配任何字符，但不包括/<br>o    </em>匹配0或多个字符，但不包括/<br>o    *<em>匹配0或多个字符，可以是/<br>•    delete 为了保持target与souce完全同步，Lsyncd默认会delete = true来允许同步删除。它除了false，还有startup、running值，请参考 Lsyncd 2.1.x ‖ Layer 4 Config ‖ Default Behavior。<br>rsync<br>（提示一下，delete和exclude本来都是rsync的选项，上面是配置在sync中的，我想这样做的原因是为了减少rsync的开销）<br>•    bwlimit 限速，单位kb/s，与rsync相同（这么重要的选项在文档里竟然没有标出）<br>•    compress 压缩传输默认为true。在带宽与cpu负载之间权衡，本地目录同步可以考虑把它设为false<br>•    perms 默认保留文件权限。<br>•    其它rsync的选项<br>其它还有rsyncssh模式独有的配置项，如host、targetdir、rsync_path、password_file，见后文示例。rsyncOps={“-avz”,”–delete”}这样的写法在2.1.</em>版本已经不支持。<br>lsyncd.conf可以有多个sync，各自的source，各自的target，各自的模式，互不影响。</p>
-<p>settings {<br>    logfile =”/usr/local/lsyncd-2.1.5/var/lsyncd.log”,<br>    statusFile =”/usr/local/lsyncd-2.1.5/var/lsyncd.status”,<br>    inotifyMode = “CloseWrite”,<br>    maxProcesses = 8,<br>    }</p>
-<p>– I. 本地目录同步，direct：cp/rm/mv。 适用：500+万文件，变动不大<br>sync {<br>    default.direct,<br>    source    = “/tmp/src”,<br>    target    = “/tmp/dest”,<br>    delay = 1<br>    maxProcesses = 1<br>    }</p>
-<p>– II. 本地目录同步，rsync模式：rsync<br>sync {<br>    default.rsync,<br>    source    = “/tmp/src”,<br>    target    = “/tmp/dest1”,<br>    excludeFrom = “/etc/rsyncd.d/rsync_exclude.lst”,<br>    rsync     = {<br>        binary = “/usr/bin/rsync”,<br>        archive = true,<br>        compress = true,<br>        bwlimit   = 2000<br>        }<br>    }</p>
-<p>– III. 远程目录同步，rsync模式 + rsyncd daemon<br>sync {<br>    default.rsync,<br>    source    = “/tmp/src”,<br>    target    = “<a href="mailto:syncuser@172.29.88.223" target="_blank" rel="noopener">syncuser@172.29.88.223</a>::module1”,<br>    delete=”running”,<br>    exclude = { “.*”, “.tmp” },<br>    delay = 30,<br>    init = false,<br>    rsync     = {<br>        binary = “/usr/bin/rsync”,<br>        archive = true,<br>        compress = true,<br>        verbose   = true,<br>        password_file = “/etc/rsyncd.d/rsync.pwd”,<br>        _extra    = {“–bwlimit=200”}<br>        }<br>    }</p>
-<p>– IV. 远程目录同步，rsync模式 + ssh shell<br>sync {<br>    default.rsync,<br>    source    = “/tmp/src”,<br>    target    = “172.29.88.223:/tmp/dest”,<br>    – target    = “<a href="mailto:root@172.29.88.223" target="_blank" rel="noopener">root@172.29.88.223</a>:/remote/dest”,<br>    – 上面target，注意如果是普通用户，必须拥有写权限<br>    maxDelays = 5,<br>    delay = 30,<br>    – init = true,<br>    rsync     = {<br>        binary = “/usr/bin/rsync”,<br>        archive = true,<br>        compress = true,<br>        bwlimit   = 2000<br>        – rsh = “/usr/bin/ssh -p 22 -o StrictHostKeyChecking=no”<br>        – 如果要指定其它端口，请用上面的rsh<br>        }<br>    }</p>
-<p>– V. 远程目录同步，rsync模式 + rsyncssh，效果与上面相同<br>sync {<br>    default.rsyncssh,<br>    source    = “/tmp/src2”,<br>    host      = “172.29.88.223”,<br>    targetdir = “/remote/dir”,<br>    excludeFrom = “/etc/rsyncd.d/rsync_exclude.lst”,<br>    – maxDelays = 5,<br>    delay = 0,<br>    – init = false,<br>    rsync    = {<br>        binary = “/usr/bin/rsync”,<br>        archive = true,<br>        compress = true,<br>        verbose   = true,<br>        _extra = {“–bwlimit=2000”},<br>        },<br>    ssh      = {<br>        port  =  1234<br>        }<br>    }</p>
-
+（提示一下，delete和exclude本来都是rsync的选项，上面是配置在sync中的，我想这样做的原因是为了减少rsync的开销）
+•    bwlimit 限速，单位kb/s，与rsync相同（这么重要的选项在文档里竟然没有标出）
+•    compress 压缩传输默认为true。在带宽与cpu负载之间权衡，本地目录同步可以考虑把它设为false
+•    perms 默认保留文件权限。
+•    其它rsync的选项
+其它还有rsyncssh模式独有的配置项，如host、targetdir、rsync_path、password_file，见后文示例。rsyncOps={&quot;-avz&quot;,&quot;--delete&quot;}这样的写法在2.1.*版本已经不支持。
+lsyncd.conf可以有多个sync，各自的source，各自的target，各自的模式，互不影响。
+</code></pre>
       
     </div>
 
@@ -594,8 +614,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/nginx/magento/Magento 文件夹及文件权限/" rel="next" title="Magento 文件夹及文件权限">
-                <i class="fa fa-chevron-left"></i> Magento 文件夹及文件权限
+              <a href="/windows/winrar 命令行使用/" rel="next" title="winrar 命令行使用">
+                <i class="fa fa-chevron-left"></i> winrar 命令行使用
               </a>
             
           </div>
@@ -680,7 +700,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -763,7 +783,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">35</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -858,7 +886,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">41</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -894,7 +930,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#yum-–enablerepo-epel-y-install-lsyncd"><span class="nav-number">1.</span> <span class="nav-text">yum –enablerepo=epel -y install lsyncd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lsyncd-–version"><span class="nav-number">2.</span> <span class="nav-text">lsyncd –version</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yum-安装-lsyncd"><span class="nav-number">2.</span> <span class="nav-text">yum 安装 lsyncd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">3.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lsyncd-conf配置选项说明"><span class="nav-number">4.</span> <span class="nav-text">lsyncd.conf配置选项说明</span></a></li></ol></div>
             
 
           </div>

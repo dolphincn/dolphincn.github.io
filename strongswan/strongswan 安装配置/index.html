@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="配置epel源12345678910111213cat &amp;gt; /etc/yum.repos.d/epel.repo &amp;lt;&amp;lt; EOF   [epel]   name=Extra Packages for Enterprise Linux 7 - \$basearch   #baseurl=http://download.fedoraproject.org/pub/epel/7/\$ba">
+<meta name="keywords" content="strongswan,ipsec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="strongswan 安装配置">
+<meta property="og:url" content="http://dolphincn.github.io/strongswan/strongswan 安装配置/index.html">
+<meta property="og:site_name" content="克隆人战争">
+<meta property="og:description" content="配置epel源12345678910111213cat &amp;gt; /etc/yum.repos.d/epel.repo &amp;lt;&amp;lt; EOF   [epel]   name=Extra Packages for Enterprise Linux 7 - \$basearch   #baseurl=http://download.fedoraproject.org/pub/epel/7/\$ba">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-25T03:50:46.462Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="strongswan 安装配置">
+<meta name="twitter:description" content="配置epel源12345678910111213cat &amp;gt; /etc/yum.repos.d/epel.repo &amp;lt;&amp;lt; EOF   [epel]   name=Extra Packages for Enterprise Linux 7 - \$basearch   #baseurl=http://download.fedoraproject.org/pub/epel/7/\$ba">
+
+
+
+
+
+
+  <link rel="canonical" href="http://dolphincn.github.io/strongswan/strongswan 安装配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>strongswan 安装配置 | 克隆人战争</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">克隆人战争</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">为了生存, 为了私利,<br/>争斗才是人类历史的主旋律！</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/strongswan/strongswan 安装配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">strongswan 安装配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-23 10:10:00" itemprop="dateCreated datePublished" datetime="2018-07-23T10:10:00+08:00">2018-07-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-25 11:50:46" itemprop="dateModified" datetime="2018-07-25T11:50:46+08:00">2018-07-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/strongswan/" itemprop="url" rel="index"><span itemprop="name">strongswan</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="配置epel源"><a href="#配置epel源" class="headerlink" title="配置epel源"></a>配置epel源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">   [epel]</span><br><span class="line">   name=Extra Packages <span class="keyword">for</span> Enterprise Linux 7 - \<span class="variable">$basearch</span></span><br><span class="line">   <span class="comment">#baseurl=http://download.fedoraproject.org/pub/epel/7/\$basearch</span></span><br><span class="line">   baseurl=http://dl.fedoraproject.org/pub/epel/7Server/x86_64/</span><br><span class="line">   failovermethod=priority</span><br><span class="line">   enabled=1</span><br><span class="line">   gpgcheck=1</span><br><span class="line">   gpgkey=http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server</span><br><span class="line"></span><br><span class="line">   EOF</span><br></pre></td></tr></table></figure>
+<h2 id="安装Strongswan"><a href="#安装Strongswan" class="headerlink" title="安装Strongswan"></a>安装Strongswan</h2><pre><code>yum -y install strongswan openssl openssl-devel
+</code></pre><a id="more"></a>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">   <span class="comment">## 开启转发</span></span><br><span class="line">   net.ipv4.ip_forward=1</span><br><span class="line">   net.ipv6.conf.all.forwarding=1</span><br><span class="line"><span class="comment">## 禁止重定向，比如禁止ICMP重定向报文</span></span><br><span class="line">   net.ipv4.conf.all.accept_redirects = 0</span><br><span class="line">   net.ipv4.conf.all.send_redirects = 0</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+<h2 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h2><pre><code>firewall-cmd --permanent --add-service=ipsec
+firewall-cmd --permanent --add-masquerade
+firewall-cmd --reload
+
+
+cat /usr/lib/firewalld/services/ipsec.xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;service&gt;
+&lt;short&gt;IPsec&lt;/short&gt;
+&lt;description&gt;Internet Protocol Security (IPsec) incorporates security for network transmissions directly into the Internet Protocol (IP). IPsec provides methods for both encrypting data and authentication for the host or network it sends to. If you plan to use a vpnc server or FreeS/WAN, do not disable this option.&lt;/description&gt;
+&lt;port protocol=&quot;ah&quot; port=&quot;&quot;/&gt;
+&lt;port protocol=&quot;esp&quot; port=&quot;&quot;/&gt;
+&lt;port protocol=&quot;udp&quot; port=&quot;500&quot;/&gt;
+&lt;port protocol=&quot;udp&quot; port=&quot;4500&quot;/&gt;
+&lt;/service&gt;
+
+
+
+## 或者
+
+  #启用ip伪装
+
+# firewall-cmd --permanen --add-rich-rule=&apos;rule family=&quot;ipv4&quot; source address=&quot;10.100.100.0/24&quot; masquerade&apos;
+
+#添加 nat 转发
+
+# firewall-cmd --permanen --add-rich-rule=&apos;rule family=&quot;ipv4&quot; source address=&quot;10.100.100.0/24&quot; forward-port port=&quot;4500&quot; protocol=&quot;udp&quot; to-port=&quot;4500&quot;&apos;
+
+# firewall-cmd --permanen --add-rich-rule=&apos;rule family=&quot;ipv4&quot; source address=&quot;10.100.100.0/24&quot; forward-port port=&quot;500&quot; protocol=&quot;udp&quot; to-port=&quot;500&quot;&apos;
+</code></pre><h2 id="配置文件ipsec-conf"><a href="#配置文件ipsec-conf" class="headerlink" title="配置文件ipsec.conf"></a>配置文件ipsec.conf</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;/etc/strongswan/ipsec.conf &lt;&lt;EOF</span><br><span class="line"></span><br><span class="line">config setup</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 如果同一个用户在不同的设备上重复登录,yes 断开旧连接,创建新连接;</span></span><br><span class="line">        <span class="comment">## no 保持旧连接,并发送通知; </span></span><br><span class="line">        <span class="comment">## never 同 no, 但不发送通知.</span></span><br><span class="line">        uniqueids=yes</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 开启调试，记录日志</span></span><br><span class="line">        <span class="comment"># charondebug="cfg 2, dmn 2, ike 2, net 0"</span></span><br><span class="line"></span><br><span class="line">conn %default</span><br><span class="line">        ikelifetime=120m</span><br><span class="line">        keylife=30m</span><br><span class="line">        rekeymargin=3m</span><br><span class="line">        keyingtries=1</span><br><span class="line">        keyexchange=ike</span><br><span class="line">        </span><br><span class="line">        compress = yes                  <span class="comment">#是否启用压缩, yes 表示如果支持压缩会启用.    </span></span><br><span class="line"></span><br><span class="line">        dpdaction = hold                <span class="comment">#当意外断开后尝试的操作, hold, 保持并重连直到超时.</span></span><br><span class="line">    </span><br><span class="line">        dpddelay = 30s                  <span class="comment">#意外断开后尝试重连时长</span></span><br><span class="line"></span><br><span class="line">        dpdtimeout = 60s                <span class="comment">#意外断开后超时时长, 只对 IKEv1 起作用</span></span><br><span class="line">    </span><br><span class="line">        inactivity = 300s               <span class="comment">#闲置时长,超过后断开连接.</span></span><br><span class="line"></span><br><span class="line">        left = %any                     <span class="comment">#服务端公网ip, 可以是魔术字 %any，表示从本地ip地址表中取.</span></span><br><span class="line"></span><br><span class="line">        right = %any                    <span class="comment">#客户端ip, 同上</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#指定服务端与客户端的dns, 多个用","分隔</span></span><br><span class="line">        leftdns = 8.8.8.8,8.8.4.4</span><br><span class="line">        rightdns = 8.8.8.8,8.8.4.4</span><br><span class="line"></span><br><span class="line">        <span class="comment">#leftikeport = &lt;port&gt;           #服务端用于ike认证时使用的端口, 默认为500,如果使用了nat 转发, 则使用4500</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#leftsourceip = %config         #服务器端虚拟ip地址</span></span><br><span class="line">    </span><br><span class="line">        rightsourceip = 10.100.100.0/24  <span class="comment">#客户端虚拟ip段</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment">#服务器端子网, 魔术字 0.0.0.0/0. 如果为客户端分配虚拟 IP 地址的话，那表示之后要做 iptables 转发，那么服务器端就必须是用魔术字</span></span><br><span class="line">        leftsubnet = 0.0.0.0/0</span><br><span class="line">        <span class="comment">#rightsubnet = &lt;ip subnet&gt;[[&lt;proto/port&gt;]][,...]</span></span><br><span class="line"></span><br><span class="line">conn ikev1-ipsec</span><br><span class="line">        keyexchange=ikev1</span><br><span class="line">        fragmentation=yes            <span class="comment">#开启对 iOS 拆包的重组支持</span></span><br><span class="line"></span><br><span class="line">        left=%defaultroute</span><br><span class="line">        leftsubnet=0.0.0.0/0</span><br><span class="line">        leftfirewall=yes</span><br><span class="line"></span><br><span class="line">        right=%any</span><br><span class="line">        rightsourceip=10.100.100.0/24</span><br><span class="line"></span><br><span class="line">        <span class="comment">#authby=xauthpsk</span></span><br><span class="line">        <span class="comment">#xauth=server</span></span><br><span class="line"></span><br><span class="line">        leftauth=psk</span><br><span class="line">        rightauth=psk</span><br><span class="line">        rightauth2=xauth</span><br><span class="line"></span><br><span class="line">        auto=add</span><br><span class="line"></span><br><span class="line">conn ikev2-eap-tls-wall</span><br><span class="line">        keyexchange=ikev2</span><br><span class="line">        fragmentation=yes                           <span class="comment">#开启IKE 消息分片，开启对 iOS 拆包的重组支持</span></span><br><span class="line">        ike=aes256-sha1-modp1024,aes128-sha1-modp1024,3des-sha1-modp1024!</span><br><span class="line">        esp=aes256-sha256,aes256-sha1,3des-sha1!</span><br><span class="line"></span><br><span class="line">        <span class="comment">#leftca="C=CA, O=WORKER, CN=WORKER CA"      #服务器端根证书DN名称，可以不需设置</span></span><br><span class="line">        leftca=caCert.pem                           <span class="comment">#服务器端根证书,功能同上，可以不需设置</span></span><br><span class="line">        leftsigkey=serverPubKey.pem                 <span class="comment">#指定服务器证书的公钥，可以不需设置</span></span><br><span class="line">        leftcert=serverCert.pem                     <span class="comment">#服务器证书, 可以是 PEM 或 DER 格式        </span></span><br><span class="line">        leftauth=pubkey                             <span class="comment">#服务端认证方法,使用证书</span></span><br><span class="line">        </span><br><span class="line">        leftid=@wall.suroot.com                     <span class="comment">#IKEID (group name) used for vpn client,服务端id, 可以任意指定, 默认为服务器证书的 subject, 还可以是魔术字 %any，表示什么都行.</span></span><br><span class="line">        left=%defaultroute                          <span class="comment">#local IP used to connect to vpn client, 就是连接vpn客户端的网卡IP. 服务端公网ip, 可以是魔术字 %any，表示从本地ip地址表中取.</span></span><br><span class="line">        leftsubnet=0.0.0.0/0                        <span class="comment">#服务器端子网, 魔术字 0.0.0.0/0. 如果为客户端分配虚拟 IP 地址的话，那表示之后要做 iptables 转发，那么服务器端就必须是用魔术字</span></span><br><span class="line">        leftfirewall=yes</span><br><span class="line">        leftsendcert=always                         <span class="comment">#是否发送服务器证书到客户端</span></span><br><span class="line"></span><br><span class="line">        right=%any</span><br><span class="line">        rightid=@wallclient                         <span class="comment">#客户端id, 任意</span></span><br><span class="line">        rightsourceip=10.100.100.0/24               <span class="comment">#客户端虚拟ip段</span></span><br><span class="line">        <span class="comment">#rightsubnet = &lt;ip subnet&gt;[[&lt;proto/port&gt;]][,...]</span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        rightauth=eap-tls                           </span><br><span class="line">        rightsendcert=never                         <span class="comment">#客户端不发送证书</span></span><br><span class="line">        rightsigkey=clientPubKey.pem                <span class="comment">#指定客户端公钥，可以不需设置</span></span><br><span class="line">        rightcert=clientCert.pem                    <span class="comment">#指定客户端证书路径</span></span><br><span class="line">        <span class="comment">#eap_identity=%any                           #对windows有用，设置windows rightid</span></span><br><span class="line">        auto=add                                    <span class="comment">#当服务启动时, 应该如何处理这个连接项. add 添加到连接表中.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 用于windows认证</span></span><br><span class="line">conn ikev2-eap-mschapv2-win</span><br><span class="line">        keyexchange=ikev2</span><br><span class="line">        ike=aes256-sha1-modp1024,aes128-sha1-modp1024,3des-sha1-modp1024!</span><br><span class="line">        esp=aes256-sha256,aes256-sha1,3des-sha1!</span><br><span class="line">        rekey=no                                    <span class="comment">#不自动重置密钥,服务器对 Windows 发出 rekey 请求会断开连接</span></span><br><span class="line">        fragmentation=yes</span><br><span class="line"></span><br><span class="line">        <span class="comment">#leftca="C=CA, O=WORKER, CN=WORKER CA"</span></span><br><span class="line">        leftca=caCert.pem</span><br><span class="line">        leftcert=serverCert.pem</span><br><span class="line">        leftsigkey=serverPubKey.pem</span><br><span class="line">        leftauth=pubkey</span><br><span class="line">        </span><br><span class="line">        leftid=@wall.suroot.com</span><br><span class="line">        left=%defaultroute</span><br><span class="line">        leftsubnet=0.0.0.0/0</span><br><span class="line">        leftfirewall=yes</span><br><span class="line">        leftsendcert=always</span><br><span class="line"></span><br><span class="line">        right=%any</span><br><span class="line">        rightid = %any</span><br><span class="line">        eap_identity=%any</span><br><span class="line">        rightsourceip=10.100.100.0/24</span><br><span class="line">        <span class="comment">#rightsubnet = &lt;ip subnet&gt;[[&lt;proto/port&gt;]][,...]</span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        rightauth=eap-mschapv2                      <span class="comment">#客户端认证使用 EAP 扩展认证 , 貌似 eap-mschapv2 比较通用</span></span><br><span class="line">        rightsendcert=never                         <span class="comment">#客户端不发送证书</span></span><br><span class="line">        <span class="comment">#rightsigkey = &lt;raw public key&gt; | &lt;path to public key&gt;</span></span><br><span class="line">        <span class="comment">#rightcert = &lt;path&gt;                        #不指定客户端证书路径</span></span><br><span class="line"></span><br><span class="line">        auto=add</span><br><span class="line"></span><br><span class="line"><span class="comment">## 站点到站点模式</span></span><br><span class="line">conn tunnel</span><br><span class="line"></span><br><span class="line">    left=%defaultroute</span><br><span class="line">    leftsubnet=0.0.0.0/0</span><br><span class="line">    leftfirewall=yes</span><br><span class="line"></span><br><span class="line">    right=139.219.239.51</span><br><span class="line">    rightsubnet=192.168.222.0/26</span><br><span class="line"></span><br><span class="line">    keyexchange=ikev2</span><br><span class="line">    ike=aes256-sha2_256-modp1024!</span><br><span class="line">    esp=aes256-sha2_256!</span><br><span class="line">    authby=secret</span><br><span class="line">    keyingtries=0</span><br><span class="line"></span><br><span class="line">    ikelifetime=1h</span><br><span class="line">    lifetime=8h</span><br><span class="line">    dpddelay=30</span><br><span class="line">    dpdtimeout=120</span><br><span class="line">    dpdaction=clear</span><br><span class="line">    </span><br><span class="line">    auto=add </span><br><span class="line"></span><br><span class="line">    <span class="built_in">type</span>=tunnel</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="密码配置文件"><a href="#密码配置文件" class="headerlink" title="密码配置文件"></a>密码配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;/etc/strongswan/ipsec.secrets &lt;&lt;EOF</span><br><span class="line">   <span class="comment">## RSA PSK 需要分别对应客户端认证密码</span></span><br><span class="line">   : RSA serverKey.pem</span><br><span class="line">   : RSA clientKey.pem</span><br><span class="line">   : PSK <span class="string">"test1234"</span></span><br><span class="line">   user1 %any : EAP <span class="string">"test1234"</span></span><br><span class="line">   user2 %any : EAP <span class="string">"test1234"</span></span><br><span class="line">   user1 %any : XAUTH <span class="string">"test1234"</span></span><br><span class="line">   user2 %any : XAUTH <span class="string">"test1234"</span></span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="配置文件strongswan-conf"><a href="#配置文件strongswan-conf" class="headerlink" title="配置文件strongswan.conf"></a>配置文件strongswan.conf</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt;/etc/strongswan/strongswan.conf &lt;&lt;EOF</span><br><span class="line">charon &#123;</span><br><span class="line">	load_modular = yes</span><br><span class="line">	duplicheck.enable = no                          <span class="comment">#冗余检查关闭，以允许同时连接多个设备</span></span><br><span class="line">	compress = yes                                  <span class="comment">#传输启用压缩</span></span><br><span class="line">	plugins &#123;</span><br><span class="line">		include strongswan.d/charon/*.conf</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	dns1 = 8.8.8.8                                  <span class="comment">#给远程端指定DNS服务器</span></span><br><span class="line">	dns2 = 8.8.4.4</span><br><span class="line">	nbns1 = 8.8.8.8                                 <span class="comment">#指定Windows的WINS服务器</span></span><br><span class="line">	nbns2 = 8.8.4.4</span><br><span class="line"></span><br><span class="line">	filelog &#123;                                       <span class="comment">#配置strongSwan日志级别和路径</span></span><br><span class="line">		/var/<span class="built_in">log</span>/strongswan.log &#123;</span><br><span class="line">               time_format = %b %e %T</span><br><span class="line">               default = 5   <span class="comment"># 日志最高等级5</span></span><br><span class="line">               append = no</span><br><span class="line">               flush_line = yes</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">include strongswan.d/*.conf</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="生成服务器和客户端证书"><a href="#生成服务器和客户端证书" class="headerlink" title="生成服务器和客户端证书"></a>生成服务器和客户端证书</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash</span></span><br><span class="line"></span><br><span class="line">serverCN=<span class="string">"wall.suroot.com"</span></span><br><span class="line">serverIP=<span class="string">"104.194.86.148"</span></span><br><span class="line">clientCN=<span class="string">"wallclient"</span></span><br><span class="line"></span><br><span class="line">dn=<span class="string">"C=CA, O=WORKER, CN="</span></span><br><span class="line">ca_dn=<span class="string">"<span class="variable">$&#123;dn&#125;</span>WORKER CA"</span></span><br><span class="line">server_dn=<span class="string">"<span class="variable">$&#123;dn&#125;</span><span class="variable">$&#123;serverCN&#125;</span>"</span></span><br><span class="line">client_dn=<span class="string">"<span class="variable">$&#123;dn&#125;</span><span class="variable">$&#123;clientCN&#125;</span>"</span></span><br><span class="line"></span><br><span class="line">days=3650</span><br><span class="line"></span><br><span class="line">ipsec_d=<span class="string">"/etc/strongswan/ipsec.d"</span></span><br><span class="line">caKeyfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/private/caKey.pem"</span></span><br><span class="line">caCertfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/cacerts/caCert.pem"</span></span><br><span class="line"></span><br><span class="line">serverKeyfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/private/serverKey.pem"</span></span><br><span class="line">serverPubKeyfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/certs/serverPubKey.pem"</span></span><br><span class="line">serverCertfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/certs/serverCert.pem"</span></span><br><span class="line"></span><br><span class="line">clientKeyfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/private/clientKey.pem"</span></span><br><span class="line">clientPubKeyfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/certs/clientPubKey.pem"</span></span><br><span class="line">clientCertfile=<span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/certs/clientCert.pem"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成CA证书:</span></span><br><span class="line"><span class="comment">#生成一个私钥</span></span><br><span class="line">strongswan pki --gen --<span class="built_in">type</span> rsa --size 4096 --outform pem &gt; <span class="variable">$&#123;caKeyfile&#125;</span></span><br><span class="line"><span class="comment">#使用私钥生成自签名根证书</span></span><br><span class="line">strongswan pki --self --ca --lifetime <span class="variable">$&#123;days&#125;</span> --<span class="keyword">in</span> <span class="variable">$&#123;caKeyfile&#125;</span> --<span class="built_in">type</span> rsa --dn <span class="string">"<span class="variable">$&#123;ca_dn&#125;</span>"</span> --outform pem &gt; <span class="variable">$&#123;caCertfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 显示CA证书内容</span></span><br><span class="line">strongswan pki --<span class="built_in">print</span> --<span class="keyword">in</span> <span class="variable">$&#123;caCertfile&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成服务端证书:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成一个私钥</span></span><br><span class="line">strongswan pki --gen --<span class="built_in">type</span> rsa --size 2048 --outform pem &gt; <span class="variable">$&#123;serverKeyfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#用私钥生成公钥</span></span><br><span class="line">strongswan pki --pub --<span class="keyword">in</span> <span class="variable">$&#123;serverKeyfile&#125;</span> --<span class="built_in">type</span> rsa --outform pem &gt; <span class="variable">$&#123;serverPubKeyfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#用根证书给公钥签名生成服务器证书</span></span><br><span class="line">strongswan pki --issue --lifetime <span class="variable">$&#123;days&#125;</span> --cacert <span class="variable">$&#123;caCertfile&#125;</span> --cakey <span class="variable">$&#123;caKeyfile&#125;</span> --<span class="keyword">in</span> <span class="variable">$&#123;serverPubKeyfile&#125;</span> --dn <span class="string">"<span class="variable">$&#123;server_dn&#125;</span>"</span> --san=<span class="string">"<span class="variable">$&#123;serverCN&#125;</span>"</span> --san=<span class="string">"<span class="variable">$&#123;serverIP&#125;</span>"</span> --flag serverAuth --flag ikeIntermediate --outform pem &gt; <span class="variable">$&#123;serverCertfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 显示服务器证书内容</span></span><br><span class="line">strongswan pki --<span class="built_in">print</span> --<span class="keyword">in</span> <span class="variable">$&#123;serverCertfile&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成客户端证书:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成一个私钥</span></span><br><span class="line">strongswan pki --gen --<span class="built_in">type</span> rsa --size 2048 --outform pem &gt; <span class="variable">$&#123;clientKeyfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#用私钥生成公钥</span></span><br><span class="line">strongswan pki --pub --<span class="keyword">in</span> <span class="variable">$&#123;clientKeyfile&#125;</span> --<span class="built_in">type</span> rsa --outform pem &gt; <span class="variable">$&#123;clientPubKeyfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#用根证书给公钥签名生成服务器证书</span></span><br><span class="line">strongswan pki --issue --lifetime <span class="variable">$&#123;days&#125;</span> --cacert <span class="variable">$&#123;caCertfile&#125;</span> --cakey <span class="variable">$&#123;caKeyfile&#125;</span> --<span class="keyword">in</span> <span class="variable">$&#123;clientPubKeyfile&#125;</span> --dn <span class="string">"<span class="variable">$&#123;client_dn&#125;</span>"</span> --san <span class="variable">$&#123;clientCN&#125;</span>  --flag clientAuth --outform pem &gt; <span class="variable">$&#123;clientCertfile&#125;</span></span><br><span class="line"></span><br><span class="line">strongswan pki --<span class="built_in">print</span> --<span class="keyword">in</span> <span class="variable">$&#123;clientCertfile&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#为iPhone生成一个p12格式的客户端证书</span></span><br><span class="line">openssl pkcs12 -<span class="built_in">export</span> -inkey <span class="variable">$&#123;clientKeyfile&#125;</span> -<span class="keyword">in</span> <span class="variable">$&#123;clientCertfile&#125;</span> -name <span class="string">"<span class="variable">$&#123;clientCN&#125;</span>"</span> -certfile <span class="variable">$&#123;caCertfile&#125;</span> -caname <span class="string">"<span class="variable">$&#123;serverCN&#125;</span>"</span> -out <span class="variable">$&#123;clientCertfile&#125;</span>.p12</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 变更证书权限</span></span><br><span class="line">chmod -R 0600 <span class="string">"<span class="variable">$&#123;ipsec_d&#125;</span>/private/"</span></span><br></pre></td></tr></table></figure>
+<h2 id="重启strongswan"><a href="#重启strongswan" class="headerlink" title="重启strongswan"></a>重启strongswan</h2><pre><code>systemctl restart strongswan
+
+systemctl enabble strongswan
+</code></pre><h2 id="显示当前接入动态信息"><a href="#显示当前接入动态信息" class="headerlink" title="显示当前接入动态信息"></a>显示当前接入动态信息</h2><pre><code>swanctl --log
+</code></pre><h2 id="iptables-配置方法"><a href="#iptables-配置方法" class="headerlink" title="iptables 配置方法"></a>iptables 配置方法</h2><pre><code>firewalld 要比 iptables 占太多内存. 小内存的 vps 用 firewalld 有点奢侈. 还是换回 iptables 了.
+
+将下面几条规则加入 iptables 规则中, 适当使用 -I 参数替换 -A 参数, 确保所有的项目位置都在拒绝项前面.
+
+
+#开放端口
+iptables -A INPUT -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -p udp --dport 4500 -j ACCEPT
+
+#启用ip伪装
+iptables -t nat -I POSTROUTING -s 10.1.0.0/16 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE
+
+#添加转发
+iptables -A FORWARD -s 10.1.0.0/16 -j ACCEPT
+
+#保存规则
+service iptables save
+
+#重启服务
+systemctl restart iptables
+
+
+如果嫌上面的操作麻烦, 可以直接编辑 iptables 规则文件.
+
+# vi /etc/sysconfig/iptables
+
+将下面的规则部分贴进去, 不要整个复制粘贴,  根据原有规则适当调整每条规则的位置, 确保规则在拒绝项前, 使之能生效.
+
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 10.1.0.0/16 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
+-A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE
+COMMIT
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -p udp -m udp --dport 500 -j ACCEPT
+-A INPUT -p udp -m udp --dport 4500 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -s 10.1.0.0/16 -j ACCEPT
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+
+保存退出, 重启 iptables 使之生效.
+
+# systemctl restart iptables
+</code></pre><h2 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h2><h3 id="证书使用配置说名"><a href="#证书使用配置说名" class="headerlink" title="证书使用配置说名"></a>证书使用配置说名</h3><pre><code>. IKEv2有两个很总要的信息需要确认，一个是数字证书，证书必须正确配置ca、crt和key三个文件。其中服务器证书serverCert.crt中subject DN或subjectAltName字段必须包含服务器的IP或域名。
+
+. left|rightid应该在用户认证过程中进行鉴别，同时left|rightcert的值应该是left|rightcert数字证书中的subject DN或subjectAltName中的值。left|rightid可以是IP地址、域名、邮箱地址甚至是证书中可以辨识的名称。
+</code></pre><h3 id="生成证书说明"><a href="#生成证书说明" class="headerlink" title="生成证书说明"></a>生成证书说明</h3><pre><code>生成证书
+
+# mkdir /cert &amp;&amp; cd /cert
+
+下面所有的(--type rsa --size 2048|4096 )可以省略, me.touzhi.work 可以换成IP 地址
+</code></pre><p>  1) 生成 CA 根证书</p>
+<pre><code>A. 生成一个私钥，用于CA证书自签:
+
+yum安装的strongswan，命令已经变成&quot;strongswan --help&quot;了，而手动编译的还是&quot;ipsec --help&quot;，不要弄混，否则就是命令不存在了。
+
+# strongswan pki --gen --type rsa --size 4096 --outform pem &gt; ca_key.pem
+</code></pre><p>   B. 基于这个私钥自己签一个 CA 根证书：</p>
+<pre><code># strongswan pki --self --ca --flag serverAuth --lifetime 3650 --in ca_key.pem --type rsa --dn &quot;C=CN, O=WTO, CN=me.touzi.work&quot;  --outform pem &gt;ca_cert.pem
+
+–self 表示自签证书
+–in 是输入的私钥
+–dn 是判别名
+
+    C 表示国家名，同样还有 ST 州/省名，L 地区名，STREET（全大写） 街道名
+    O 组织名称
+    CN 友好显示的通用名
+
+–ca 表示生成 CA 根证书
+–lifetime 为有效期, 单位是天
+</code></pre><p>   C. 显示CA 根证书内容</p>
+<pre><code># strongswan pki --print --in ca_cert.pem
+</code></pre><p>  2) 生成服务器端证书</p>
+<p>   A. 生成一个私钥，用于服务端证书自签</p>
+<pre><code># strongswan pki --gen --type rsa --size 2048 --outform pem &gt; server_key.pem  
+</code></pre><p>   B. 从私钥生成公钥</p>
+<pre><code># strongswan pki --pub --in server_key.pem --type rsa --outform pem &gt; server_pub.pem
+</code></pre><p>   C. 用刚生成的公钥生成服务器证书</p>
+<pre><code># strongswan pki --issue --lifetime 1200 --in server_pub.pem \
+--cacert ca_cert.pem --cakey ca_key.pem --dn &quot;C=CN, O=WTO, CN=me.touzi.work&quot; \
+--san=&quot;me.touzi.work&quot; --san &quot;162.219.120.136&quot; --flag serverAuth --flag ikeIntermediate --outform pem &gt; server_cert.pem
+
+
+–issue, –cacert 和 –cakey 就是表明要用刚才自签的 CA 证书来签这个服务器证书。
+
+–dn, –san，–flag 是一些客户端方面的特殊要求：
+
+. iOS 客户端要求 CN 也就是通用名必须是你的服务器的 URL 或 IP 地址;
+
+. Windows 7 不但要求了上面，还要求必须显式说明这个服务器证书的用途（用于与服务器进行认证），–flag serverAuth;
+
+. 非 iOS 的 Mac OS X 要求了“IP 安全网络密钥互换居间（IP Security IKE Intermediate）”这种增强型密钥用法（EKU），–flag ikdeIntermediate;
+
+. Android 和 iOS 都要求服务器别名（serverAltName）就是服务器的 URL 或 IP 地址，–san。
+
+所以这里C、O的值要跟第一步的一致，CN值及--san值是服务器公网地址或url,另外这里可以设置多个--san值。否则会出现错误 13801:IKE身份验证凭证不可接受.
+</code></pre><p>   D. 显示服务器证书内容</p>
+<pre><code># strongswan pki --print --in server_cert.pem
+</code></pre><p>  3) 生成客户端证书(可选), 如果需要很高的安全性, 可以用客户端证书</p>
+<p>   A 生成客户端证书的私钥</p>
+<pre><code># strongswan pki --gen --type rsa --size 2048 --outform pem &gt; client_key.pem
+</code></pre><p>  6) 用CA证书签发客户端证书</p>
+<p>   A. 从私钥生成公钥</p>
+<pre><code># strongswan pki --pub --in client_key.pem --type rsa --outform pem &gt; client_pub.pem
+</code></pre><p>   B. 签发客户端证书,这里就不需要上面那一堆特殊参数了</p>
+<pre><code># strongswan pki --issue --in client_pub.pem \
+--cacert ca_cert.pem --cakey ca_key.pem --dn &quot;C=CN, O=WTO, CN=dolphin@126.com&quot; \
+--san dolphin@126.com --lifetime 1200 --outform pem &gt; client_cert.pem
+
+--flag serverAuth --flag ikeIntermediate
+--san dolphin@126.com 可以省略,--san CN= 可以是邮箱地址，也可以是me.touzhi.work
+</code></pre><p>   C. 打包证书为 pkcs12，生成 pkcs12 证书</p>
+<pre><code># openssl pkcs12 -export -inkey client_key.pem -in client_cert.pem -name &quot;WTO Client&quot; \
+-certfile ca_cert.pem -caname &quot;me.touzi.work&quot;  -out client_cert.p12
+
+CA证书转换,以防部分客户端不支持
+
+# openssl x509 -inform PEM -outform DER -in ca_cert.pem -out ca.crt
+</code></pre><p>  8) 安装证书, 把证书复制到strongswan目录下</p>
+<pre><code># cp -r ca_key.pem /etc/strongswan/ipsec.d/private/
+# cp -r ca_cert.pem /etc/strongswan/ipsec.d/cacerts/
+# cp -r server_cert.pem /etc/strongswan/ipsec.d/certs/
+# cp -r server_key.pem /etc/strongswan/ipsec.d/private/
+# cp -r server_pub.pem /etc/strongswan/ipsec.d/certs/
+# cp -r client_cert.pem /etc/strongswan/ipsec.d/certs/
+# cp -r client_key.pem /etc/strongswan/ipsec.d/private/
+
+把 CA 证书(ca_cert.pem)、客户端证书(client_cert.pem)和 .p12 证书(client_cert.p12)用 FTP 复制出来给客户端用
+</code></pre><h3 id="配置验证方式的用户名与密码"><a href="#配置验证方式的用户名与密码" class="headerlink" title="配置验证方式的用户名与密码"></a>配置验证方式的用户名与密码</h3><pre><code>下面添加用户
+
+# vi /etc/strongswan/ipsec.secrets
+
+#使用证书验证时的服务器端私钥
+#格式 : RSA &lt;private key file&gt; [ &lt;passphrase&gt; | %prompt ]
+: RSA server_key.pem
+
+#使用预设加密密钥, 越长越好
+#格式 [ &lt;id selectors&gt; ] : PSK &lt;secret&gt;
+%any : PSK &quot;预设加密密钥&quot;
+
+
+#EAP 方式, 格式同 psk 相同
+用户名 : EAP &quot;密码&quot;
+
+#XAUTH 方式, 只适用于 IKEv1
+#格式 [ &lt;servername&gt; ] &lt;username&gt; : XAUTH &quot;&lt;password&gt;&quot;
+用户名 : XAUTH &quot;密码&quot;
+
+示例：
+
+创建了VPN用户john和他的密码。在添加用户的时候，请注意在冒号（：）左右两边都需要一个空格。
+
+: RSA server_key.pem  
+: PSK &quot;PSK_KEY&quot;  
+john %any : EAP &quot;John&apos;s Password&quot;  
+john %any : XAUTH &quot;John&apos;s Password&quot; 
+
+: RSA server_key.pem    #使用证书验证时的服务器端私钥
+: PSK &quot;123456&quot;           #使用预设密钥时, 8-63位ASCII字符
+: XAUTH &quot;123456&quot;         #这里是使用XAUTH验证时的用户名和密码
+VPN %any : EAP &quot;123456&quot; #这里是使用EAP验证时的用户名和密码
+</code></pre><h2 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h2><pre><code>在客户端安装(client_cert.p12,ca_cert.pem)两个证书如果你是使用iPhone, 可以通过邮件将这个两个证书发送到iPhone上然后安装。
+
+先下载安装一开始生成的CA证书ca_cert.pem,可能需要改扩展名,如ca.crt
+
+IOS 9.x:
+
+    类型 IKEv2
+    服务器是 IP 或是 URL
+    远程ID是 IP 或是 URL
+    账户和密码填 ipsec.secrets 里 EAP 前后的那两个
+
+IOS 9 以下:
+
+    类型 IPSec
+
+iPhone, Android, Windows PC都可以通过证书加密码的方式登录VPN；
+
+Mac OS X可以通过PSK key加密码的方式登录。
+</code></pre><p>  1) IOS:</p>
+<pre><code>先导入 CA 证书
+
+将之前创建的 ca_cert.pem 用 ftp 导出 , 写邮件以附件的方式发到邮箱, 在 ios 浏览器登录邮箱, 下载附件, 安装 ca 证书.
+
+1. 使用 IKEv2 + EAP 认证
+
+找到手机上 “设置-&gt;VPN-&gt;添加配置”, 选 IKEv2
+
+    描述: 随便填
+    服务器: 填url或ip
+    远程ID: ipsec.conf 中的 leftid
+    用户鉴定: 用户名
+    用户名: EAP 项用户名
+    密码: EAP 项密码
+
+2. 使用 IKEv2 + 客户端证书 认证
+
+把之前的 .p12 证书(里面包含ca证书)发到邮箱在手机上打开.  导入到手机(此时需要之前设置的证书密码).
+
+找到手机上 “设置-&gt;VPN-&gt;添加配置”, 选 IKEv2
+
+    描述: 随便填
+    服务器: 填url或ip
+    远程ID: ipsec.conf 中的 leftid
+    用户鉴定: 证书
+    证书: 选择安装完的客户端证书
+
+3. 使用 IKEv2 + 预设密钥 认证
+
+找到手机上 “设置-&gt;VPN-&gt;添加配置”, 选 IKEv2
+
+    描述: 随便填
+    服务器: 填url或ip
+    远程ID: ipsec.conf 中的 leftid
+    用户鉴定: 无
+    使用证书: 关
+    密钥: PSK 项密钥
+</code></pre><p>  2) Windows 10</p>
+<pre><code>导入证书：
+
+    将 CA 根证书 ca_cert.pem 重命名为 ca_cert.crt
+    双击 ca_cert.crt 开始安装证书
+    点击安装证书
+    “存储位置” 选择 “本地计算机”, 下一步
+    选择 “将所有的证书都放入下列存储区”, 点浏览, 选择 “受信任的根证书颁发机构”, 确定, 下一步, 完成.
+
+建立连接：
+
+    “控制面板”-“网络和共享中心”-“设置新的连接或网络”-“连接到工作区”-“使用我的 Internet 连接”
+    Internet 地址写服务器 IP 或 URL。
+    描述随便写。
+    用户名密码写之前配置的 EAP 的那个。
+    确定
+    转到 控制面板网络和 Internet网络连接
+    在新建的 VPN 连接上右键属性然后切换到“安全”选项卡
+    VPN 类型选 IKEv2
+    数据加密选“需要加密”
+    身份认证这里需要说一下，如果想要使用 EAP 认证的话就选择“Microsoft:安全密码(EAP-MSCHAP v2)”; 想要使用私人证书认证的话就选择“使用计算机证书”。
+    再切换到 “网络” 选项卡, 双击 “Internet 协议版本 4” 以打开属性窗口, 这里说一下, 如果你使用的是老版本的 win10, 可能会打不开属性窗口, 这是已知的 bug, 升级最新版本即可解决.
+    点击 “高级” 按钮, 勾选 “在远程网络上使用默认网关”, 确定退出.
+
+VPN 配置完成
+</code></pre><p>  3) Windows 7 导入证书略有不同</p>
+<pre><code>开始菜单搜索「cmd」，打开后输入 mmc（Microsoft 管理控制台）。
+「文件」-「添加/删除管理单元」，添加「证书」单元
+证书单元的弹出窗口中一定要选「计算机账户」，之后选「本地计算机」，确定。
+在左边的「控制台根节点」下选择「证书」-「受信任的根证书颁发机构」-「证书」，右键 -「所有任务」-「导入」打开证书导入窗口。
+选择 CA 证书 ca_cert.crt 导入即可
+
+注意 千万不要双击 .p12 证书导入！因为那样会导入到当前用户而不是本机计算机中，ipsec 守护精灵是访问不了它的。
+</code></pre><h2 id="其它配置参考"><a href="#其它配置参考" class="headerlink" title="其它配置参考"></a>其它配置参考</h2><figure class="highlight bash"><figcaption><span>## 参考配置1</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">config setup</span><br><span class="line">    uniqueids=never</span><br><span class="line">    charondebug=<span class="string">"cfg 2, dmn 2, ike 2, net 0"</span></span><br><span class="line"> </span><br><span class="line">conn %default</span><br><span class="line">    left=%defaultroute</span><br><span class="line">    leftsubnet=0.0.0.0/0</span><br><span class="line">    leftcert=vpnHostCert.pem</span><br><span class="line">    right=%any</span><br><span class="line">    rightsourceip=10.0.0.0/24</span><br><span class="line"> </span><br><span class="line">conn xauth_pubkey_ikev1</span><br><span class="line">    keyexchange=ikev1</span><br><span class="line">    fragmentation=yes</span><br><span class="line">    rightauth=pubkey</span><br><span class="line">    rightauth2=xauth</span><br><span class="line">    leftsendcert=always</span><br><span class="line">    rekey=no</span><br><span class="line">    auto=add</span><br><span class="line"> </span><br><span class="line">conn xauth_psk_ikev1</span><br><span class="line">    keyexchange=ikev1</span><br><span class="line">    leftauth=psk</span><br><span class="line">    rightauth=psk</span><br><span class="line">    rightauth2=xauth</span><br><span class="line">    auto=add</span><br><span class="line">    dpdaction=hold</span><br><span class="line">    dpddelay=600s</span><br><span class="line">    dpdtimeout=5s</span><br><span class="line">    lifetime=24h</span><br><span class="line">    ikelifetime=240h</span><br><span class="line">    rekey=no</span><br><span class="line"> </span><br><span class="line">conn pubkey_ikev2</span><br><span class="line">    keyexchange=ikev2</span><br><span class="line">    leftauth=pubkey</span><br><span class="line">    rightauth=pubkey</span><br><span class="line">    leftsendcert=always</span><br><span class="line">    auto=add</span><br><span class="line"> </span><br><span class="line">conn eap_ikev2</span><br><span class="line">    keyexchange=ikev2</span><br><span class="line">    ike=aes256-sha1-modp1024!</span><br><span class="line">    rekey=no</span><br><span class="line">    leftauth=pubkey</span><br><span class="line">    leftsendcert=always</span><br><span class="line">    rightauth=eap-mschapv2</span><br><span class="line">    eap_identity=%any</span><br><span class="line">    auto=add</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>## 站点到站点tunnel配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## https://help.aliyun.com/document_detail/65374.html?spm=a2c4g.11186623.6.569.H47Tmw</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># vi /etc/strongswan/ipsec.conf</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ipsec.conf - strongSwan IPsec configuration file</span></span><br><span class="line"><span class="comment"># basic configuration</span></span><br><span class="line">config setup</span><br><span class="line">    uniqueids=never</span><br><span class="line">conn %default</span><br><span class="line">    authby=psk</span><br><span class="line">    <span class="built_in">type</span>=tunnel</span><br><span class="line">conn tomyidc</span><br><span class="line">    keyexchange=ikev1</span><br><span class="line">    left=59.110.165.70</span><br><span class="line">    leftsubnet=172.16.2.0/24</span><br><span class="line">    leftid=59.110.165.70（IDC网关设备的公网IP）</span><br><span class="line">    right=119.23.227.125</span><br><span class="line">    rightsubnet=192.168.10.0/24</span><br><span class="line">    rightid=119.23.227.125（VPN网关的公网IP）</span><br><span class="line">    auto=route</span><br><span class="line">    ike=aes-sha1-modp1024</span><br><span class="line">    ikelifetime=86400s</span><br><span class="line">    esp=aes-sha1-modp1024</span><br><span class="line">    lifetime=86400s</span><br><span class="line">    <span class="built_in">type</span>=tunnel</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># vi /etc/strongswan/ipsec.secrets</span></span><br><span class="line">59.110.165.70 119.23.227.125 : PSK yourpassword</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开系统转发配置。</span></span><br><span class="line"><span class="comment"># echo 1 &gt; /proc/sys/net/ipv4/ip_forward</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><pre><code>搭建strongswan服务器
+http://www.bewindoweb.com/123.html
+
+https://expats-in-china.com/t/setup-a-vpn-ipsec-on-centos-7-using-strongswan/27
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/strongswan/" rel="tag"><i class="fa fa-tag"></i> strongswan</a>
+          
+            <a href="/tags/ipsec/" rel="tag"><i class="fa fa-tag"></i> ipsec</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/strongswan/使用strongswan 搭建站点到站点tunnel/" rel="next" title="使用strongswan 搭建站点到站点tunnel">
+                <i class="fa fa-chevron-left"></i> 使用strongswan 搭建站点到站点tunnel
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">dolphin</p>
+              <p class="site-description motion-element" itemprop="description">现实是强者理想的实现</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置epel源"><span class="nav-number">1.</span> <span class="nav-text">配置epel源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Strongswan"><span class="nav-number">2.</span> <span class="nav-text">安装Strongswan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-number">3.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙配置"><span class="nav-number">4.</span> <span class="nav-text">防火墙配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件ipsec-conf"><span class="nav-number">5.</span> <span class="nav-text">配置文件ipsec.conf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#密码配置文件"><span class="nav-number">6.</span> <span class="nav-text">密码配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件strongswan-conf"><span class="nav-number">7.</span> <span class="nav-text">配置文件strongswan.conf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成服务器和客户端证书"><span class="nav-number">8.</span> <span class="nav-text">生成服务器和客户端证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重启strongswan"><span class="nav-number">9.</span> <span class="nav-text">重启strongswan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示当前接入动态信息"><span class="nav-number">10.</span> <span class="nav-text">显示当前接入动态信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iptables-配置方法"><span class="nav-number">11.</span> <span class="nav-text">iptables 配置方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置说明"><span class="nav-number">12.</span> <span class="nav-text">配置说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#证书使用配置说名"><span class="nav-number">12.1.</span> <span class="nav-text">证书使用配置说名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成证书说明"><span class="nav-number">12.2.</span> <span class="nav-text">生成证书说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置验证方式的用户名与密码"><span class="nav-number">12.3.</span> <span class="nav-text">配置验证方式的用户名与密码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端配置"><span class="nav-number">13.</span> <span class="nav-text">客户端配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它配置参考"><span class="nav-number">14.</span> <span class="nav-text">其它配置参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">15.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dolphin</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

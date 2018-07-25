@@ -319,6 +319,1323 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/oracle/Oracle Database 12c, install on centos 7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/oracle/Oracle Database 12c, install on centos 7/" itemprop="url">
+                  Install Oracle Database 12c on centos 7
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-15 10:49:33" itemprop="dateModified" datetime="2018-07-15T10:49:33+08:00">2018-07-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/install/" itemprop="url" rel="index"><span itemprop="name">install</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <h2 id="下载地址："><a href="#下载地址：" class="headerlink" title="下载地址："></a>下载地址：</h2><pre><code>oracle:
+http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
+
+sql developer
+http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html
+
+PL/SQL Developer
+http://files.allroundautomations.com/plsqldev1207x64.msi
+
+
+## 通过wget下载，首先需要用chrome 登陆下载Oracle安装包，然后通过chrome查看下载内容获取下载连接地址, 这个地址包含AuthParam，这个值是变的
+## Oracle Database 12c Release 2 (12.2.0.1.0) for Linux x86-64 (cksum - 4170261901)
+
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1531550179_0b36f7a93d74a319d16d912549e8f200&quot; -O linuxx64_12201_database.zip
+## 或者
+wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1531550179_0b36f7a93d74a319d16d912549e8f200&quot;
+
+## Oracle Database 12c Release 2 Grid Infrastructure (12.2.0.1.0) for Linux x86-64 (cksum - 1523222538)  
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_gsm.zip?AuthParam=1531550996_aafa7bf31f418173242a4d5220592b4b&quot;
+
+## Oracle Database Gateways 12c Release 2 (12.2.0.1.0) for Linux x86-64 (cksum - 2671223080) 
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_gateways.zip?AuthParam=1531551201_626b9d693e0e19eaa903a50d34774984&quot;
+
+## Oracle Database 12c Release 2 Examples (12.2.0.1.0) for Linux x86-64
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_examples.zip?AuthParam=1531551390_b6f3aa6b20993c7afabe834d72459cc9&quot;
+
+## 解压
+yum install -y zip unzip
+mkdir /data/install
+unzip linuxx64_12201_database.zip -d /data/install/
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/oracle/Oracle Database 12c, install on centos 7/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/Web缓存知识体系/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/nginx/Web缓存知识体系/" itemprop="url">
+                  Web缓存知识体系
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-16 17:28:27" itemprop="dateModified" datetime="2018-07-16T17:28:27+08:00">2018-07-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          
+          
+
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/nginx/Web缓存知识体系/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/oracle/数据库的通用命令行工具 USQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/oracle/数据库的通用命令行工具 USQL/" itemprop="url">
+                  数据库的通用命令行工具 USQL
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-15 12:37:06" itemprop="dateModified" datetime="2018-07-15T12:37:06+08:00">2018-07-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/USQL/" itemprop="url" rel="index"><span itemprop="name">USQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><pre><code>USQL 是一个使用 Go 语言开发的支持 SQL/NoSQL 数据库的通用命令行工具，支持多种主流的数据库软件。
+
+比如：PostgreSQL、MySQL、Oracle Database、SQLite3、Microsoft SQL Server 以及许多其它的数据库（包括 NoSQL 和非关系型数据库）。
+
+USQL 的灵感来自 PostgreSQL 的 PSQL，USQL 支持大多数 PSQL 的核心特性，比如：设置变量、反引号参数。
+
+并具有 PSQL 不支持的其它功能，如语法高亮、基于上下文的自动补全和多数据库支持等。
+
+项目地址：https://github.com/xo/usql
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/oracle/数据库的通用命令行工具 USQL/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/mssql/Install Microsoft SQL Server On CentOS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/mssql/Install Microsoft SQL Server On CentOS/" itemprop="url">
+                  Install Microsoft SQL Server On CentOS Linux
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-13 17:37:21" itemprop="dateModified" datetime="2018-07-13T17:37:21+08:00">2018-07-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mssql/" itemprop="url" rel="index"><span itemprop="name">mssql</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <h2 id="配置安装源"><a href="#配置安装源" class="headerlink" title="配置安装源"></a>配置安装源</h2><pre><code>## sql server
+wget https://packages.microsoft.com/config/rhel/7/mssql-server-2017.repo -O /etc/yum.repos.d/mssql-server.repo
+
+
+## mssql-tools 
+
+wget https://packages.microsoft.com/config/rhel/7/prod.repo -O /etc/yum.repos.d/prod.repo
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/mssql/Install Microsoft SQL Server On CentOS/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/keepalived/Keepalived和LVS-NAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/keepalived/Keepalived和LVS-NAT/" itemprop="url">
+                  Keepalived和LVS-NAT
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-18 15:55:25" itemprop="dateModified" datetime="2018-07-18T15:55:25+08:00">2018-07-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/keepalived/" itemprop="url" rel="index"><span itemprop="name">keepalived</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <p><img src="/images/keepalived/keepalived_lvs_nat.jpg" alt="keepalived_lvs_nat"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/keepalived/Keepalived和LVS-NAT/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/azure/azure_cli_vm/Azure cli 通过复制vhd重建虚机/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/azure/azure_cli_vm/Azure cli 通过复制vhd重建虚机/" itemprop="url">
+                  Azure cli 通过复制的vhd重建虚机
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-06 09:20:00" itemprop="dateCreated datePublished" datetime="2018-07-06T09:20:00+08:00">2018-07-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-20 17:49:06" itemprop="dateModified" datetime="2018-07-20T17:49:06+08:00">2018-07-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/azurecli/" itemprop="url" rel="index"><span itemprop="name">azurecli</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/azurecli/vm/" itemprop="url" rel="index"><span itemprop="name">vm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          
+          说明本文适合跨账户迁移虚机。
+
+原理通过公开的sas url 复制磁盘镜像到存储账户里，然后再从存储账户的vhd文件创建托管磁盘，再利用托管磁盘创建虚机
+
+需要注意的是：虚机加载的额外磁盘需要卸掉，或者在fstab 磁盘加载项添加 nofail, 如 centos配置：
+
+UUID=1037feaf
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/azure/azure_cli_vm/Azure cli 通过复制vhd重建虚机/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/azure/azure_cli/Azure cli 扩展执行bash命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/azure/azure_cli/Azure cli 扩展执行bash命令/" itemprop="url">
+                  Azure cli 扩展执行bash命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-06 09:10:00" itemprop="dateCreated datePublished" datetime="2018-07-06T09:10:00+08:00">2018-07-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-20 16:46:45" itemprop="dateModified" datetime="2018-07-20T16:46:45+08:00">2018-07-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/azurecli/" itemprop="url" rel="index"><span itemprop="name">azurecli</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/azurecli/vm/" itemprop="url" rel="index"><span itemprop="name">vm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <h2 id="清空sudoers-d目录下ceph文件"><a href="#清空sudoers-d目录下ceph文件" class="headerlink" title="清空sudoers.d目录下ceph文件"></a>清空sudoers.d目录下ceph文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 切换到中国Azure云</span></span><br><span class="line">az cloud <span class="built_in">set</span> -n AzureChinaCloud</span><br><span class="line"></span><br><span class="line"><span class="comment">## 登陆</span></span><br><span class="line">az login</span><br><span class="line"></span><br><span class="line"><span class="comment">## 显示订阅</span></span><br><span class="line">az account list --output table</span><br><span class="line"></span><br><span class="line"><span class="comment">## 通过订阅名切换活动的订阅，也可以使用订阅id。只有一个订阅的账户就可以省略订阅切换</span></span><br><span class="line">az account <span class="built_in">set</span> --subscription &lt;Name|SubscriptionId&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">## 通过扩展在虚机上执行bash命令</span></span><br><span class="line"></span><br><span class="line">az vm extension <span class="built_in">set</span> \</span><br><span class="line">--publisher Microsoft.Azure.Extensions \</span><br><span class="line">--version 2.0 \</span><br><span class="line">--name CustomScript \</span><br><span class="line">--vm-name myvm01 \</span><br><span class="line">--resource-group mygroup02 \</span><br><span class="line">--settings <span class="string">'&#123;"commandToExecute":"echo &gt; /etc/sudoers.d/ceph"&#125;'</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/azure/azure_cli/Azure cli 扩展执行bash命令/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/ceph/手动部署Ceph mon osd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -700,188 +2017,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/Oracle的高级复制、流复制、备库的区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Oracle的高级复制、流复制、备库的区别/" itemprop="url">
-                  Oracle的高级复制、流复制、备库的区别
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-29 10:10:00" itemprop="dateCreated datePublished" datetime="2018-06-29T10:10:00+08:00">2018-06-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-05 11:45:08" itemprop="dateModified" datetime="2018-07-05T11:45:08+08:00">2018-07-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <h2 id="Oracle备份功能包括："><a href="#Oracle备份功能包括：" class="headerlink" title="Oracle备份功能包括："></a>Oracle备份功能包括：</h2><pre><code>高级复制（Advanced Replication）
-
-流复制（Streams Replication）
-
-备库（Dataguard）
-</code></pre>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Oracle的高级复制、流复制、备库的区别/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/如何用Nginx搬运整个世界/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1055,1076 +2190,6 @@ https://dream.ren/proxy_the_whole_world_by_nginx.html
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/Nginx 模块编译安装配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/nginx/config/Nginx 模块编译安装配置/" itemprop="url">
-                  Nginx 模块编译安装配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-29 10:10:00 / 修改时间：10:43:07" itemprop="dateCreated datePublished" datetime="2018-06-29T10:10:00+08:00">2018-06-29</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          
-          动态模块模块加载# 需要配置在nginx.conf文件的最顶端。
-1234567891011121314151617181920212223# 存放模块的目录    mkdir /etc/nginx/modules -p# 存放模块配置文件的目录    mkdir /etc/nginx/module
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/nginx/config/Nginx 模块编译安装配置/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/Nginx 安装配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/nginx/config/Nginx 安装配置/" itemprop="url">
-                  Nginx 安装配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-29 10:10:00" itemprop="dateCreated datePublished" datetime="2018-06-29T10:10:00+08:00">2018-06-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-08 15:47:28" itemprop="dateModified" datetime="2018-07-08T15:47:28+08:00">2018-07-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <h2 id="yum-安装"><a href="#yum-安装" class="headerlink" title="yum 安装"></a>yum 安装</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/nginx/config/Nginx 安装配置/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/linux/ipsec/混合云自建V-P-N/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/linux/ipsec/混合云自建V-P-N/" itemprop="url">
-                  混合云自建V-P-N
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-27 15:19:00 / 修改时间：18:05:03" itemprop="dateCreated datePublished" datetime="2018-06-27T15:19:00+08:00">2018-06-27</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/ipsec/" itemprop="url" rel="index"><span itemprop="name">ipsec</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><pre><code>https://yq.aliyun.com/articles/504348?spm=a2c4e.11153940.blogcont434405.27.300e35b1Inhu7M#4
-</code></pre>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/linux/ipsec/混合云自建V-P-N/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/windows下配置hexo开机启动/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/hexo/windows下配置hexo开机启动/" itemprop="url">
-                  windows下配置hexo开机启动
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-27 13:26:00 / 修改时间：13:28:54" itemprop="dateCreated datePublished" datetime="2018-06-27T13:26:00+08:00">2018-06-27</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <pre><code>为了更方便的使用，寻找一种可以开机启动hexo server的方法，通过脚本实现。
-
-需要创建2个脚本，一个为vbs脚本，一个为bat脚本。
-
-vbs脚本放到启动文件夹，用于运行bat脚本，而bat脚本用于启动hexo server
-</code></pre>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/hexo/windows下配置hexo开机启动/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/windows/windows 2008R2 浏览器支持MP4播放/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/windows/windows 2008R2 浏览器支持MP4播放/" itemprop="url">
-                  windows 2008R2 浏览器支持MP4播放
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-26 17:17:00" itemprop="dateCreated datePublished" datetime="2018-06-26T17:17:00+08:00">2018-06-26</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-06-27 14:07:56" itemprop="dateModified" datetime="2018-06-27T14:07:56+08:00">2018-06-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          
-          安装和kb2483177补丁kb2483177
-https://download.microsoft.com/download/7/3/D/73D3721D-17E7-4D7A-9C64-5CCD0DD285B1/Windows6.1-KB2483177-x64.msu
-
-
-kb2454826：可选
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/windows/windows 2008R2 浏览器支持MP4播放/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/" itemprop="url">
-                  Nginx 负载-代理-缓存配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-26 17:17:00" itemprop="dateCreated datePublished" datetime="2018-06-26T17:17:00+08:00">2018-06-26</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-06-28 17:12:42" itemprop="dateModified" datetime="2018-06-28T17:12:42+08:00">2018-06-28</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <figure class="highlight bash"><figcaption><span>nginx http 里负载配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mkdir -p /etc/nginx/http.d</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/nginx/http.d/20.upstream.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">upstream images &#123;</span><br><span class="line"></span><br><span class="line">    server 200.200.200.222:99 weight=5 max_fails=3 fail_timeout=60s;</span><br><span class="line">    server 200.200.200.223:99 weight=5 max_fails=3 fail_timeout=60s;</span><br><span class="line">    <span class="comment"># server 200.200.200.225:99 weight=5 backup;</span></span><br><span class="line">    <span class="comment"># server unix:/tmp/backend3; #使用unix socket</span></span><br><span class="line">    <span class="comment"># keepalive 32;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><figcaption><span>nginx server 代理配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">location ~ .*\.(mp4|gif|jpg|jpeg|png|bmp|swf|js|css)$</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">## 指定访问后端服务器的IP地址</span></span><br><span class="line">        <span class="comment">#proxy_bind 127.0.0.1;</span></span><br><span class="line">        proxy_pass <span class="variable">$scheme</span>://images;</span><br><span class="line">        include local.d/proxy.conf;</span><br><span class="line">        proxy_next_upstream http_404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2172,7 +2237,7 @@ kb2454826：可选
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2255,7 +2320,15 @@ kb2454826：可选
                     
                       
                     
-                    <span class="site-state-item-count">35</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2350,7 +2423,15 @@ kb2454826：可选
                     
                       
                     
-                    <span class="site-state-item-count">41</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
