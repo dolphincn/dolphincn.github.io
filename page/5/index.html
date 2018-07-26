@@ -496,7 +496,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/syncthing 安装配置/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/lsyncd 安装配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -515,8 +515,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/sync/syncthing 安装配置/" itemprop="url">
-                  syncthing 同步文件
+                <a class="post-title-link" href="/sync/lsyncd 安装配置/" itemprop="url">
+                  lsyncd 同步文件
                 </a>
               
             
@@ -559,7 +559,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-09 11:04:38" itemprop="dateModified" datetime="2018-07-09T11:04:38+08:00">2018-07-09</time>
+                <time title="修改时间：2018-07-19 16:19:51" itemprop="dateModified" datetime="2018-07-19T16:19:51+08:00">2018-07-19</time>
               
             
           </span>
@@ -615,18 +615,18 @@
         <!-- 自定义结束 -->
         
           
-          syncthing 安装配置
-使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。
+          前言lsyncd基于rsync，且要求rsync &gt;= 3.1，可输入rsync --version查看当前版本
 
-共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。
+CentOS自带的软件或yum安装的软件太古老
 
-同步的文件所有者和所有组，改为syncthing运行的用户名和组
+官方网址：http://axkibe.github.io/lsyncd/
 
-同步间隔内(一分钟内)，
+服务器端需要安装配置好rsyncd
+yum 安装 l
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/sync/syncthing 安装配置/#more" rel="contents">
+            <a class="btn" href="/sync/lsyncd 安装配置/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1924,7 +1924,7 @@ Content ( 配置段位 ): http
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/log/nginx 日志记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -1943,8 +1943,8 @@ Content ( 配置段位 ): http
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/" itemprop="url">
-                  用NGINX的GeoIp库做国外ip屏蔽
+                <a class="post-title-link" href="/nginx/log/nginx 日志记录/" itemprop="url">
+                  nginx 日志记录
                 </a>
               
             
@@ -1970,7 +1970,7 @@ Content ( 配置段位 ): http
                 
               
 
-              <time title="创建时间：2018-06-20 15:48:28 / 修改时间：17:40:49" itemprop="dateCreated datePublished" datetime="2018-06-20T15:48:28+08:00">2018-06-20</time>
+              <time title="创建时间：2018-06-20 15:48:28 / 修改时间：17:01:15" itemprop="dateCreated datePublished" datetime="2018-06-20T15:48:28+08:00">2018-06-20</time>
             
 
             
@@ -1999,7 +1999,7 @@ Content ( 配置段位 ): http
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/security/" itemprop="url" rel="index"><span itemprop="name">security</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/log/" itemprop="url" rel="index"><span itemprop="name">log</span></a></span>
 
                 
                 
@@ -2037,10 +2037,19 @@ Content ( 配置段位 ): http
         
         <!-- 自定义结束 -->
         
-          <h2 id="安装GeoIp模块"><a href="#安装GeoIp模块" class="headerlink" title="安装GeoIp模块"></a>安装GeoIp模块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 安装模块，nginx也是通过yum安装</span></span><br><span class="line"></span><br><span class="line">yum install nginx-module-geoip</span><br><span class="line"></span><br><span class="line"><span class="comment">## 安装对应nginx 版本的 模块</span></span><br><span class="line"></span><br><span class="line">yum --showduplicate list nginx-module-geoip</span><br><span class="line"></span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.0-1.el7.ngx       nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.1-1.el7.ngx       nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.2-1.el7_4.ngx     nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.14.0-1.el7_4.ngx     nginx</span><br><span class="line"></span><br><span class="line">yum install nginx-module-geoip-1:1.12.2-1.el7_4.ngx.x86_64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ls /usr/lib64/nginx/modules/</span><br><span class="line">ngx_http_geoip_module-debug.so  ngx_http_geoip_module.so  ngx_stream_geoip_module-debug.so  ngx_stream_geoip_module.so</span><br></pre></td></tr></table></figure>
+          <h2 id="日志语法"><a href="#日志语法" class="headerlink" title="日志语法"></a>日志语法</h2><pre><code>参考: http://nginx.org/en/docs/http/ngx_http_log_module.html
+
+Syntax:     access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];
+access_log off;
+Default:     
+
+access_log logs/access.log combined;
+
+Context:     http, server, location, if in location, limit_except
+</code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/#more" rel="contents">
+            <a class="btn" href="/nginx/log/nginx 日志记录/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
