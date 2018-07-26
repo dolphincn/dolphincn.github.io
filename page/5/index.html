@@ -319,7 +319,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/syncthing 安装配置/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/lsyncd 安装配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -338,8 +338,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/sync/syncthing 安装配置/" itemprop="url">
-                  syncthing 同步文件
+                <a class="post-title-link" href="/sync/lsyncd 安装配置/" itemprop="url">
+                  lsyncd 同步文件
                 </a>
               
             
@@ -382,7 +382,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-09 11:04:38" itemprop="dateModified" datetime="2018-07-09T11:04:38+08:00">2018-07-09</time>
+                <time title="修改时间：2018-07-19 16:19:51" itemprop="dateModified" datetime="2018-07-19T16:19:51+08:00">2018-07-19</time>
               
             
           </span>
@@ -438,18 +438,195 @@
         <!-- 自定义结束 -->
         
           
-          syncthing 安装配置
-使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。
+          前言lsyncd基于rsync，且要求rsync &gt;= 3.1，可输入rsync --version查看当前版本
 
-共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。
+CentOS自带的软件或yum安装的软件太古老
 
-同步的文件所有者和所有组，改为syncthing运行的用户名和组
+官方网址：http://axkibe.github.io/lsyncd/
 
-同步间隔内(一分钟内)，
+服务器端需要安装配置好rsyncd
+yum 安装 l
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/sync/syncthing 安装配置/#more" rel="contents">
+            <a class="btn" href="/sync/lsyncd 安装配置/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/Rsync/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/sync/Rsync/" itemprop="url">
+                  Rsync 同步文件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-25 10:05:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-23 11:07:22" itemprop="dateModified" datetime="2018-07-23T11:07:22+08:00">2018-07-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sync/" itemprop="url" rel="index"><span itemprop="name">sync</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <p>Rsync是linux/Unix文件同步和传送工具。用于替代rcp的一个工具，rsync可以通过rsh或ssh使用，也能以daemon模式去运行，在以daemon方式运行时rsync server会开一个873端口，等待客户端去连接。连接时rsync server会检查口令是否相符，若通过口令查核，则可以通过进行文件传输，第一次连通完成时，会把整份文件传输一次，以后则就只需进行增量备份。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/sync/Rsync/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1913,183 +2090,11 @@ Context:     http, server, location, if in location, limit_except
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/" itemprop="url">
-                  用NGINX的GeoIp库做国外ip屏蔽
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-20 15:48:28 / 修改时间：17:40:49" itemprop="dateCreated datePublished" datetime="2018-06-20T15:48:28+08:00">2018-06-20</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/security/" itemprop="url" rel="index"><span itemprop="name">security</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <h2 id="安装GeoIp模块"><a href="#安装GeoIp模块" class="headerlink" title="安装GeoIp模块"></a>安装GeoIp模块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 安装模块，nginx也是通过yum安装</span></span><br><span class="line"></span><br><span class="line">yum install nginx-module-geoip</span><br><span class="line"></span><br><span class="line"><span class="comment">## 安装对应nginx 版本的 模块</span></span><br><span class="line"></span><br><span class="line">yum --showduplicate list nginx-module-geoip</span><br><span class="line"></span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.0-1.el7.ngx       nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.1-1.el7.ngx       nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.2-1.el7_4.ngx     nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.14.0-1.el7_4.ngx     nginx</span><br><span class="line"></span><br><span class="line">yum install nginx-module-geoip-1:1.12.2-1.el7_4.ngx.x86_64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ls /usr/lib64/nginx/modules/</span><br><span class="line">ngx_http_geoip_module-debug.so  ngx_http_geoip_module.so  ngx_stream_geoip_module-debug.so  ngx_stream_geoip_module.so</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2132,7 +2137,7 @@ Context:     http, server, location, if in location, limit_except
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2223,7 +2228,9 @@ Context:     http, server, location, if in location, limit_except
                     
                       
                     
-                    <span class="site-state-item-count">39</span>
+                      
+                    
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2326,7 +2333,9 @@ Context:     http, server, location, if in location, limit_except
                     
                       
                     
-                    <span class="site-state-item-count">45</span>
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
