@@ -319,6 +319,185 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/strongswan/strongswan 安装配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/strongswan/strongswan 安装配置/" itemprop="url">
+                  strongswan 安装配置
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-23 10:10:00" itemprop="dateCreated datePublished" datetime="2018-07-23T10:10:00+08:00">2018-07-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-25 11:50:46" itemprop="dateModified" datetime="2018-07-25T11:50:46+08:00">2018-07-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/strongswan/" itemprop="url" rel="index"><span itemprop="name">strongswan</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <h2 id="配置epel源"><a href="#配置epel源" class="headerlink" title="配置epel源"></a>配置epel源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">   [epel]</span><br><span class="line">   name=Extra Packages <span class="keyword">for</span> Enterprise Linux 7 - \<span class="variable">$basearch</span></span><br><span class="line">   <span class="comment">#baseurl=http://download.fedoraproject.org/pub/epel/7/\$basearch</span></span><br><span class="line">   baseurl=http://dl.fedoraproject.org/pub/epel/7Server/x86_64/</span><br><span class="line">   failovermethod=priority</span><br><span class="line">   enabled=1</span><br><span class="line">   gpgcheck=1</span><br><span class="line">   gpgkey=http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server</span><br><span class="line"></span><br><span class="line">   EOF</span><br></pre></td></tr></table></figure>
+<h2 id="安装Strongswan"><a href="#安装Strongswan" class="headerlink" title="安装Strongswan"></a>安装Strongswan</h2><pre><code>yum -y install strongswan openssl openssl-devel
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/strongswan/strongswan 安装配置/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/strongswan/使用strongswan 与 Azure gateway 建立 ipsec vpn 连接/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -449,185 +628,6 @@ Azure VPN getaway 公网IP 139.219.99.158 内网Ip：192.168.120.126
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/strongswan/使用strongswan 与 Azure gateway 建立 ipsec vpn 连接/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/strongswan/strongswan 安装配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/strongswan/strongswan 安装配置/" itemprop="url">
-                  strongswan 安装配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-23 10:10:00" itemprop="dateCreated datePublished" datetime="2018-07-23T10:10:00+08:00">2018-07-23</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-25 11:50:46" itemprop="dateModified" datetime="2018-07-25T11:50:46+08:00">2018-07-25</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/strongswan/" itemprop="url" rel="index"><span itemprop="name">strongswan</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <h2 id="配置epel源"><a href="#配置epel源" class="headerlink" title="配置epel源"></a>配置epel源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">   [epel]</span><br><span class="line">   name=Extra Packages <span class="keyword">for</span> Enterprise Linux 7 - \<span class="variable">$basearch</span></span><br><span class="line">   <span class="comment">#baseurl=http://download.fedoraproject.org/pub/epel/7/\$basearch</span></span><br><span class="line">   baseurl=http://dl.fedoraproject.org/pub/epel/7Server/x86_64/</span><br><span class="line">   failovermethod=priority</span><br><span class="line">   enabled=1</span><br><span class="line">   gpgcheck=1</span><br><span class="line">   gpgkey=http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server</span><br><span class="line"></span><br><span class="line">   EOF</span><br></pre></td></tr></table></figure>
-<h2 id="安装Strongswan"><a href="#安装Strongswan" class="headerlink" title="安装Strongswan"></a>安装Strongswan</h2><pre><code>yum -y install strongswan openssl openssl-devel
-</code></pre>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/strongswan/strongswan 安装配置/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1046,7 +1046,7 @@ strongswan 服务器vpn2
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/keepalived/Keepalived和LVS/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/keepalived/Keepalived和LVS-NAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -1065,8 +1065,8 @@ strongswan 服务器vpn2
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/keepalived/Keepalived和LVS/" itemprop="url">
-                  Keepalived和LVS
+                <a class="post-title-link" href="/keepalived/Keepalived和LVS-NAT/" itemprop="url">
+                  Keepalived和LVS-NAT
                 </a>
               
             
@@ -1109,7 +1109,7 @@ strongswan 服务器vpn2
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-18 10:47:05" itemprop="dateModified" datetime="2018-07-18T10:47:05+08:00">2018-07-18</time>
+                <time title="修改时间：2018-07-18 15:55:25" itemprop="dateModified" datetime="2018-07-18T15:55:25+08:00">2018-07-18</time>
               
             
           </span>
@@ -1164,13 +1164,10 @@ strongswan 服务器vpn2
         
         <!-- 自定义结束 -->
         
-          <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre><code>yum install keepalived ipvsadm psmisc
-</code></pre><h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><pre><code>firewall-cmd --zone=public --add-rich-rule=&apos;rule family=&quot;ipv4&quot; destination address=&quot;224.0.0.18&quot; protocol value=&quot;vrrp&quot; accept&apos; --permanent
-firewall-cmd --reload
-</code></pre>
+          <p><img src="/images/keepalived/keepalived_lvs_nat.jpg" alt="keepalived_lvs_nat"></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/keepalived/Keepalived和LVS/#more" rel="contents">
+            <a class="btn" href="/keepalived/Keepalived和LVS-NAT/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1226,7 +1223,7 @@ firewall-cmd --reload
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/Haproxy/安装配置 HAProxy 1.8.8/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/oracle/数据库的通用命令行工具 USQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -1245,8 +1242,8 @@ firewall-cmd --reload
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/Haproxy/安装配置 HAProxy 1.8.8/" itemprop="url">
-                  安装配置 HAProxy 1.8.8
+                <a class="post-title-link" href="/oracle/数据库的通用命令行工具 USQL/" itemprop="url">
+                  数据库的通用命令行工具 USQL
                 </a>
               
             
@@ -1289,7 +1286,7 @@ firewall-cmd --reload
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-19 16:51:44" itemprop="dateModified" datetime="2018-07-19T16:51:44+08:00">2018-07-19</time>
+                <time title="修改时间：2018-07-15 12:37:06" itemprop="dateModified" datetime="2018-07-15T12:37:06+08:00">2018-07-15</time>
               
             
           </span>
@@ -1306,14 +1303,7 @@ firewall-cmd --reload
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HAProxy/" itemprop="url" rel="index"><span itemprop="name">HAProxy</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HAProxy/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/USQL/" itemprop="url" rel="index"><span itemprop="name">USQL</span></a></span>
 
                 
                 
@@ -1351,13 +1341,19 @@ firewall-cmd --reload
         
         <!-- 自定义结束 -->
         
-          <h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><pre><code>http://cbonte.github.io/haproxy-dconv/
+          <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><pre><code>USQL 是一个使用 Go 语言开发的支持 SQL/NoSQL 数据库的通用命令行工具，支持多种主流的数据库软件。
 
-http://www.haproxy.org
+比如：PostgreSQL、MySQL、Oracle Database、SQLite3、Microsoft SQL Server 以及许多其它的数据库（包括 NoSQL 和非关系型数据库）。
+
+USQL 的灵感来自 PostgreSQL 的 PSQL，USQL 支持大多数 PSQL 的核心特性，比如：设置变量、反引号参数。
+
+并具有 PSQL 不支持的其它功能，如语法高亮、基于上下文的自动补全和多数据库支持等。
+
+项目地址：https://github.com/xo/usql
 </code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/Haproxy/安装配置 HAProxy 1.8.8/#more" rel="contents">
+            <a class="btn" href="/oracle/数据库的通用命令行工具 USQL/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1613,187 +1609,6 @@ http://www.haproxy.org
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/app/smart you tube tv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/app/smart you tube tv/" itemprop="url">
-                  smart you tube tv
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-15 18:59:48" itemprop="dateModified" datetime="2018-07-15T18:59:48+08:00">2018-07-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/app/" itemprop="url" rel="index"><span itemprop="name">app</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          
-          将手机you tube 投影到 android 设备 的 apphttps://smartyoutubetv.github.io/
-
-https://github.com/yuliskov/SmartYouTubeTV/releases/download/6.12.96/SmartYouTubeTV
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/app/smart you tube tv/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/linux/config/proc sys net ipv4 下各项的意义/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1924,6 +1739,193 @@ https://github.com/yuliskov/SmartYouTubeTV/releases/download/6.12.96/SmartYouTub
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/linux/config/proc sys net ipv4 下各项的意义/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/Haproxy/安装配置 HAProxy 1.8.8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Haproxy/安装配置 HAProxy 1.8.8/" itemprop="url">
+                  安装配置 HAProxy 1.8.8
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-19 16:51:44" itemprop="dateModified" datetime="2018-07-19T16:51:44+08:00">2018-07-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HAProxy/" itemprop="url" rel="index"><span itemprop="name">HAProxy</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HAProxy/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><pre><code>http://cbonte.github.io/haproxy-dconv/
+
+http://www.haproxy.org
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Haproxy/安装配置 HAProxy 1.8.8/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2202,7 +2204,7 @@ ps -A -o stat,ppid,p
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
