@@ -319,7 +319,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/oracle/数据库的通用命令行工具 USQL/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/oracle/Oracle Database 12c, install on centos 7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -338,8 +338,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/oracle/数据库的通用命令行工具 USQL/" itemprop="url">
-                  数据库的通用命令行工具 USQL
+                <a class="post-title-link" href="/oracle/Oracle Database 12c, install on centos 7/" itemprop="url">
+                  Install Oracle Database 12c on centos 7
                 </a>
               
             
@@ -382,7 +382,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-15 12:37:06" itemprop="dateModified" datetime="2018-07-15T12:37:06+08:00">2018-07-15</time>
+                <time title="修改时间：2018-07-15 10:49:33" itemprop="dateModified" datetime="2018-07-15T10:49:33+08:00">2018-07-15</time>
               
             
           </span>
@@ -399,7 +399,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/USQL/" itemprop="url" rel="index"><span itemprop="name">USQL</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/install/" itemprop="url" rel="index"><span itemprop="name">install</span></a></span>
 
                 
                 
@@ -437,19 +444,40 @@
         
         <!-- 自定义结束 -->
         
-          <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><pre><code>USQL 是一个使用 Go 语言开发的支持 SQL/NoSQL 数据库的通用命令行工具，支持多种主流的数据库软件。
+          <h2 id="下载地址："><a href="#下载地址：" class="headerlink" title="下载地址："></a>下载地址：</h2><pre><code>oracle:
+http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
 
-比如：PostgreSQL、MySQL、Oracle Database、SQLite3、Microsoft SQL Server 以及许多其它的数据库（包括 NoSQL 和非关系型数据库）。
+sql developer
+http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html
 
-USQL 的灵感来自 PostgreSQL 的 PSQL，USQL 支持大多数 PSQL 的核心特性，比如：设置变量、反引号参数。
+PL/SQL Developer
+http://files.allroundautomations.com/plsqldev1207x64.msi
 
-并具有 PSQL 不支持的其它功能，如语法高亮、基于上下文的自动补全和多数据库支持等。
 
-项目地址：https://github.com/xo/usql
+## 通过wget下载，首先需要用chrome 登陆下载Oracle安装包，然后通过chrome查看下载内容获取下载连接地址, 这个地址包含AuthParam，这个值是变的
+## Oracle Database 12c Release 2 (12.2.0.1.0) for Linux x86-64 (cksum - 4170261901)
+
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1531550179_0b36f7a93d74a319d16d912549e8f200&quot; -O linuxx64_12201_database.zip
+## 或者
+wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1531550179_0b36f7a93d74a319d16d912549e8f200&quot;
+
+## Oracle Database 12c Release 2 Grid Infrastructure (12.2.0.1.0) for Linux x86-64 (cksum - 1523222538)  
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_gsm.zip?AuthParam=1531550996_aafa7bf31f418173242a4d5220592b4b&quot;
+
+## Oracle Database Gateways 12c Release 2 (12.2.0.1.0) for Linux x86-64 (cksum - 2671223080) 
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_gateways.zip?AuthParam=1531551201_626b9d693e0e19eaa903a50d34774984&quot;
+
+## Oracle Database 12c Release 2 Examples (12.2.0.1.0) for Linux x86-64
+wget &quot;http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_examples.zip?AuthParam=1531551390_b6f3aa6b20993c7afabe834d72459cc9&quot;
+
+## 解压
+yum install -y zip unzip
+mkdir /data/install
+unzip linuxx64_12201_database.zip -d /data/install/
 </code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/oracle/数据库的通用命令行工具 USQL/#more" rel="contents">
+            <a class="btn" href="/oracle/Oracle Database 12c, install on centos 7/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -630,6 +658,188 @@ USQL 的灵感来自 PostgreSQL 的 PSQL，USQL 支持大多数 PSQL 的核心�
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/nginx/Web缓存知识体系/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/tomcat/确保Tomcat安全的途径/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/tomcat/确保Tomcat安全的途径/" itemprop="url">
+                  确保Tomcat安全的途径
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-23 11:16:46" itemprop="dateModified" datetime="2018-07-23T11:16:46+08:00">2018-07-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tomcat/" itemprop="url" rel="index"><span itemprop="name">tomcat</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <p>首先，新建一个帐户</p>
+<ol>
+<li>用”ITOMCAT_计算机名”建立一个普通用户</li>
+<li>为其设置一个密码</li>
+<li>保证”密码永不过期”(Password Never Expires)被选中</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/tomcat/确保Tomcat安全的途径/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -869,7 +1079,7 @@ wget https://packages.microsoft.com/config/rhel/7/prod.repo -O /etc/yum.repos.d/
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/tomcat/确保Tomcat安全的途径/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/keepalived/Keepalived和Haproxy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -888,8 +1098,8 @@ wget https://packages.microsoft.com/config/rhel/7/prod.repo -O /etc/yum.repos.d/
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/tomcat/确保Tomcat安全的途径/" itemprop="url">
-                  确保Tomcat安全的途径
+                <a class="post-title-link" href="/keepalived/Keepalived和Haproxy/" itemprop="url">
+                  Keepalived和Haproxy
                 </a>
               
             
@@ -932,7 +1142,7 @@ wget https://packages.microsoft.com/config/rhel/7/prod.repo -O /etc/yum.repos.d/
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-23 11:16:46" itemprop="dateModified" datetime="2018-07-23T11:16:46+08:00">2018-07-23</time>
+                <time title="修改时间：2018-07-17 16:08:45" itemprop="dateModified" datetime="2018-07-17T16:08:45+08:00">2018-07-17</time>
               
             
           </span>
@@ -949,7 +1159,7 @@ wget https://packages.microsoft.com/config/rhel/7/prod.repo -O /etc/yum.repos.d/
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tomcat/" itemprop="url" rel="index"><span itemprop="name">tomcat</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/keepalived/" itemprop="url" rel="index"><span itemprop="name">keepalived</span></a></span>
 
                 
                 
@@ -987,198 +1197,16 @@ wget https://packages.microsoft.com/config/rhel/7/prod.repo -O /etc/yum.repos.d/
         
         <!-- 自定义结束 -->
         
-          <p>首先，新建一个帐户</p>
-<ol>
-<li>用”ITOMCAT_计算机名”建立一个普通用户</li>
-<li>为其设置一个密码</li>
-<li>保证”密码永不过期”(Password Never Expires)被选中</li>
-</ol>
+          <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre><code>yum install keepalived haproxy psmisc
+</code></pre><h2 id="修改系统参数"><a href="#修改系统参数" class="headerlink" title="修改系统参数"></a>修改系统参数</h2><pre><code>echo &apos;net.ipv4.ip_nonlocal_bind = 1&apos; &gt;&gt; /etc/sysctl.conf
+
+sysctl -p
+</code></pre><h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><pre><code>firewall-cmd --zone=public --add-rich-rule=&apos;rule family=&quot;ipv4&quot; destination address=&quot;224.0.0.18&quot; protocol value=&quot;vrrp&quot; accept&apos; --permanent
+Firewall-cmd --reload
+</code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/tomcat/确保Tomcat安全的途径/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/java/yum install java on centos 7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/java/yum install java on centos 7/" itemprop="url">
-                  yum install java on centos 7
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-09T00:00:00+08:00">2018-07-09</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-14 14:13:02" itemprop="dateModified" datetime="2018-07-14T14:13:02+08:00">2018-07-14</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          
-          tar 包安装方式## 下载地址：    
-## oracle jdk:    http://www.oracle.com/technetwork/java/javase/downloads/index.html
-## open jdk: http://jdk.java.net/10/
-
-## or
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/java/yum install java on centos 7/#more" rel="contents">
+            <a class="btn" href="/keepalived/Keepalived和Haproxy/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1991,7 +2019,7 @@ UUID=1037feaf
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/Oracle的高级复制、流复制、备库的区别/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/如何用Nginx搬运整个世界/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -2010,8 +2038,8 @@ UUID=1037feaf
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/Oracle的高级复制、流复制、备库的区别/" itemprop="url">
-                  Oracle的高级复制、流复制、备库的区别
+                <a class="post-title-link" href="/nginx/config/如何用Nginx搬运整个世界/" itemprop="url">
+                  如何用Nginx搬运整个世界
                 </a>
               
             
@@ -2054,7 +2082,7 @@ UUID=1037feaf
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-05 11:45:08" itemprop="dateModified" datetime="2018-07-05T11:45:08+08:00">2018-07-05</time>
+                <time title="修改时间：2018-07-04 16:23:32" itemprop="dateModified" datetime="2018-07-04T16:23:32+08:00">2018-07-04</time>
               
             
           </span>
@@ -2071,7 +2099,14 @@ UUID=1037feaf
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
 
                 
                 
@@ -2109,15 +2144,14 @@ UUID=1037feaf
         
         <!-- 自定义结束 -->
         
-          <h2 id="Oracle备份功能包括："><a href="#Oracle备份功能包括：" class="headerlink" title="Oracle备份功能包括："></a>Oracle备份功能包括：</h2><pre><code>高级复制（Advanced Replication）
-
-流复制（Streams Replication）
-
-备库（Dataguard）
-</code></pre>
+          
+          如何用Nginx搬运整个世界
+https://dream.ren/proxy_the_whole_world_by_nginx.html
+基于http协议的各种反代方法太多太简单了，网上肯定一大把，这里就无需多言了，今天博主来介绍一种更为通用、隐蔽、安全和高效的反代方法，此方法并非完全工作在第七层，
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/Oracle的高级复制、流复制、备库的区别/#more" rel="contents">
+            <a class="btn" href="/nginx/config/如何用Nginx搬运整个世界/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
