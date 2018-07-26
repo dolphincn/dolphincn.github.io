@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="克隆人战争">
 <meta property="og:description" content="搭建环境：两台strongswang 运行在Azure云上一个虚拟网络的虚机里，有内部IP和公网IP  strongswan服务器vpn1 网络空间 10.250.250.0/24 内部IP地址 10.250.250.69 外部公网IP地址 139.219.133.12 共享密匙 /etc/strongswan/ipsec.secrets  strongswan 服务器vpn2 网络空间 10.1">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-25T08:41:25.759Z">
+<meta property="og:updated_time" content="2018-07-25T09:52:58.132Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用strongswan 搭建站点到站点tunnel">
 <meta name="twitter:description" content="搭建环境：两台strongswang 运行在Azure云上一个虚拟网络的虚机里，有内部IP和公网IP  strongswan服务器vpn1 网络空间 10.250.250.0/24 内部IP地址 10.250.250.69 外部公网IP地址 139.219.133.12 共享密匙 /etc/strongswan/ipsec.secrets  strongswan 服务器vpn2 网络空间 10.1">
@@ -379,7 +379,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-25 16:41:25" itemprop="dateModified" datetime="2018-07-25T16:41:25+08:00">2018-07-25</time>
+                <time title="修改时间：2018-07-25 17:52:58" itemprop="dateModified" datetime="2018-07-25T17:52:58+08:00">2018-07-25</time>
               
             
           </span>
@@ -445,7 +445,7 @@ strongswan 服务器vpn2
 共享密匙 /etc/strongswan/ipsec.secrets
 </code></pre><a id="more"></a>
 <h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><pre><code>子网[10.250.250.0/24]----&gt;[可配对内网卡]vpn1[10.250.250.69]--|防火墙|--[139.219.133.12]---&gt;internet---[42.159.93.91]--|防火墙|--&gt;[10.10.50.4]vpn2[可配对内网卡]----&gt;子网[10.10.50.0/24]
-</code></pre><h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><figure class="highlight bash"><figcaption><span>## 两台vpn服务器上设置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">   <span class="comment">## 开启转发</span></span><br><span class="line">   net.ipv4.ip_forward=1</span><br><span class="line">   net.ipv6.conf.all.forwarding=1</span><br><span class="line"><span class="comment">## 禁止重定向，比如禁止ICMP重定向报文</span></span><br><span class="line">   net.ipv4.conf.all.accept_redirects = 0</span><br><span class="line">   net.ipv4.conf.all.send_redirects = 0</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><figure class="highlight bash"><figcaption><span>## 两台vpn服务器上设置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">   <span class="comment">## 开启转发</span></span><br><span class="line">   net.ipv4.ip_forward=1</span><br><span class="line">   net.ipv6.conf.all.forwarding=1</span><br><span class="line">   <span class="comment">## 禁止重定向，比如禁止ICMP重定向报文</span></span><br><span class="line">   net.ipv4.conf.all.accept_redirects = 0</span><br><span class="line">   net.ipv4.conf.all.send_redirects = 0</span><br><span class="line"></span><br><span class="line">   EOF</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
 <h2 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h2><pre><code>## 两台vpn服务器上设置
 
 firewall-cmd --permanent --add-service=ipsec
@@ -492,7 +492,11 @@ ip route add 10.250.250.0/26 via 10.10.50.4
     下一跳地址: 10.10.50.4        ## VPN服务器的连接内网的IP地址(如果是采用双网卡)
 
     在把路由表绑定到本端子网，这些子网需要通过此vpn连接对端子网。
+
+3. 安全组需要开通4500/udp 500/udp
 </code></pre><h2 id="aws-平台"><a href="#aws-平台" class="headerlink" title="aws 平台"></a>aws 平台</h2><pre><code>需要关闭VPN服务器网卡默认的“源/目标检查”，默认为开启状态
+
+需要设置平台路由表和安全组
 
 具体没操作过，此略。
 </code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><pre><code>https://wiki.strongswan.org/projects/strongswan/wiki/UsableExamples
@@ -531,8 +535,8 @@ ip route add 10.250.250.0/26 via 10.10.50.4
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/strongswan/使用strongswan 与 Azure gateway 建立 ipsec vpn 连接/" rel="next" title="使用strongswan 与 Azure gateway 建立 ipsec vpn 连接">
-                <i class="fa fa-chevron-left"></i> 使用strongswan 与 Azure gateway 建立 ipsec vpn 连接
+              <a href="/strongswan/strongswan 安装配置/" rel="next" title="strongswan 安装配置">
+                <i class="fa fa-chevron-left"></i> strongswan 安装配置
               </a>
             
           </div>
@@ -541,8 +545,8 @@ ip route add 10.250.250.0/26 via 10.10.50.4
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/strongswan/strongswan 安装配置/" rel="prev" title="strongswan 安装配置">
-                strongswan 安装配置 <i class="fa fa-chevron-right"></i>
+              <a href="/strongswan/使用strongswan 与 Azure gateway 建立 ipsec vpn 连接/" rel="prev" title="使用strongswan 与 Azure gateway 建立 ipsec vpn 连接">
+                使用strongswan 与 Azure gateway 建立 ipsec vpn 连接 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
