@@ -319,7 +319,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/log/nginx 日志记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -338,8 +338,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/" itemprop="url">
-                  用NGINX的GeoIp库做国外ip屏蔽
+                <a class="post-title-link" href="/nginx/log/nginx 日志记录/" itemprop="url">
+                  nginx 日志记录
                 </a>
               
             
@@ -365,7 +365,7 @@
                 
               
 
-              <time title="创建时间：2018-06-20 15:48:28 / 修改时间：17:40:49" itemprop="dateCreated datePublished" datetime="2018-06-20T15:48:28+08:00">2018-06-20</time>
+              <time title="创建时间：2018-06-20 15:48:28 / 修改时间：17:01:15" itemprop="dateCreated datePublished" datetime="2018-06-20T15:48:28+08:00">2018-06-20</time>
             
 
             
@@ -394,7 +394,7 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/security/" itemprop="url" rel="index"><span itemprop="name">security</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/log/" itemprop="url" rel="index"><span itemprop="name">log</span></a></span>
 
                 
                 
@@ -432,10 +432,19 @@
         
         <!-- 自定义结束 -->
         
-          <h2 id="安装GeoIp模块"><a href="#安装GeoIp模块" class="headerlink" title="安装GeoIp模块"></a>安装GeoIp模块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 安装模块，nginx也是通过yum安装</span></span><br><span class="line"></span><br><span class="line">yum install nginx-module-geoip</span><br><span class="line"></span><br><span class="line"><span class="comment">## 安装对应nginx 版本的 模块</span></span><br><span class="line"></span><br><span class="line">yum --showduplicate list nginx-module-geoip</span><br><span class="line"></span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.0-1.el7.ngx       nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.1-1.el7.ngx       nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.12.2-1.el7_4.ngx     nginx</span><br><span class="line">nginx-module-geoip.x86_64    1:1.14.0-1.el7_4.ngx     nginx</span><br><span class="line"></span><br><span class="line">yum install nginx-module-geoip-1:1.12.2-1.el7_4.ngx.x86_64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ls /usr/lib64/nginx/modules/</span><br><span class="line">ngx_http_geoip_module-debug.so  ngx_http_geoip_module.so  ngx_stream_geoip_module-debug.so  ngx_stream_geoip_module.so</span><br></pre></td></tr></table></figure>
+          <h2 id="日志语法"><a href="#日志语法" class="headerlink" title="日志语法"></a>日志语法</h2><pre><code>参考: http://nginx.org/en/docs/http/ngx_http_log_module.html
+
+Syntax:     access_log path [format [buffer=size] [gzip[=level]] [flush=time] [if=condition]];
+access_log off;
+Default:     
+
+access_log logs/access.log combined;
+
+Context:     http, server, location, if in location, limit_except
+</code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/nginx/security/用NGINX的GeoIp库做国外ip屏蔽/#more" rel="contents">
+            <a class="btn" href="/nginx/log/nginx 日志记录/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -878,6 +887,190 @@ exit
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/Hexo渲染时排除部分文件或目录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/hexo/Hexo渲染时排除部分文件或目录/" itemprop="url">
+                  Hexo渲染时排除部分文件或目录
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-18 10:44:15" itemprop="dateCreated datePublished" datetime="2018-06-18T10:44:15+08:00">2018-06-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-24 10:25:10" itemprop="dateModified" datetime="2018-06-24T10:25:10+08:00">2018-06-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <pre><code>skip_render:
+  - &apos;baidu.html&apos;
+  - &apos;google.html&apos;
+  - &apos;demo/other/3.html&apos;
+
+
+只有source目录下的文件才会发布到public（能够在网络上访问到），因此Hexo只渲染source目录下的文件。
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/hexo/Hexo渲染时排除部分文件或目录/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/Hexo 写作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1059,7 +1252,7 @@ exit
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/Hexo渲染时排除部分文件或目录/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/vscode git hexo 配合使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -1078,8 +1271,8 @@ exit
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/hexo/Hexo渲染时排除部分文件或目录/" itemprop="url">
-                  Hexo渲染时排除部分文件或目录
+                <a class="post-title-link" href="/hexo/vscode git hexo 配合使用/" itemprop="url">
+                  vscode git hexo 配合使用
                 </a>
               
             
@@ -1122,7 +1315,7 @@ exit
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-06-24 10:25:10" itemprop="dateModified" datetime="2018-06-24T10:25:10+08:00">2018-06-24</time>
+                <time title="修改时间：2018-06-23 20:12:12" itemprop="dateModified" datetime="2018-06-23T20:12:12+08:00">2018-06-23</time>
               
             
           </span>
@@ -1177,17 +1370,19 @@ exit
         
         <!-- 自定义结束 -->
         
-          <pre><code>skip_render:
-  - &apos;baidu.html&apos;
-  - &apos;google.html&apos;
-  - &apos;demo/other/3.html&apos;
+          <h2 id="概况"><a href="#概况" class="headerlink" title="概况"></a>概况</h2><pre><code>安装vscode
 
+安装git客户端
 
-只有source目录下的文件才会发布到public（能够在网络上访问到），因此Hexo只渲染source目录下的文件。
+安装nodejs v8
+
+添加nodejs环境变量
+
+通过npm 安装 hexo
 </code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/hexo/Hexo渲染时排除部分文件或目录/#more" rel="contents">
+            <a class="btn" href="/hexo/vscode git hexo 配合使用/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1389,192 +1584,6 @@ hexo new page about
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/hexo/hexo nexT 主题安装配置/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/hexo/vscode git hexo 配合使用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/hexo/vscode git hexo 配合使用/" itemprop="url">
-                  vscode git hexo 配合使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-18 10:44:15" itemprop="dateCreated datePublished" datetime="2018-06-18T10:44:15+08:00">2018-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-06-23 20:12:12" itemprop="dateModified" datetime="2018-06-23T20:12:12+08:00">2018-06-23</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          <h2 id="概况"><a href="#概况" class="headerlink" title="概况"></a>概况</h2><pre><code>安装vscode
-
-安装git客户端
-
-安装nodejs v8
-
-添加nodejs环境变量
-
-通过npm 安装 hexo
-</code></pre>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/hexo/vscode git hexo 配合使用/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
