@@ -1209,6 +1209,191 @@ vbs脚本放到启动文件夹，用于运行bat脚本，而bat脚本用于启�
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dolphin">
+      <meta itemprop="description" content="现实是强者理想的实现">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="克隆人战争">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/" itemprop="url">
+                  Nginx 负载-代理-缓存配置
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-26 17:17:00" itemprop="dateCreated datePublished" datetime="2018-06-26T17:17:00+08:00">2018-06-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-28 17:12:42" itemprop="dateModified" datetime="2018-06-28T17:12:42+08:00">2018-06-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
+        
+        <!-- 自定义结束 -->
+        
+          <figure class="highlight bash"><figcaption><span>nginx http 里负载配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mkdir -p /etc/nginx/http.d</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/nginx/http.d/20.upstream.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">upstream images &#123;</span><br><span class="line"></span><br><span class="line">    server 200.200.200.222:99 weight=5 max_fails=3 fail_timeout=60s;</span><br><span class="line">    server 200.200.200.223:99 weight=5 max_fails=3 fail_timeout=60s;</span><br><span class="line">    <span class="comment"># server 200.200.200.225:99 weight=5 backup;</span></span><br><span class="line">    <span class="comment"># server unix:/tmp/backend3; #使用unix socket</span></span><br><span class="line">    <span class="comment"># keepalive 32;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>nginx server 代理配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">location ~ .*\.(mp4|gif|jpg|jpeg|png|bmp|swf|js|css)$</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">## 指定访问后端服务器的IP地址</span></span><br><span class="line">        <span class="comment">#proxy_bind 127.0.0.1;</span></span><br><span class="line">        proxy_pass <span class="variable">$scheme</span>://images;</span><br><span class="line">        include local.d/proxy.conf;</span><br><span class="line">        proxy_next_upstream http_404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/windows/windows 2008R2 浏览器支持MP4播放/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1392,7 +1577,7 @@ kb2454826：可选
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/git/git 服务搭建和hexo发布/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -1411,8 +1596,8 @@ kb2454826：可选
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/" itemprop="url">
-                  Nginx 负载-代理-缓存配置
+                <a class="post-title-link" href="/git/git 服务搭建和hexo发布/" itemprop="url">
+                  git 服务搭建和hexo发布
                 </a>
               
             
@@ -1438,7 +1623,7 @@ kb2454826：可选
                 
               
 
-              <time title="创建时间：2018-06-26 17:17:00" itemprop="dateCreated datePublished" datetime="2018-06-26T17:17:00+08:00">2018-06-26</time>
+              <time title="创建时间：2018-06-25 10:05:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
             
 
             
@@ -1455,7 +1640,7 @@ kb2454826：可选
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-06-28 17:12:42" itemprop="dateModified" datetime="2018-06-28T17:12:42+08:00">2018-06-28</time>
+                <time title="修改时间：2018-07-26 11:53:42" itemprop="dateModified" datetime="2018-07-26T11:53:42+08:00">2018-07-26</time>
               
             
           </span>
@@ -1472,14 +1657,7 @@ kb2454826：可选
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/nginx/config/" itemprop="url" rel="index"><span itemprop="name">config</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
 
                 
                 
@@ -1517,11 +1695,14 @@ kb2454826：可选
         
         <!-- 自定义结束 -->
         
-          <figure class="highlight bash"><figcaption><span>nginx http 里负载配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mkdir -p /etc/nginx/http.d</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/nginx/http.d/20.upstream.conf &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">upstream images &#123;</span><br><span class="line"></span><br><span class="line">    server 200.200.200.222:99 weight=5 max_fails=3 fail_timeout=60s;</span><br><span class="line">    server 200.200.200.223:99 weight=5 max_fails=3 fail_timeout=60s;</span><br><span class="line">    <span class="comment"># server 200.200.200.225:99 weight=5 backup;</span></span><br><span class="line">    <span class="comment"># server unix:/tmp/backend3; #使用unix socket</span></span><br><span class="line">    <span class="comment"># keepalive 32;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><figcaption><span>nginx server 代理配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">location ~ .*\.(mp4|gif|jpg|jpeg|png|bmp|swf|js|css)$</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">## 指定访问后端服务器的IP地址</span></span><br><span class="line">        <span class="comment">#proxy_bind 127.0.0.1;</span></span><br><span class="line">        proxy_pass <span class="variable">$scheme</span>://images;</span><br><span class="line">        include local.d/proxy.conf;</span><br><span class="line">        proxy_next_upstream http_404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+          git中文文档https://git-scm.com/book/zh/v2
+安装yum install -y git
+服务器上添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/nginx/config/Nginx Proxy 代理图片静态文件缓存配置/#more" rel="contents">
+            <a class="btn" href="/git/git 服务搭建和hexo发布/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1763,7 +1944,7 @@ winrar.exe:运行
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/git/git 服务搭建和hexo发布/">
+    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/syncthing 安装配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dolphin">
@@ -1782,8 +1963,8 @@ winrar.exe:运行
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/git/git 服务搭建和hexo发布/" itemprop="url">
-                  git 服务搭建和hexo发布
+                <a class="post-title-link" href="/sync/syncthing 安装配置/" itemprop="url">
+                  syncthing 同步文件
                 </a>
               
             
@@ -1826,188 +2007,7 @@ winrar.exe:运行
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-26 11:49:54" itemprop="dateModified" datetime="2018-07-26T11:49:54+08:00">2018-07-26</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <!-- 自定义,用于添加文章摘要图片，文章中不显示 -->
-        
-        <!-- 自定义结束 -->
-        
-          
-          git中文文档https://git-scm.com/book/zh/v2
-安装yum install -y git
-服务器上添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/git/git 服务搭建和hexo发布/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://dolphincn.github.io/sync/Rsync/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dolphin">
-      <meta itemprop="description" content="现实是强者理想的实现">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="克隆人战争">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/sync/Rsync/" itemprop="url">
-                  Rsync 同步文件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-25 10:05:00" itemprop="dateCreated datePublished" datetime="2018-06-25T10:05:00+08:00">2018-06-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-23 11:07:22" itemprop="dateModified" datetime="2018-07-23T11:07:22+08:00">2018-07-23</time>
+                <time title="修改时间：2018-07-09 11:04:38" itemprop="dateModified" datetime="2018-07-09T11:04:38+08:00">2018-07-09</time>
               
             
           </span>
@@ -2062,10 +2062,19 @@ winrar.exe:运行
         
         <!-- 自定义结束 -->
         
-          <p>Rsync是linux/Unix文件同步和传送工具。用于替代rcp的一个工具，rsync可以通过rsh或ssh使用，也能以daemon模式去运行，在以daemon方式运行时rsync server会开一个873端口，等待客户端去连接。连接时rsync server会检查口令是否相符，若通过口令查核，则可以通过进行文件传输，第一次连通完成时，会把整份文件传输一次，以后则就只需进行增量备份。</p>
+          
+          syncthing 安装配置
+使用总结：一分钟内能同步变更，可以同步权限，但不能同步所有者和所属组，以及ACL等属性。
+
+共享的文件夹没权读取或写入，会导致同步问题，同时导致自动选用端口，而不用指定端口。
+
+同步的文件所有者和所有组，改为syncthing运行的用户名和组
+
+同步间隔内(一分钟内)，
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/sync/Rsync/#more" rel="contents">
+            <a class="btn" href="/sync/syncthing 安装配置/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
