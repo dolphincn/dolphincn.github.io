@@ -112,19 +112,19 @@
 
 
 
-  <meta name="description" content="git中文文档https://git-scm.com/book/zh/v2 安装yum install -y git 服务器上添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统useradd -s /bin/git-shell s_git## 最好设置一个复杂">
+  <meta name="description" content="git中文文档https://git-scm.com/book/zh/v2 服务器安装配置yum install -y git 添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统useradd -s /bin/git-shell s_git## 最好设置一个复">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git 服务搭建和hexo发布">
 <meta property="og:url" content="http://dolphincn.github.io/git/git 服务搭建和hexo发布/index.html">
 <meta property="og:site_name" content="克隆人战争">
-<meta property="og:description" content="git中文文档https://git-scm.com/book/zh/v2 安装yum install -y git 服务器上添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统useradd -s /bin/git-shell s_git## 最好设置一个复杂">
+<meta property="og:description" content="git中文文档https://git-scm.com/book/zh/v2 服务器安装配置yum install -y git 添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统useradd -s /bin/git-shell s_git## 最好设置一个复">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://dolphincn.github.io/images/git/git_hexo.jpg">
-<meta property="og:updated_time" content="2018-07-26T05:27:23.401Z">
+<meta property="og:updated_time" content="2018-07-26T05:37:03.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git 服务搭建和hexo发布">
-<meta name="twitter:description" content="git中文文档https://git-scm.com/book/zh/v2 安装yum install -y git 服务器上添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统useradd -s /bin/git-shell s_git## 最好设置一个复杂">
+<meta name="twitter:description" content="git中文文档https://git-scm.com/book/zh/v2 服务器安装配置yum install -y git 添加git连接用户## 添加用户，设置密钥连接1234567891011121314151617181920## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统useradd -s /bin/git-shell s_git## 最好设置一个复">
 <meta name="twitter:image" content="http://dolphincn.github.io/images/git/git_hexo.jpg">
 
 
@@ -381,7 +381,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-26 13:27:23" itemprop="dateModified" datetime="2018-07-26T13:27:23+08:00">2018-07-26</time>
+                <time title="修改时间：2018-07-26 13:37:03" itemprop="dateModified" datetime="2018-07-26T13:37:03+08:00">2018-07-26</time>
               
             
           </span>
@@ -433,16 +433,16 @@
 
       
         <h2 id="git中文文档"><a href="#git中文文档" class="headerlink" title="git中文文档"></a>git中文文档</h2><pre><code>https://git-scm.com/book/zh/v2
-</code></pre><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre><code>yum install -y git
-</code></pre><h2 id="服务器上添加git连接用户"><a href="#服务器上添加git连接用户" class="headerlink" title="服务器上添加git连接用户"></a>服务器上添加git连接用户</h2><figure class="highlight bash"><figcaption><span>## 添加用户，设置密钥连接</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统</span></span><br><span class="line">useradd -s /bin/git-shell s_git</span><br><span class="line"></span><br><span class="line"><span class="comment">## 最好设置一个复杂的密码</span></span><br><span class="line">passwd s_git</span><br><span class="line"></span><br><span class="line"><span class="comment">## 设置密钥登陆，ssh需要设置密钥登陆</span></span><br><span class="line">mkdir /home/s_git/.ssh</span><br><span class="line">chmod 700 /home/s_git/.ssh</span><br><span class="line">touch 700 /home/s_git/.ssh/authorized_keys</span><br><span class="line">chmod 600 /home/s_git/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">chown -R s_git:s_git /home/s_git/.ssh</span><br><span class="line"></span><br><span class="line"><span class="comment">## 把公钥输入进去</span></span><br><span class="line">cat &gt; /home/s_git/.ssh/authorized_keys &lt;&lt; EOF</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeVoDwGgk0XZVEOxoIwCmwR2YD+Om/zsGWMLpwOkTTC2fPtDOk6rO3LA15FfNY6FKhGER2zoZaTUKltUgPYB3IDcC3L9bazc3TnI5SW6/AUWXeFjYTMweZkhCCx9+XHscvIZ21hnvEfP5cmU1sPRegOTxI6Lv7itCcg6kGS2P8wqjQeNEgLs7xcfo4+5Jk0Hq3Ke77gYIlBg37+XuiMg2g8UR8KkRuzK/ZCFK5kPXmSg/yGETieUyflPHiaCFEQcQJdNblO0pFoZSOLAgtjXoIdnwkzCt7A6w3KumSFzlOUc+2S6N7k+NfvPa/iW/1NG7m5fiwdt3X0ZnIXRnC05GH</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<h2 id="服务器上添加-git-repository"><a href="#服务器上添加-git-repository" class="headerlink" title="服务器上添加 git repository"></a>服务器上添加 git repository</h2><pre><code>mkdir /data/git -p    
+</code></pre><h2 id="服务器安装配置"><a href="#服务器安装配置" class="headerlink" title="服务器安装配置"></a>服务器安装配置</h2><pre><code>yum install -y git
+</code></pre><h3 id="添加git连接用户"><a href="#添加git连接用户" class="headerlink" title="添加git连接用户"></a>添加git连接用户</h3><figure class="highlight bash"><figcaption><span>## 添加用户，设置密钥连接</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 创建用户, 必须设置-s /bin/git-shell，防止用户远程登陆系统</span></span><br><span class="line">useradd -s /bin/git-shell s_git</span><br><span class="line"></span><br><span class="line"><span class="comment">## 最好设置一个复杂的密码</span></span><br><span class="line">passwd s_git</span><br><span class="line"></span><br><span class="line"><span class="comment">## 设置密钥登陆，ssh需要设置密钥登陆</span></span><br><span class="line">mkdir /home/s_git/.ssh</span><br><span class="line">chmod 700 /home/s_git/.ssh</span><br><span class="line">touch 700 /home/s_git/.ssh/authorized_keys</span><br><span class="line">chmod 600 /home/s_git/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">chown -R s_git:s_git /home/s_git/.ssh</span><br><span class="line"></span><br><span class="line"><span class="comment">## 把公钥输入进去</span></span><br><span class="line">cat &gt; /home/s_git/.ssh/authorized_keys &lt;&lt; EOF</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeVoDwGgk0XZVEOxoIwCmwR2YD+Om/zsGWMLpwOkTTC2fPtDOk6rO3LA15FfNY6FKhGER2zoZaTUKltUgPYB3IDcC3L9bazc3TnI5SW6/AUWXeFjYTMweZkhCCx9+XHscvIZ21hnvEfP5cmU1sPRegOTxI6Lv7itCcg6kGS2P8wqjQeNEgLs7xcfo4+5Jk0Hq3Ke77gYIlBg37+XuiMg2g8UR8KkRuzK/ZCFK5kPXmSg/yGETieUyflPHiaCFEQcQJdNblO0pFoZSOLAgtjXoIdnwkzCt7A6w3KumSFzlOUc+2S6N7k+NfvPa/iW/1NG7m5fiwdt3X0ZnIXRnC05GH</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="添加-git-repository"><a href="#添加-git-repository" class="headerlink" title="添加 git repository"></a>添加 git repository</h3><pre><code>mkdir /data/git -p    
 
 ## 创建一个空的Git仓库，服务器上的Git仓库通常都以.git结尾
 git init --bare /data/git/hexo.git
 
 ## 设置目录权限
 chown -R s_git:s_git /data/git
-</code></pre><h2 id="客户端密钥登陆设置"><a href="#客户端密钥登陆设置" class="headerlink" title="客户端密钥登陆设置"></a>客户端密钥登陆设置</h2><pre><code>1. windows:
+</code></pre><h2 id="客户端设置"><a href="#客户端设置" class="headerlink" title="客户端设置"></a>客户端设置</h2><h3 id="客户端密钥登陆设置"><a href="#客户端密钥登陆设置" class="headerlink" title="客户端密钥登陆设置"></a>客户端密钥登陆设置</h3><pre><code>1. windows:
 
 在用户的home个人目录下添加.ssh目录，比如用户Lion (C:\Users\lion\.ssh)，添加密钥文件id_rsa, id_rsa.pub
 
@@ -451,14 +451,14 @@ chown -R s_git:s_git /data/git
 2. linux
 
 在用户home目录下添加.ssh目录，如/home/lion/.ssh，添加密钥文件id_rsa, id_rsa.pub
-</code></pre><h2 id="git客户端初次使用"><a href="#git客户端初次使用" class="headerlink" title="git客户端初次使用"></a>git客户端初次使用</h2><pre><code>## 需要全局设置一下用户信息
+</code></pre><h3 id="git客户端初次使用"><a href="#git客户端初次使用" class="headerlink" title="git客户端初次使用"></a>git客户端初次使用</h3><pre><code>## 需要全局设置一下用户信息
 git config --global user.name &quot;John Doe&quot;
 git config --global user.email johndoe@example.com
 
 
 ## 查看git配置信息
 git config --list
-</code></pre><h2 id="git配置文件地址"><a href="#git配置文件地址" class="headerlink" title="git配置文件地址"></a>git配置文件地址</h2><pre><code>Git 自带一个 git config 的工具来帮助设置控制 Git 外观和行为的配置变量。 这些变量存储在三个不同的位置：
+</code></pre><h3 id="git配置文件地址"><a href="#git配置文件地址" class="headerlink" title="git配置文件地址"></a>git配置文件地址</h3><pre><code>Git 自带一个 git config 的工具来帮助设置控制 Git 外观和行为的配置变量。 这些变量存储在三个不同的位置：
 
 /etc/gitconfig 文件: 包含系统上每一个用户及他们仓库的通用配置。 如果使用带有 --system 选项的 git config 时，它会从此文件读写配置变量。
 
@@ -469,7 +469,7 @@ git config --list
 每一个级别覆盖上一级别的配置，所以 .git/config 的配置变量会覆盖 /etc/gitconfig 中的配置变量。
 
 在 Windows 系统中，Git 会查找 $HOME 目录下（一般情况下是 C:\Users\$USER）的 .gitconfig 文件。 Git 同样也会寻找 /etc/gitconfig 文件，但只限于 MSys 的根目录下，即安装 Git 时所选的目标位置
-</code></pre><h2 id="测试客户端推送"><a href="#测试客户端推送" class="headerlink" title="测试客户端推送"></a>测试客户端推送</h2><pre><code>cd test
+</code></pre><h3 id="测试客户端推送"><a href="#测试客户端推送" class="headerlink" title="测试客户端推送"></a>测试客户端推送</h3><pre><code>cd test
 git init
 git remote add origin ssh://s_git@wall.suroot.com:55555/data/git/hexo.git
 
@@ -488,7 +488,7 @@ git -rm
 
 ## 查看所有分支
 git branch -v
-</code></pre><h2 id="测试客户端克隆"><a href="#测试客户端克隆" class="headerlink" title="测试客户端克隆"></a>测试客户端克隆</h2><pre><code>mkdir test
+</code></pre><h3 id="测试客户端克隆"><a href="#测试客户端克隆" class="headerlink" title="测试客户端克隆"></a>测试客户端克隆</h3><pre><code>mkdir test
 cd test
 git clone ssh://s_git@wall.suroot.com:55555/data/git/hexo.git
 </code></pre><h2 id="hexo网站自动发布"><a href="#hexo网站自动发布" class="headerlink" title="hexo网站自动发布"></a>hexo网站自动发布</h2><p><img src="/images/git/git_hexo.jpg" alt="&quot;git_hexo&quot;"></p>
@@ -505,7 +505,9 @@ hexo clean &amp;&amp; hexo generate --deploy
 ## 指定额外配置文件，如果想推送到不同的git
 hexo --config github.yml clean
 hexo --config nginx_server.yml generate --deploy
-</code></pre><h3 id="nginx-服务配置"><a href="#nginx-服务配置" class="headerlink" title="nginx 服务配置"></a>nginx 服务配置</h3><pre><code>server {
+</code></pre><h3 id="nginx-服务配置"><a href="#nginx-服务配置" class="headerlink" title="nginx 服务配置"></a>nginx 服务配置</h3><pre><code>## nginx 服务器和git repository在同一服务器上
+
+server {
     listen 80;
     charset utf-8;
     root   /data/www/blog;
@@ -604,8 +606,8 @@ http://yelog.org/2016/10/23/hexo-git-server-blog/
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/sync/syncthing 安装配置/" rel="next" title="syncthing 同步文件">
-                <i class="fa fa-chevron-left"></i> syncthing 同步文件
+              <a href="/sync/lsyncd 安装配置/" rel="next" title="lsyncd 同步文件">
+                <i class="fa fa-chevron-left"></i> lsyncd 同步文件
               </a>
             
           </div>
@@ -924,7 +926,7 @@ http://yelog.org/2016/10/23/hexo-git-server-blog/
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#git中文文档"><span class="nav-number">1.</span> <span class="nav-text">git中文文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器上添加git连接用户"><span class="nav-number">3.</span> <span class="nav-text">服务器上添加git连接用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器上添加-git-repository"><span class="nav-number">4.</span> <span class="nav-text">服务器上添加 git repository</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端密钥登陆设置"><span class="nav-number">5.</span> <span class="nav-text">客户端密钥登陆设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git客户端初次使用"><span class="nav-number">6.</span> <span class="nav-text">git客户端初次使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git配置文件地址"><span class="nav-number">7.</span> <span class="nav-text">git配置文件地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试客户端推送"><span class="nav-number">8.</span> <span class="nav-text">测试客户端推送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试客户端克隆"><span class="nav-number">9.</span> <span class="nav-text">测试客户端克隆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo网站自动发布"><span class="nav-number">10.</span> <span class="nav-text">hexo网站自动发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-修改配置文件"><span class="nav-number">10.1.</span> <span class="nav-text">hexo 修改配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-发布推送"><span class="nav-number">10.2.</span> <span class="nav-text">hexo 发布推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-服务配置"><span class="nav-number">10.3.</span> <span class="nav-text">nginx 服务配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git自动同步nginx网站"><span class="nav-number">10.4.</span> <span class="nav-text">git自动同步nginx网站</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows下git客户端安装"><span class="nav-number">11.</span> <span class="nav-text">windows下git客户端安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载安装-git"><span class="nav-number">11.1.</span> <span class="nav-text">下载安装 git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-环境变量配置"><span class="nav-number">11.2.</span> <span class="nav-text">git 环境变量配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加ssh-密钥"><span class="nav-number">11.3.</span> <span class="nav-text">添加ssh 密钥</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">12.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#git中文文档"><span class="nav-number">1.</span> <span class="nav-text">git中文文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器安装配置"><span class="nav-number">2.</span> <span class="nav-text">服务器安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加git连接用户"><span class="nav-number">2.1.</span> <span class="nav-text">添加git连接用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加-git-repository"><span class="nav-number">2.2.</span> <span class="nav-text">添加 git repository</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端设置"><span class="nav-number">3.</span> <span class="nav-text">客户端设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端密钥登陆设置"><span class="nav-number">3.1.</span> <span class="nav-text">客户端密钥登陆设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git客户端初次使用"><span class="nav-number">3.2.</span> <span class="nav-text">git客户端初次使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git配置文件地址"><span class="nav-number">3.3.</span> <span class="nav-text">git配置文件地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试客户端推送"><span class="nav-number">3.4.</span> <span class="nav-text">测试客户端推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试客户端克隆"><span class="nav-number">3.5.</span> <span class="nav-text">测试客户端克隆</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo网站自动发布"><span class="nav-number">4.</span> <span class="nav-text">hexo网站自动发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-修改配置文件"><span class="nav-number">4.1.</span> <span class="nav-text">hexo 修改配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-发布推送"><span class="nav-number">4.2.</span> <span class="nav-text">hexo 发布推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-服务配置"><span class="nav-number">4.3.</span> <span class="nav-text">nginx 服务配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git自动同步nginx网站"><span class="nav-number">4.4.</span> <span class="nav-text">git自动同步nginx网站</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows下git客户端安装"><span class="nav-number">5.</span> <span class="nav-text">windows下git客户端安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载安装-git"><span class="nav-number">5.1.</span> <span class="nav-text">下载安装 git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-环境变量配置"><span class="nav-number">5.2.</span> <span class="nav-text">git 环境变量配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加ssh-密钥"><span class="nav-number">5.3.</span> <span class="nav-text">添加ssh 密钥</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
